@@ -20,20 +20,20 @@
 
 library(tidyverse)
 library(sf)
-library(tmap)
-library(tmaptools)
+#library(tmap)
+#library(tmaptools)
 
 ## Load Data ####
 
 ## From tbo_data.R
-tbo_plot_agg <- read_csv("data/tbo_ticks_plot_year.csv")
-tbo_trap_ticks <- read_csv("data/tbo_ticks_onTraps.csv")
-tbo_human_strict_traps <- read_csv("data/tbo_human_strict_onTraps.csv")
+tbo_plot_agg <- read_csv("serdp_data/tbo_ticks_plot_year.csv")
+tbo_trap_ticks <- read_csv("serdp_data/tbo_ticks_onTraps.csv")
+tbo_human_strict_traps <- read_csv("serdp_data/tbo_human_strict_onTraps.csv")
 
 ## From plot_data_report.Rmd
-trap_effort <- read_csv("data/installation_trapping_effort.csv")
+trap_effort <- read_csv("serdp_data/installation_trapping_effort.csv")
 
-sites_sf <- st_read("data/gis_files/selected_installations.shp")
+sites_sf <- st_read("serdp_data/gis_files/selected_installations.shp")
 
 unique(tbo_plot_agg$Installation)
 unique(sites_sf$FULLNAME)
@@ -142,10 +142,11 @@ sites_tbo_sf <- left_join(
       select(FULLNAME, total_ticks, Human_pathogen_prevalence, ticks_per_trap, PxA)
 
 
+
 ## Make a map ####
 
 # toggle between interactive "view" mode and static "plot" mode
-tmap_mode("view")
+#tmap_mode("view")
 # tmap_mode("plot")
 
 # qtm(sites_sf, fill = "red")
@@ -156,28 +157,31 @@ sites_tbo_sf <- sites_tbo_sf %>%
              Prevalence = Human_pathogen_prevalence,
              Abundance = ticks_per_trap
              )
+#sites_tbo_sf$geometry <- as.character(sites_tbo_sf$geometry)
+#write.csv(sites_tbo_sf, "/projectnb/dietzelab/mccabete/SERDP_shiny/code/serdp_data/Tick_prevelence_absense_map.csv")
+st_write(sites_tbo_sf, "/projectnb/dietzelab/mccabete/SERDP_shiny/code/serdp_data/Tick_prevelence_absense_map.shp")
 
 ## Adds layers for abundance, prevalence, and their product.
 ## So, need to toggle layers on/off for it to make any kind of sense.
-tp_map <- tm_shape(sites_tbo_sf) +
-      # tm_polygons(text = "FULLNAME") +
-      # # tm_dots(col = "Pathogen_prevalence", size = "Pathogen_prevalence",
-      #         group = "Pathogens") +
-      # tm_shape(sites_tbo_sf) +
-      tm_dots(col = "Abundance", size = "Abundance",
-              # breaks = c(0, 50, 100, 200, 408),
-              group = "Ticks per trap (abundance)") +
-      tm_shape(sites_tbo_sf) +
-      tm_dots(col = "Prevalence", size = "Prevalence",
-              # breaks = c(0, 50, 100, 200, 408),
-              group = "Human pathogen prevalence ") +
-      tm_shape(sites_tbo_sf) +
-      tm_dots(col = "PxA", size = "PxA",
-              # breaks = c(0, 50, 100, 200, 408),
-              group = "Prevalence x Abundance") +
-      tm_text(text = "FULLNAME", just = "right", size = 1.5, xmod = -2, bg.color = "gray40")
-tp_map
-tmap_save(tp_map, filename = "figures/map_tickAbun_strictlyHuman_pathPrev.html")
+# tp_map <- tm_shape(sites_tbo_sf) +
+#       # tm_polygons(text = "FULLNAME") +
+#       # # tm_dots(col = "Pathogen_prevalence", size = "Pathogen_prevalence",
+#       #         group = "Pathogens") +
+#       # tm_shape(sites_tbo_sf) +
+#       tm_dots(col = "Abundance", size = "Abundance",
+#               # breaks = c(0, 50, 100, 200, 408),
+#               group = "Ticks per trap (abundance)") +
+#       tm_shape(sites_tbo_sf) +
+#       tm_dots(col = "Prevalence", size = "Prevalence",
+#               # breaks = c(0, 50, 100, 200, 408),
+#               group = "Human pathogen prevalence ") +
+#       tm_shape(sites_tbo_sf) +
+#       tm_dots(col = "PxA", size = "PxA",
+#               # breaks = c(0, 50, 100, 200, 408),
+#               group = "Prevalence x Abundance") +
+#       tm_text(text = "FULLNAME", just = "right", size = 1.5, xmod = -2, bg.color = "gray40")
+# tp_map
+# tmap_save(tp_map, filename = "figures/map_tickAbun_strictlyHuman_pathPrev.html")
 # tmap_save(tp_map, filename = "figures/map_tickAbun_pathPrev.png")
 
 #

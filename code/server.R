@@ -95,6 +95,9 @@ park_card <- function (park_Name, park_Code, park_State, park_Acres, park_Latitu
 # DATA WRANGLING #
 ##################
 
+tick_map <- st_read("/projectnb/dietzelab/mccabete/SERDP_shiny/code/serdp_data/Tick_prevelence_absense_map.shp") #By default, this function abriviates column names? 
+#names(tick_map) <- c("FULLNAME","total_ticks", "Human_pathogen_prevalence", "ticks_per_trap","PxA","geometry","Ticks","Prevalence","Abundance" )
+#st_geometry(tick_map) <- "geometry"
 # preprocessed parks file:
 #   3 records were multi states parks, only was was attributed
 #     DEVA,Death Valley National Park,CA/NV,4740912,36.24,-116.82  --> CA
@@ -175,29 +178,57 @@ shinyServer(function(input, output) {
 
   ######### Tess edits  ###########
   
-  output$parksMap <- renderLeaflet({
-     leaflet(data=parks) %>% 
-     addProviderTiles(providers$OpenStreetMap.Mapnik, group = "Open Street Map", options = providerTileOptions(noWrap = TRUE)) %>%
-     addProviderTiles(providers$Stamen.TerrainBackground, group = "Stamen Terrain Background", options = providerTileOptions(noWrap = TRUE)) %>%
-     addProviderTiles(providers$Esri.WorldImagery, group = "Esri World Imagery", options = providerTileOptions(noWrap = TRUE)) %>%
-     addFullscreenControl() %>%
-     addMarkers(
-       ~Longitude,
-       ~Latitude,
-       icon = makeIcon(
-         iconUrl = "32px-US-NationalParkService-Logo.svg.png",
-         shadowUrl = "32px-US-NationalParkService-Logo.svg - black.png",
-         shadowAnchorX = -1, shadowAnchorY = -2
-       ),
-       clusterOptions = markerClusterOptions()
-     ) %>%
-     addLayersControl(
-       baseGroups = c("Open Street Map","Stamen Terrain Background","Esri World Imagery"),
-       position = c("topleft"),
-       options = layersControlOptions(collapsed = TRUE)
-     )
-    })
+  # output$parksMap <- renderLeaflet({
+  #    leaflet(data=parks) %>% 
+  #    addProviderTiles(providers$OpenStreetMap.Mapnik, group = "Open Street Map", options = providerTileOptions(noWrap = TRUE)) %>%
+  #    addProviderTiles(providers$Stamen.TerrainBackground, group = "Stamen Terrain Background", options = providerTileOptions(noWrap = TRUE)) %>%
+  #    addProviderTiles(providers$Esri.WorldImagery, group = "Esri World Imagery", options = providerTileOptions(noWrap = TRUE)) %>%
+  #    addFullscreenControl() %>%
+  #    addMarkers(
+  #      ~Longitude,
+  #      ~Latitude,
+  #      icon = makeIcon(
+  #        iconUrl = "32px-US-NationalParkService-Logo.svg.png",
+  #        shadowUrl = "32px-US-NationalParkService-Logo.svg - black.png",
+  #        shadowAnchorX = -1, shadowAnchorY = -2
+  #      ),
+  #      clusterOptions = markerClusterOptions()
+  #    ) %>%
+  #    addLayersControl(
+  #      baseGroups = c("Open Street Map","Stamen Terrain Background","Esri World Imagery"),
+  #      position = c("topleft"),
+  #      options = layersControlOptions(collapsed = TRUE)
+  #    )
+  #   })
+  # 
   
+  bins <- c(0, 10, 50, 100, 318)
+  pal <- colorBin("YlOrRd", domain = tick_map$Ticks, bins = bins)
+  
+  labels <- sprintf(
+    "<strong>%s</strong><br/>%g Ticks Collected",
+    tick_map$FULLNAM, tick_map$Ticks
+  ) %>% lapply(htmltools::HTML)
+  
+  output$parksMap <- renderLeaflet({
+    leaflet(data = tick_map) %>% 
+      addProviderTiles(providers$Esri.WorldImagery, group = "Esri World Imagery", options = providerTileOptions(noWrap = TRUE)) %>%
+      addFullscreenControl() %>%
+      addPolygons(fillColor = ~pal(Ticks),
+                  weight = 1,
+                  opacity = 1,
+                  color = "white",
+                  fillOpacity = 1,
+                  label = labels
+                  ) %>%
+      addLegend(pal = pal, values = ~density, opacity = 0.7, title = "Ticks Collected",
+                position = "bottomright") %>%
+      addLayersControl(
+        baseGroups = c("Esri World Imagery"),
+        position = c("topleft"),
+        options = layersControlOptions(collapsed = TRUE)
+      )
+  })
   
   
   #####################################
