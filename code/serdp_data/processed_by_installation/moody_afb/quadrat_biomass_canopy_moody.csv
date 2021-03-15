@@ -1,0 +1,4 @@
+plot_id,date,visit_year,avg_woody_veg_ht,avg_herb_veg_ht,avg_litter_ht,avg_pct_green,avg_pct_litter,avg_pct_wood_litter,avg_pct_bare,avg_standing_fuel_mass_wet_m2,avg_litter_mass_wet_m2,avg_standing_fuel_mass_dry_m2,avg_litter_mass_dry_m2,avg_pct_canopy_cover
+moody a1,2017-08-30,2017,33.5,29.666666666666668,6.833333333333333,58.75,37.5,9,31.25,648.76,282.08,258.36,231.07999999999998,53.04
+moody b1,2017-08-29,2017,14,34.5,8.666666666666666,30,75,7.5,6.25,280.08,532.2,134.28,464.56,74.1
+moody k1,2017-08-30,2017,60.625,24.875,4.583333333333333,10.25,83.75,11.25,6.25,227.68,1189.72,102.88,823.88,72.28

@@ -1,0 +1,10 @@
+plot_id,date,visit_year,species,dung1m,dung2m
+gordon a1,2018-08-20,2018,deer,1,0
+gordon b1,2018-08-20,2018,deer,2,0
+gordon c1,2018-08-20,2018,NA,0,0
+gordon d1,2018-08-21,2018,NA,0,0
+gordon e1,2018-08-21,2018,bear?,1,0
+gordon e1,2018-08-21,2018,deer,2,0
+gordon f1,2018-08-21,2018,NA,0,0
+gordon g1,2018-08-22,2018,NA,0,0
+gordon h1,2018-08-22,2018,NA,0,0

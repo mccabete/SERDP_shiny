@@ -1,0 +1,9 @@
+plot_id,visit_year,imcy_inv,avg_tiller_density_m2,xcoord_lon,ycoord_lat,years_since_fire
+gordon a1,2018,uninvaded,NA,-82.185351,33.355677,2
+gordon b1,2018,uninvaded,NA,-82.176099,33.357005,1
+gordon c1,2018,uninvaded,NA,-82.212831,33.35564,4
+gordon d1,2018,uninvaded,NA,-82.187065,33.343386,5
+gordon e1,2018,uninvaded,NA,-82.187841,33.342135,9
+gordon f1,2018,uninvaded,NA,-82.195633,33.34406,3
+gordon g1,2018,uninvaded,NA,-82.284032,33.364516,2
+gordon h1,2018,uninvaded,NA,-82.2853,33.364136,0

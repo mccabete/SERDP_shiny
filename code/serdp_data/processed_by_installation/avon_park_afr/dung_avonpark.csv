@@ -1,0 +1,26 @@
+plot_id,date,visit_year,species,dung1m,dung2m
+avonpark a1,2017-06-27,2017,cottontail,65,12
+avonpark a1,2017-06-27,2017,cow,15,4
+avonpark c1,2017-06-28,2017,cow,10,3
+avonpark c1,2017-06-28,2017,hog,2,1
+avonpark c1,2017-06-28,2017,racoon,1,0
+avonpark b1,2017-06-29,2017,NA,0,0
+avonpark d1,2017-06-30,2017,cottontail,1,0
+avonpark i1,2018-06-01,2018,NA,0,0
+avonpark g1,2018-05-31,2018,cottontail,2,0
+avonpark h1,2018-06-01,2018,cottontail,1,0
+avonpark h1,2018-06-01,2018,deer,2,2
+avonpark f1,2018-05-31,2018,deer,7,5
+avonpark f1,2018-05-31,2018,other,0,1
+avonpark c2,2018-05-31,2018,cottontail,31,0
+avonpark c2,2018-05-31,2018,cow,5,1
+avonpark c2,2018-05-31,2018,deer,2,1
+avonpark a1,2018-05-30,2018,cottontail,498,48
+avonpark a1,2018-05-30,2018,cow,31,10
+avonpark a2,2018-05-30,2018,cottontail,297,27
+avonpark a2,2018-05-30,2018,cow,27,7
+avonpark c1,2018-05-31,2018,cottontail,47,0
+avonpark c1,2018-05-31,2018,cow,12,3
+avonpark c1,2018-05-31,2018,other,1,0
+avonpark e1,2018-05-29,2018,NA,0,0
+avonpark e2,2018-05-29,2018,NA,0,0

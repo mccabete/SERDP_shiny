@@ -1,0 +1,19 @@
+plot_id,plot_visit_date,visit_year,species_name,life_stage,tick_count
+eglin b1,2017-08-19,2017,NA,NA,0
+eglin p1,2017-08-19,2017,Dermacentor variabilis,adult,1
+eglin d1,2017-08-17,2017,Amblyomma americanum,adult,3
+eglin d1,2017-08-17,2017,Amblyomma americanum,nymph,8
+eglin h1,2017-08-16,2017,Amblyomma americanum,adult,1
+eglin h1,2017-08-16,2017,Amblyomma americanum,nymph,68
+eglin h1,2017-08-16,2017,Dermacentor variabilis,adult,1
+eglin a1,2018-06-11,2018,Amblyomma americanum,nymph,1
+eglin b2,2018-06-15,2018,NA,NA,0
+eglin c1,2018-06-13,2018,NA,NA,0
+eglin e1,2018-06-12,2018,NA,NA,0
+eglin f1,2018-06-15,2018,Amblyomma americanum,adult,2
+eglin g1,2018-06-11,2018,Amblyomma americanum,adult,2
+eglin i1,2018-06-12,2018,Amblyomma americanum,adult,9
+eglin i1,2018-06-12,2018,Amblyomma americanum,nymph,13
+eglin i1,2018-06-12,2018,Dermacentor variabilis,adult,4
+eglin j1,2018-06-13,2018,Amblyomma americanum,adult,4
+eglin j1,2018-06-13,2018,Amblyomma americanum,nymph,2

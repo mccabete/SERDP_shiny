@@ -1,0 +1,11 @@
+plot_id,visit_year,imcy_inv,avg_tiller_density_m2,xcoord_lon,ycoord_lat,years_since_fire
+benning b1,2018,uninvaded,NA,-84.900369,32.390499,2
+benning a1,2018,uninvaded,NA,-84.894867,32.389017,4
+benning c1,2018,uninvaded,NA,-84.815476,32.345412,0
+benning d1,2018,uninvaded,NA,-84.774863,32.361567,1
+benning e1,2018,uninvaded,NA,-84.818986,32.327739,3
+benning f1,2018,uninvaded,NA,-84.821965,32.333689,2
+benning i1,2018,uninvaded,NA,-84.67736,32.399427,1
+benning j1,2018,uninvaded,NA,-84.679634,32.392144,0
+benning g1,2018,uninvaded,NA,-84.700343,32.377208,3
+benning h1,2018,uninvaded,NA,-84.672603,32.366872,1

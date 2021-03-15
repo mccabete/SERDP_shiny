@@ -1,0 +1,24 @@
+plot_id,date,visit_year,species,dung1m,dung2m
+eglin b1,2017-08-19,2017,cottontail,1,0
+eglin b1,2017-08-19,2017,deer,6,1
+eglin b1,2017-08-19,2017,other,1,0
+eglin p1,2017-08-19,2017,cottontail,1,0
+eglin p1,2017-08-19,2017,deer,1,0
+eglin d1,2017-08-17,2017,deer,6,0
+eglin h1,2017-08-16,2017,NA,0,0
+eglin a1,2018-06-11,2018,cottontail,1,0
+eglin b2,2018-06-15,2018,cottontail,7,0
+eglin b2,2018-06-15,2018,deer,3,1
+eglin b2,2018-06-15,2018,turkey,5,0
+eglin c1,2018-06-13,2018,cottontail,11,1
+eglin c1,2018-06-13,2018,deer,4,4
+eglin e1,2018-06-12,2018,cottontail,9,1
+eglin e1,2018-06-12,2018,turkey,2,1
+eglin f1,2018-06-15,2018,cottontail,34,0
+eglin f1,2018-06-15,2018,deer,39,14
+eglin g1,2018-06-11,2018,cottontail,8,0
+eglin g1,2018-06-11,2018,deer,7,1
+eglin i1,2018-06-12,2018,NA,0,0
+eglin j1,2018-06-13,2018,deer,15,3
+eglin j1,2018-06-13,2018,other,1,0
+eglin j1,2018-06-13,2018,turkey,2,2

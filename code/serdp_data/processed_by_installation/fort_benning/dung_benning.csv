@@ -1,0 +1,13 @@
+plot_id,date,visit_year,species,dung1m,dung2m
+benning b1,2018-07-24,2018,deer,11,0
+benning a1,2018-07-24,2018,deer,1,0
+benning c1,2018-07-25,2018,NA,0,0
+benning d1,2018-07-25,2018,deer,3,0
+benning e1,2018-07-26,2018,NA,0,0
+benning f1,2018-07-26,2018,cottontail,9,0
+benning f1,2018-07-26,2018,deer,1,0
+benning i1,2018-07-27,2018,NA,0,0
+benning j1,2018-07-27,2018,cottontail,6,0
+benning j1,2018-07-27,2018,deer,3,0
+benning g1,2018-07-28,2018,NA,0,0
+benning h1,2018-07-28,2018,deer,4,0

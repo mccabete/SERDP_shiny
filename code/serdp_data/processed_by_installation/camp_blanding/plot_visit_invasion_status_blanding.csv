@@ -1,0 +1,18 @@
+plot_id,visit_year,imcy_inv,avg_tiller_density_m2,xcoord_lon,ycoord_lat,years_since_fire
+blanding c1,2017,uninvaded,NA,-81.997211,29.826576,2
+blanding g1,2017,uninvaded,NA,-81.950797,29.869148,6
+blanding d1,2017,uninvaded,NA,-81.998625,29.869196,3
+blanding a1,2017,uninvaded,NA,-82.001082,29.86202,0
+blanding b1,2017,uninvaded,NA,-81.990587,29.832857,1
+blanding f1,2017,uninvaded,NA,-81.982317,29.833612,10
+blanding e1,2017,uninvaded,NA,-81.965662,29.849803,4
+blanding h1,2017,uninvaded,NA,-81.949534,29.866916,8
+blanding k1,2018,uninvaded,NA,-82.023445,29.837378,3
+blanding m1,2018,uninvaded,NA,-81.968503,29.84575,11
+blanding n1,2018,uninvaded,NA,-81.977192,29.83789,5
+blanding theater_cogon,2018,invaded,15.25,NA,NA,NA
+blanding h1,2018,uninvaded,NA,-81.949534,29.866916,0
+blanding g1,2018,uninvaded,NA,-81.950797,29.869148,0
+blanding c1,2018,uninvaded,NA,-81.997211,29.826576,1
+blanding i1,2018,uninvaded,NA,-82.032726,29.863529,4
+blanding j1,2018,uninvaded,NA,-82.026049,29.852464,2

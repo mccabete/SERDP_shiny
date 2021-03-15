@@ -1,0 +1,4 @@
+plot_id,visit_year,imcy_inv,avg_tiller_density_m2,xcoord_lon,ycoord_lat,years_since_fire
+moody b1,2017,uninvaded,NA,-83.1753,30.984401,1
+moody a1,2017,uninvaded,NA,-83.179208,30.98314,0
+moody k1,2017,uninvaded,NA,-83.183563,30.950761,11

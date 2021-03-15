@@ -1,0 +1,15 @@
+plot_id,plot_visit_date,visit_year,species_name,life_stage,tick_count
+avonpark a1,2017-06-27,2017,NA,NA,0
+avonpark c1,2017-06-28,2017,NA,NA,0
+avonpark b1,2017-06-29,2017,NA,NA,0
+avonpark d1,2017-06-30,2017,Dermacentor variabilis,adult,2
+avonpark i1,2018-06-01,2018,Dermacentor variabilis,adult,1
+avonpark g1,2018-05-31,2018,Dermacentor variabilis,adult,1
+avonpark h1,2018-06-01,2018,NA,NA,0
+avonpark f1,2018-05-31,2018,NA,NA,0
+avonpark c2,2018-05-31,2018,Amblyomma maculatum,adult,1
+avonpark a1,2018-05-30,2018,NA,NA,0
+avonpark a2,2018-05-30,2018,NA,NA,0
+avonpark c1,2018-05-31,2018,Dermacentor variabilis,adult,2
+avonpark e1,2018-05-29,2018,Dermacentor variabilis,adult,1
+avonpark e2,2018-05-29,2018,Dermacentor variabilis,adult,1

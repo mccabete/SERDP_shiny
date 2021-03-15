@@ -1,0 +1,15 @@
+plot_id,visit_year,imcy_inv,avg_tiller_density_m2,xcoord_lon,ycoord_lat,years_since_fire
+avonpark a1,2017,invaded,181.33333333333334,-81.309644,27.67576,0
+avonpark c1,2017,invaded,203,-81.325371,27.6764,2
+avonpark b1,2017,invaded,143.33333333333334,-81.283521,27.67749,1
+avonpark d1,2017,uninvaded,NA,-81.387992,27.711576,3
+avonpark i1,2018,uninvaded,NA,-81.371559,27.735014,6
+avonpark g1,2018,uninvaded,NA,-81.273215,27.544825,5
+avonpark h1,2018,uninvaded,NA,-81.390801,27.731963,1
+avonpark f1,2018,uninvaded,NA,-81.292512,27.615926,0
+avonpark c2,2018,uninvaded,NA,-81.327873,27.674898,3
+avonpark a1,2018,invaded,241,-81.309644,27.67576,1
+avonpark a2,2018,uninvaded,NA,-81.311222,27.674646,1
+avonpark c1,2018,invaded,50.25,-81.325371,27.6764,3
+avonpark e1,2018,uninvaded,NA,-81.283291,27.587665,1
+avonpark e2,2018,invaded,627,-81.245362,27.630246,1

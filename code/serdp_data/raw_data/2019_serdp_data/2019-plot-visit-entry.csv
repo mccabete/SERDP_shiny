@@ -1,0 +1,53 @@
+installation,relative_location,plot_id,imcy_inv,visit_date,last_fire_year,visit_number,notes
+wes,gainesville,I-1,invaded,20190402,2000,1,
+brown,ocala,I-1,invaded,20190404,2000,1,
+brown,ocala,N-1,uninvaded,20190404,2000,1,
+silversprings,ocala,I-1,invaded,20190404,2000,1,
+silversprings,ocala,N-1,uninvaded,20190404,2000,1,
+peaceriver,lakeland,I-1,invaded,20190410,2000,1,
+peaceriver,lakeland,I-2,invaded,20190410,2000,1,
+peaceriver,lakeland,I-3,invaded,20190410,2000,1,
+peaceriver,lakeland,I-1,invaded,20190417,2000,2,retrap all peace river but moved trap locations
+peaceriver,lakeland,I-2,invaded,20190417,2000,2,
+peaceriver,lakeland,I-3,invaded,20190417,2000,2,
+hancock,lakeland,I-1,invaded,20190417,2000,1,
+hancock,lakeland,I-2,invaded,20190417,2016,1,
+hancock,lakeland,N-1,uninvaded,20190417,2000,1,
+wes,gainesville,I-2,invaded,20190423,2000,1,"did not trap I-1, moved invaded"
+wes,gainesville,N-1,uninvaded,20190423,2000,1,found native plot
+seay,gainesville,I-1,invaded,20190423,2000,1,
+seay,gainesville,N-1,uninvaded,20190423,2000,1,
+brown,ocala,I-2,invaded,20190425,2000,1,"did not trap I-1, moved invaded"
+brown,ocala,N-2,uninvaded,20190425,2000,1,"did not trap N-1, moved uninvaded"
+silversprings,ocala,I-1,invaded,20190425,2000,2,
+silversprings,ocala,N-1,uninvaded,20190425,2000,2,
+munson,tallahassee,I-1,invaded,20190501,2000,1,
+munson,tallahassee,N-1,uninvaded,20190501,2000,1,
+riversedge,tallahassee,I-1,invaded,20190501,2000,1,
+riversedge,tallahassee,I-2,invaded,20190501,2000,1,
+riversedge,tallahassee,I-3,invaded,20190501,2000,1,"recently burned, 4/2019"
+riversedge,tallahassee,N-1,uninvaded,20190501,2000,1,
+peaceriver,lakeland,I-4,invaded,20190508,2000,3,similar to i-2 and i-3 (oaky)
+peaceriver,lakeland,I-5,invaded,20190508,2000,3,similar to i-1 (pine)
+peaceriver,lakeland,N-1,uninvaded,20190508,2000,3,native mid trail ish
+hancock,lakeland,I-3,invaded,20190508,2000,1,similar to i-1 (by the water)
+hancock,lakeland,I-4,invaded,20190508,2016,1,similar to i-2 (pine)
+hancock,lakeland,N-1,uninvaded,20190508,2000,2,pair to i-2 (cow pasture)
+hancock,lakeland,N-2,uninvaded,20190508,2000,1,pair to i-1 (by the water)
+wes,gainesville,I-1,invaded,20190515,2000,2,
+wes,gainesville,I-3,invaded,20190515,2000,1,new invasion found
+wes,gainesville,N-1,uninvaded,20190515,2000,2,
+seay,gainesville,I-2,invaded,20190515,2000,1,
+seay,gainesville,N-2,uninvaded,20190515,2000,1,moved both plots eastward
+brown,ocala,I-2,invaded,20190517,2000,2,
+brown,ocala,I-3,invaded,20190517,2000,1,
+brown,ocala,N-2,uninvaded,20190517,2000,2,
+brown,ocala,N-3,uninvaded,20190517,2000,1,
+silversprings,ocala,I-1,invaded,20190517,2000,3,
+silversprings,ocala,N-1,uninvaded,20190517,2000,3,
+munson,tallahassee,I-1,invaded,20190607,2000,2,
+munson,tallahassee,N-1,uninvaded,20190607,2000,2,
+riversedge,tallahassee,I-1,invaded,20190607,2000,2,
+riversedge,tallahassee,I-2,invaded,20190607,2000,2,
+riversedge,tallahassee,I-3,invaded,20190607,2019,2,
+riversedge,tallahassee,N-1,uninvaded,20190607,2000,2,
