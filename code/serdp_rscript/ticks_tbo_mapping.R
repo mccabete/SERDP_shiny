@@ -157,6 +157,7 @@ sites_tbo_sf <- sites_tbo_sf %>%
              Prevalence = Human_pathogen_prevalence,
              Abundance = ticks_per_trap
              )
+sites_tbo_sf$Trap_effort <- trap_effort$trap_effort
 #sites_tbo_sf$geometry <- as.character(sites_tbo_sf$geometry)
 #write.csv(sites_tbo_sf, "/projectnb/dietzelab/mccabete/SERDP_shiny/code/serdp_data/Tick_prevelence_absense_map.csv")
 st_write(sites_tbo_sf, "/projectnb/dietzelab/mccabete/SERDP_shiny/code/serdp_data/Tick_prevelence_absense_map.shp")

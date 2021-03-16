@@ -95,9 +95,9 @@ park_card <- function (park_Name, park_Code, park_State, park_Acres, park_Latitu
 # DATA WRANGLING #
 ##################
 
-tick_map <- st_read("/projectnb/dietzelab/mccabete/SERDP_shiny/code/serdp_data/Tick_prevelence_absense_map.shp") #By default, this function abriviates column names? 
-#names(tick_map) <- c("FULLNAME","total_ticks", "Human_pathogen_prevalence", "ticks_per_trap","PxA","geometry","Ticks","Prevalence","Abundance" )
-#st_geometry(tick_map) <- "geometry"
+tick_map <- st_read("/projectnb/dietzelab/mccabete/SERDP_shiny/code/serdp_data/Tick_prevelence_absense_map.shp") #By default, this function abriviates column names? Renaming them does cause errors. 
+tick_map$pathogen_number <- tick_map$Hmn_pt_ * tick_map$Ticks
+
 # preprocessed parks file:
 #   3 records were multi states parks, only was was attributed
 #     DEVA,Death Valley National Park,CA/NV,4740912,36.24,-116.82  --> CA
@@ -202,29 +202,88 @@ shinyServer(function(input, output) {
   #   })
   # 
   
-  bins <- c(0, 10, 50, 100, 318)
-  pal <- colorBin("YlOrRd", domain = tick_map$Ticks, bins = bins)
+  #Tick Abundance Layer
+  pal_tick_abundance <- colorBin("YlOrRd", domain = tick_map$tcks_p_, bins = 3)
   
-  labels <- sprintf(
-    "<strong>%s</strong><br/>%g Ticks Collected",
-    tick_map$FULLNAM, tick_map$Ticks
+  labels_tick_abundance <- sprintf(
+    "<strong>%s</strong><br/>%g Ticks per trap <br/> %g ticks, %g traps ",
+    tick_map$FULLNAM, tick_map$tcks_p_, tick_map$Ticks, tick_map$Trp_ffr
   ) %>% lapply(htmltools::HTML)
   
+  #Pathogen Prevelence Data Layer
+  pal_path_prevelance <- colorBin("YlOrRd", domain = tick_map$Hmn_pt_, bins = 3)
+  
+  labels_path_prevelance <- sprintf(
+    "<strong>%s</strong><br/>%g Pathogens per Tick <br/> %g pathogens, %g ticks ",
+    tick_map$FULLNAM, tick_map$Hmn_pt_, tick_map$pathogen_number, tick_map$Ticks
+  ) %>% lapply(htmltools::HTML)
+  
+  # Risk Layer
+  pal_risk <- colorBin("YlOrRd", domain = tick_map$PxA, bins = 3)
+  
+  labels_risk <- sprintf(
+    "<strong>%s</strong><br/>%g Risk of Tick-borne Pathogen <br/> Exposure per 24 hours",
+    tick_map$FULLNAM, tick_map$PxA
+  ) %>% lapply(htmltools::HTML)
+  
+  
+  # Map
   output$parksMap <- renderLeaflet({
     leaflet(data = tick_map) %>% 
       addProviderTiles(providers$Esri.WorldImagery, group = "Esri World Imagery", options = providerTileOptions(noWrap = TRUE)) %>%
       addFullscreenControl() %>%
-      addPolygons(fillColor = ~pal(Ticks),
+      #------------ Risk Layer ----------#
+      addPolygons(fillColor = ~pal_risk(PxA),
                   weight = 1,
                   opacity = 1,
                   color = "white",
                   fillOpacity = 1,
-                  label = labels
+                  label = labels_risk, 
+                  group = "Tick Borne Disease Risk" 
+      ) %>%
+      addLegend(pal = pal_risk, 
+                values = ~PxA, 
+                opacity = 0.7, 
+                title = "Tick Borne Disease Risk",
+                position = "bottomright", 
+                group = "Tick Borne Disease Risk"
+      ) %>%
+      #------------ Pathogen Presence Layer ----------#
+      addPolygons(fillColor = ~pal_path_prevelance(Hmn_pt_),
+                  weight = 1,
+                  opacity = 1,
+                  color = "white",
+                  fillOpacity = 1,
+                  label = labels_path_prevelance, 
+                  group = "Pathogen Presence" 
+      ) %>%
+      addLegend(pal = pal_path_prevelance, 
+                values = ~Hmn_pt_, 
+                opacity = 0.7, 
+                title = "Human Pathogens/Tick",
+                position = "bottomright", 
+                group = "Pathogen Presence"
+      ) %>%
+      #------------ Tick Abundance Layer ----------#
+      addPolygons(fillColor = ~pal_tick_abundance(tcks_p_),
+                  weight = 1,
+                  opacity = 1,
+                  color = "white",
+                  fillOpacity = 1,
+                  label = labels_tick_abundance, 
+                  group = "Tick Abundance" 
                   ) %>%
-      addLegend(pal = pal, values = ~density, opacity = 0.7, title = "Ticks Collected",
-                position = "bottomright") %>%
+      addLegend(pal = pal_tick_abundance, 
+                values = ~tcks_p_, 
+                opacity = 0.7, 
+                title = "Tick Abundance",
+                position = "bottomright", 
+                group = "Tick Abundance"
+                ) %>%
+      #------------ Layer control ----------#
       addLayersControl(
-        baseGroups = c("Esri World Imagery"),
+        #baseGroups = c("Esri World Imagery"),
+        overlayGroups = c("Tick Abundance", "Pathogen Presence",  "Tick Borne Disease Risk"),
         position = c("topleft"),
         options = layersControlOptions(collapsed = TRUE)
       )
