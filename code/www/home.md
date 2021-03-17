@@ -1,6 +1,6 @@
 ## Welcome !
 <br><br>
-<i> Biodiversity in National Parks</i> is an app that let you visualize [Kaggle's biodiversity dataset](https://www.kaggle.com/nationalparkservice/park-biodiversity).
+
 
 From the left navigation panel you'll be able to access the maps, data and charts concerning the US National Parks and their resident species.
 
