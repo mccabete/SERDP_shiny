@@ -8,4 +8,4 @@ It has been made with [shiny](https://shiny.rstudio.com/) and you may find the c
 
 For a quick walkthrough have a look a the video below.
 <br><br><br>
-<iframe style = "display: block; margin: auto;" width="640" height="360" src="https://www.youtube.com/embed/Qu2J2ytWqxA?hd=1"></iframe>
+<iframe style = "display: block; margin: auto;" width="640" height="360" src="serdp-flow-chart.png"></iframe>
