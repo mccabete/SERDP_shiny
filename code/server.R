@@ -10,7 +10,7 @@ library(sf)
 # DATA WRANGLING #
 ##################
 
-tick_map <- st_read("/projectnb/dietzelab/mccabete/SERDP_shiny/code/serdp_data/Tick_prevelence_absense_map.shp") #By default, this function abriviates column names? Renaming them does cause errors. 
+tick_map <- st_read("www/Tick_prevelence_absense_map.shp") #By default, this function abriviates column names? Renaming them does cause errors. 
 tick_map$pathogen_number <- tick_map$Hmn_pt_ * tick_map$Ticks
 
 
