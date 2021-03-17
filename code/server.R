@@ -8,6 +8,7 @@ library(shiny)
 library(tidyverse)
 library(leaflet.extras)
 library(rvest)
+library(sf)
 
 #####################
 # SUPPORT FUNCTIONS #
