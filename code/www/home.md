@@ -1,11 +1,10 @@
 ## Welcome !
 <br><br>
-<i> Biodiversity in National Parks</i> is an app that let you visualize [Kaggle's biodiversity dataset](https://www.kaggle.com/nationalparkservice/park-biodiversity).
-
-From the left navigation panel you'll be able to access the maps, data and charts concerning the US National Parks and their resident species.
-
-It has been made with [shiny](https://shiny.rstudio.com/) and you may find the code on [github](https://github.com/abenedetti/bioNPS/) and [rcloud](https://rstudio.cloud/project/246130). 
-
-For a quick walkthrough have a look a the video below.
-<br><br><br>
+Tick-borne diseases (TBDs) represent a major public health threat in North America, particularly for military personnel training on Department of Defense (DoD) installations. We received funding from the Strategic Environmental Research and Development Program to explore several of the predicted consequences of climate change on fire regimes and plant communities, and their interactions with wildlife, for human risk of exposure to TBDs in the southeastern U.S.
+<br>
+<br>
+<i> Click on the tabs to the left to explore our data. 
+<br>
+<br>
+<br>
 <iframe style = "display: block; margin: auto;" width="640" height="360" src="serdp-flow-chart.png"></iframe>
