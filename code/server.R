@@ -13,6 +13,20 @@ library(sf)
 tick_map <- st_read("www/Tick_prevelence_absense_map.shp") #By default, this function abriviates column names? Renaming them does cause errors. 
 tick_map$pathogen_number <- tick_map$Hmn_pt_ * tick_map$Ticks
 
+installation_lookup_table <- read.csv("www/SERDP_data_installtion_lookup_table.csv")
+ticks <- read.csv("www/ticks.csv")
+
+##################
+# HELPER FUNCTIONS #
+##################
+
+subset_data <- function (data, installation_name){
+  name <- installation_lookup_table$data_name[installation_name == installation_lookup_table$Formal_name]
+  
+  data <- filter(data, installation == name)
+  
+  return(data)
+}
 
 ################
 # SERVER LOGIC #
@@ -23,7 +37,7 @@ shinyServer(function(input, output) {
  
   
   #Tick Abundance Layer
-  pal_tick_abundance <- colorBin("YlOrRd", domain = tick_map$tcks_p_, bins = 3)
+  pal_tick_abundance <- colorBin("Blues", domain = tick_map$tcks_p_, bins = 4)
   
   labels_tick_abundance <- sprintf(
     "<strong>%s</strong><br/>%g Ticks per trap <br/> %g ticks, %g traps ",
@@ -31,7 +45,7 @@ shinyServer(function(input, output) {
   ) %>% lapply(htmltools::HTML)
   
   #Pathogen Prevelence Data Layer
-  pal_path_prevelance <- colorBin("YlOrRd", domain = tick_map$Hmn_pt_, bins = 3)
+  pal_path_prevelance <- colorBin("Purples", domain = tick_map$Hmn_pt_, bins = 4)
   
   labels_path_prevelance <- sprintf(
     "<strong>%s</strong><br/>%g Pathogens per Tick <br/> %g pathogens, %g ticks ",
@@ -39,15 +53,15 @@ shinyServer(function(input, output) {
   ) %>% lapply(htmltools::HTML)
   
   # Risk Layer
-  pal_risk <- colorBin("YlOrRd", domain = tick_map$PxA, bins = 3)
+  pal_risk <- colorBin("YlOrRd", domain = tick_map$PxA, bins = 4)
   
   labels_risk <- sprintf(
     "<strong>%s</strong><br/>%g Risk of Tick-borne Pathogen <br/> Exposure per 24 hours",
     tick_map$FULLNAM, tick_map$PxA
   ) %>% lapply(htmltools::HTML)
   
-  
-  # Map
+
+  #### Map
   output$parksMap <- renderLeaflet({
     leaflet(data = tick_map) %>% 
       addProviderTiles(providers$Esri.WorldImagery, group = "Esri World Imagery", options = providerTileOptions(noWrap = TRUE)) %>%
@@ -106,8 +120,29 @@ shinyServer(function(input, output) {
         overlayGroups = c("Tick Abundance", "Pathogen Presence",  "Tick Borne Disease Risk"),
         position = c("topleft"),
         options = layersControlOptions(collapsed = TRUE)
-      )
-  })
+      ) %>%
+      hideGroup(c("Tick Abundance", "Pathogen Presence"))
+  }) # parkMap
+      
+  #### Tick Borne DIsease Summery Plots
+  #tick_data <- subset_data(ticks, input$installation)
+  
+  output$hist_summary_ticks <- renderPlot( {
+    tick_data <- subset_data(ticks, input$installation)
+      ggplot(tick_data) +
+      theme_classic()+ 
+      geom_histogram(aes(x = count, fill = life_stage)) + 
+      ylab("Frequency") + 
+      xlab("Ticks Observed per Sampling Event") + 
+      ggtitle(input$installation)
+    })
+  
+  
+#  output$tick_species <- renderDataTable({
+#    tick_data <- subset_data(ticks, input$installation)
+#    tick_data <- select(tick_data, c("visit_year", "count","life_stage" ,"species_name"))
+#    })
+
   
   
   #####################################

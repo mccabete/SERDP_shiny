@@ -11,6 +11,13 @@ library(shinycssloaders)
 library(DT)
 library(tigris)
 
+
+###########
+# DATA    #
+###########
+installation.name <- c("Avon Park Air Force Range", "Fort Benning", "Camp Blanding Army Base",
+                        "Eglin Air Force Base", "Fort Gordon Army Base", "Fort Jackson Army Base", "Moody Air Force Base", 
+                        "Camp Shelby Joint Forces Training Center", "Tyndall Air Force Base")
 ###########
 # LOAD UI #
 ###########
@@ -42,7 +49,7 @@ shinyUI(fluidPage(
           "<br>"
         )),
         menuItem("Home", tabName = "home", icon = icon("home")),
-        menuItem("Tick Borne Disease", tabName = "map", icon = icon("disease"))
+        menuItem("Tick Borne Disease", tabName = "tick_borne_disease", icon = icon("disease"))
       )
       
     ), # end dashboardSidebar
@@ -58,12 +65,33 @@ shinyUI(fluidPage(
           
         ),
         
-        tabItem(tabName = "map",
-        
-          # parks map section
-          leafletOutput("parksMap") %>% withSpinner(color = "green")
+        tabItem(tabName = "tick_borne_disease",
+         
+            
+              
+              leafletOutput("parksMap", width = "75%", height = "100px") %>% withSpinner(color = "green"),
+              
+               
                 
-        )
+           
+            
+             
+             selectInput(
+                "installation", "Please Select Installtion(s) for data summary", installation.name,
+                multiple = FALSE
+              ),
+            
+              
+              plotOutput("hist_summary_ticks"), 
+             
+            # dataTableOutput("tick_species")
+            
+            
+                
+            
+            )## Tab 
+          
+                
               
       ) # End of tabItems
     
