@@ -100,7 +100,9 @@ shinyUI(fluidPage(
                 )  
         ), # disease risk map
         
-        tabItem(tabName = "pathogens")
+        tabItem(tabName = "pathogens", 
+                dataTableOutput("pathogen_data")
+                )
         
               
       ) # End of tabItems

@@ -52,7 +52,9 @@ p <- pathogenecity %>%
             Pathogen_Name = `PATHOGEN NAME`,
             Domestic_Animals = `Domestic Animals`,
             Human_Endo = `Human/Endosymbiont`,
-            Human_Animal = `Human/Animal`
+            Human_Animal = `Human/Animal`, 
+            Vertebrate_Host = `VERTEBRATE TICK HOST(S)`, 
+            Disease = `DISEASE`
       ) %>%
       select(Pathogen_Name:Unknown) %>%
       mutate(Human = ifelse(Human=="+", "Yes","No"),

@@ -11,11 +11,14 @@ library(sf)
 # DATA WRANGLING #
 ##################
 
+# Tick data ----
 tick_map <- st_read("www/Tick_prevelence_absense_map.shp") #By default, this function abriviates column names? Renaming them does cause errors. 
 tick_map$pathogen_number <- tick_map$Hmn_pt_ * tick_map$Ticks
 
 installation_lookup_table <- read.csv("www/SERDP_data_installtion_lookup_table.csv")
 ticks <- read.csv("www/ticks.csv", stringsAsFactors = FALSE)
+pathogens <- read.csv("www/pathogenicity_by_installation.csv", stringsAsFactors = FALSE)
+#pathogens <- select(pathogens, c("Installation", "tbo", "Human", "Wildlife", "Domestic_Animals", "Endosymbiont", "Human_Endo","Human_Animal", "Unknown", "Vertebrate_Host","Disease"))
 
 ##################
 # HELPER FUNCTIONS #
@@ -36,7 +39,7 @@ subset_data <- function (data, installation_name){
 shinyServer(function(input, output) {
    
  
-  
+# TBD Map prep ----
   #Tick Abundance Layer
   pal_tick_abundance <- colorBin("Blues", domain = tick_map$tcks_p_, bins = 4)
   
@@ -62,7 +65,7 @@ shinyServer(function(input, output) {
   ) %>% lapply(htmltools::HTML)
   
 
-  #### Map
+  #### TBD Map ----
   output$parksMap <- renderLeaflet({
     leaflet(data = tick_map) %>% 
       addProviderTiles(providers$Esri.WorldImagery, group = "Esri World Imagery", options = providerTileOptions(noWrap = TRUE)) %>%
@@ -124,8 +127,9 @@ shinyServer(function(input, output) {
       ) %>%
       hideGroup(c("Tick Abundance", "Pathogen Presence"))
   }) # parkMap
-      
-  #### Tick Borne DIsease Summery Plots
+  
+ 
+  #### Tick Borne Dssease Summery Plots ----
   #tick_data <- subset_data(ticks, input$installation)
   
   output$hist_summary_ticks <- renderPlot( {
@@ -159,12 +163,14 @@ shinyServer(function(input, output) {
         axis.text.x = element_text(size = 12, angle = 45, hjust = 1)) +
       ylab("Total Ticks Collected") + 
       xlab("")
-    
     })
+   
+  # Pathogen data ----
+  output$pathogen_data <- renderDataTable(pathogens)
 
   
   
-  #####################################
+
   
 
 })

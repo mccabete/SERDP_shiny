@@ -1,0 +1,95 @@
+Installation,Organism/Pathogen,Vertebrate_Host,Disease,Disease_infection_population
+Avon,Francisella-like endosymbiont,unknown,non-pathogenic,NA
+Avon,Rickettsia rhipicephali,mammals,rickettsiosis, Wildlife Domestic Animals
+Blanding,Ehrlichia muris subsp. eauclairensis,"cattle, dogs, med/large mammals, mice, sml mammals, ground-frequenting birds, skinks, lizards",ehrlichiosis, Human
+Blanding,Rickettsia amblyommatis,mammals,"endosymbiont, may cause mild human rickettsiosis", Human/Endosymbiont
+Blanding,Coxiella endo. of A. americanum,unknown,non-pathogenic,NA
+Blanding,Babesia sp.,cattle; deer; rabbits,babesioses/unknown, Wildlife Domestic Animals
+Blanding,Francisella endosymbiont,unknown,non-pathogenic,NA
+Blanding,Theileria cervi,deer,opportunistic theileriosis, Wildlife
+Blanding,Theileria sp.,unknown,theileriosis/unknown pathogenicity, Unknown
+Blanding,Rickettsia parkeri,mammals,"R. parkeri rickettsiosis; mild, eschar-associated rickettsiosis (North America); no known disease in Central America; spotted fever (South America)", Human Domestic Animals Human/Animals
+Blanding,Francisella-like endosymbiont,unknown,non-pathogenic,NA
+Blanding,Theileria sp. Ree18,deer,theileriosis, Wildlife
+Blanding,Rickettsia bellii,"rabbits, guinea pigs",eschars develop, Wildlife Domestic Animals
+Blanding,Theileria sp. H8,deer,theileriosis, Wildlife
+Blanding,Rickettsia sp.,unknown,rickettsiosis/non-pathogenic, Unknown
+Blanding,Theileria sp. KCS-2015,deer,theileriosis, Wildlife
+Blanding,Borrelia lonestari,"dogs, deer, horses, rodents",STARI? (probably not?), Human
+Blanding,Ehrlichia ewingii,"dogs, deer, horses, rodents",granulocytic ehrlichiosis, Human Wildlife Domestic Animals Human/Animals
+Blanding,Rickettsia rhipicephali,mammals,rickettsiosis, Wildlife Domestic Animals
+Blanding,Francisella sp.,unknown,unknown pathogensis, Unknown
+Blanding,Theileria sp. North Texas white-tailed deer,deer,theileriosis, Wildlife
+Blanding,Coxiella sp.,unknown,non-pathogenic,NA
+Eglin,Rickettsia amblyommatis,mammals,"endosymbiont, may cause mild human rickettsiosis", Human/Endosymbiont
+Eglin,Coxiella endo. of A. americanum,unknown,non-pathogenic,NA
+Eglin,Rickettsia sp.,unknown,rickettsiosis/non-pathogenic, Unknown
+Eglin,Theileria sp.,unknown,theileriosis/unknown pathogenicity, Unknown
+Eglin,Ehrlichia muris subsp. eauclairensis,"cattle, dogs, med/large mammals, mice, sml mammals, ground-frequenting birds, skinks, lizards",ehrlichiosis, Human
+Eglin,Theileria cervi,deer,opportunistic theileriosis, Wildlife
+Eglin,Francisella sp.,unknown,unknown pathogensis, Unknown
+Eglin,Rickettsia bellii,"rabbits, guinea pigs",eschars develop, Wildlife Domestic Animals
+Eglin,Theileria sp. H8,deer,theileriosis, Wildlife
+Eglin,Anaplasma phagocytophilum,"rodents, cattle, sheep, goats",febrile disease (human and animal granulocytic anaplasmosis), Human Wildlife Domestic Animals Human/Animals
+Eglin,Rickettsia sp. Is2FT68-2,unknown,unknown pathogenicity, Unknown
+Eglin,Francisella-like endosymbiont,unknown,non-pathogenic,NA
+Gordon,Coxiella endo. of A. americanum,unknown,non-pathogenic,NA
+Gordon,Ehrlichia chaffeensis,"dogs, deer, horses, rodents",human monocytic ehrlichiosis, Human Domestic Animals Human/Animals
+Gordon,Theileria sp.,unknown,theileriosis/unknown pathogenicity, Unknown
+Gordon,Ehrlichia muris subsp. eauclairensis,"cattle, dogs, med/large mammals, mice, sml mammals, ground-frequenting birds, skinks, lizards",ehrlichiosis, Human
+Gordon,Rickettsia amblyommatis,mammals,"endosymbiont, may cause mild human rickettsiosis", Human/Endosymbiont
+Gordon,Rickettsia bellii,"rabbits, guinea pigs",eschars develop, Wildlife Domestic Animals
+Gordon,Borrelia lonestari,"dogs, deer, horses, rodents",STARI? (probably not?), Human
+Gordon,Candidatus Rickettsia andeanae,"equids, bovids, canids, birds",unknown pathogenicity, Unknown
+Gordon,Francisella-like endosymbiont,unknown,non-pathogenic,NA
+Gordon,Ehrlichia sp. P-Mtn,"dogs, deer, horses, rodents",ehrlichiosis, Domestic Animals
+Jackson,Francisella sp.,unknown,unknown pathogensis, Unknown
+Jackson,Rickettsia bellii,"rabbits, guinea pigs",eschars develop, Wildlife Domestic Animals
+Jackson,Rickettsia amblyommatis,mammals,"endosymbiont, may cause mild human rickettsiosis", Human/Endosymbiont
+Jackson,Coxiella endo. of A. americanum,unknown,non-pathogenic,NA
+Jackson,Ehrlichia muris subsp. eauclairensis,"cattle, dogs, med/large mammals, mice, sml mammals, ground-frequenting birds, skinks, lizards",ehrlichiosis, Human
+Jackson,Rickettsia sp. Is2FT68-2,unknown,unknown pathogenicity, Unknown
+Jackson,Francisella-like endosymbiont,unknown,non-pathogenic,NA
+Moody,Ehrlichia muris subsp. eauclairensis,"cattle, dogs, med/large mammals, mice, sml mammals, ground-frequenting birds, skinks, lizards",ehrlichiosis, Human
+Moody,Theileria sp. North Texas white-tailed deer,deer,theileriosis, Wildlife
+Moody,Coxiella endo. of A. americanum,unknown,non-pathogenic,NA
+Moody,Theileria cervi,deer,opportunistic theileriosis, Wildlife
+Benning,Coxiella endo. of A. americanum,unknown,non-pathogenic,NA
+Benning,Theileria sp.,unknown,theileriosis/unknown pathogenicity, Unknown
+Benning,Rickettsia bellii,"rabbits, guinea pigs",eschars develop, Wildlife Domestic Animals
+Benning,Rickettsia amblyommatis,mammals,"endosymbiont, may cause mild human rickettsiosis", Human/Endosymbiont
+Benning,Ehrlichia ewingii,"dogs, deer, horses, rodents",granulocytic ehrlichiosis, Human Wildlife Domestic Animals Human/Animals
+Benning,Babesia sp.,cattle; deer; rabbits,babesioses/unknown, Wildlife Domestic Animals
+Benning,Ehrlichia muris subsp. eauclairensis,"cattle, dogs, med/large mammals, mice, sml mammals, ground-frequenting birds, skinks, lizards",ehrlichiosis, Human
+Shelby,Candidatus Rickettsia andeanae,"equids, bovids, canids, birds",unknown pathogenicity, Unknown
+Shelby,Francisella-like endosymbiont,unknown,non-pathogenic,NA
+Shelby,Ehrlichia muris subsp. eauclairensis,"cattle, dogs, med/large mammals, mice, sml mammals, ground-frequenting birds, skinks, lizards",ehrlichiosis, Human
+Shelby,Coxiella endo. of A. americanum,unknown,non-pathogenic,NA
+Shelby,Francisella sp.,unknown,unknown pathogensis, Unknown
+Shelby,Rickettsia amblyommatis,mammals,"endosymbiont, may cause mild human rickettsiosis", Human/Endosymbiont
+Shelby,Rickettsia parkeri,mammals,"R. parkeri rickettsiosis; mild, eschar-associated rickettsiosis (North America); no known disease in Central America; spotted fever (South America)", Human Domestic Animals Human/Animals
+Shelby,Theileria sp.,unknown,theileriosis/unknown pathogenicity, Unknown
+Shelby,Rickettsia bellii,"rabbits, guinea pigs",eschars develop, Wildlife Domestic Animals
+Shelby,Theileria cervi,deer,opportunistic theileriosis, Wildlife
+Tyndall,Rickettsia parkeri,mammals,"R. parkeri rickettsiosis; mild, eschar-associated rickettsiosis (North America); no known disease in Central America; spotted fever (South America)", Human Domestic Animals Human/Animals
+Tyndall,Francisella-like endosymbiont,unknown,non-pathogenic,NA
+Tyndall,Francisella sp.,unknown,unknown pathogensis, Unknown
+Tyndall,Rickettsia rhipicephali,mammals,rickettsiosis, Wildlife Domestic Animals
+Tyndall,Ehrlichia muris subsp. eauclairensis,"cattle, dogs, med/large mammals, mice, sml mammals, ground-frequenting birds, skinks, lizards",ehrlichiosis, Human
+Tyndall,Rickettsia amblyommatis,mammals,"endosymbiont, may cause mild human rickettsiosis", Human/Endosymbiont
+Tyndall,Coxiella endo. of A. americanum,unknown,non-pathogenic,NA
+Tyndall,Rickettsia sp.,unknown,rickettsiosis/non-pathogenic, Unknown
+Tyndall,Ehrlichia sp.,unknown,ehrlichiosis/unknown pathogensis, Unknown
+Tyndall,Rickettsia bellii,"rabbits, guinea pigs",eschars develop, Wildlife Domestic Animals
+Tyndall,Rickettsia sp. Is2FT68-2,unknown,unknown pathogenicity, Unknown
+Tyndall,Borrelia sp.,"deer, rodents, rabbits, birds, small reptiles",borrelioses/non-pathogenic, Human
+Tyndall,Anaplasma phagocytophilum,"rodents, cattle, sheep, goats",febrile disease (human and animal granulocytic anaplasmosis), Human Wildlife Domestic Animals Human/Animals
+Tyndall,Candidatus Rickettsia andeanae,"equids, bovids, canids, birds",unknown pathogenicity, Unknown
+Tyndall,Borrelia burgdorferi,"rodents, deer, sheep (British Isles)",Lyme disease (arthritis), Human
+Tyndall,Theileria sp.,unknown,theileriosis/unknown pathogenicity, Unknown
+Tyndall,Theileria sp. H8,deer,theileriosis, Wildlife
+Tyndall,Ehrlichia chaffeensis,"dogs, deer, horses, rodents",human monocytic ehrlichiosis, Human Domestic Animals Human/Animals
+Tyndall,Theileria sp. North Texas white-tailed deer,deer,theileriosis, Wildlife
+Tyndall,Ehrlichia ewingii,"dogs, deer, horses, rodents",granulocytic ehrlichiosis, Human Wildlife Domestic Animals Human/Animals
+Tyndall,Borrelia kurtenbachii,"small rodents (RH), deer",Lyme borreliosis, Human
+Tyndall,Theileria cervi-like,deer,unknown pathogenicity, Unknown
