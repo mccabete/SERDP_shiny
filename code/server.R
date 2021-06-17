@@ -1,3 +1,4 @@
+#library(rgdal, lib.loc = "/share/pkg.7/r/3.6.0/install/lib64/R/library")
 library(shiny)
 library(tidyverse)
 library(leaflet.extras)
@@ -14,7 +15,7 @@ tick_map <- st_read("www/Tick_prevelence_absense_map.shp") #By default, this fun
 tick_map$pathogen_number <- tick_map$Hmn_pt_ * tick_map$Ticks
 
 installation_lookup_table <- read.csv("www/SERDP_data_installtion_lookup_table.csv")
-ticks <- read.csv("www/ticks.csv")
+ticks <- read.csv("www/ticks.csv", stringsAsFactors = FALSE)
 
 ##################
 # HELPER FUNCTIONS #
@@ -130,18 +131,36 @@ shinyServer(function(input, output) {
   output$hist_summary_ticks <- renderPlot( {
     tick_data <- subset_data(ticks, input$installation)
       ggplot(tick_data) +
-      theme_classic()+ 
-      geom_histogram(aes(x = count, fill = life_stage)) + 
-      ylab("Frequency") + 
-      xlab("Ticks Observed per Sampling Event") + 
+        theme(
+          legend.title = element_blank(),
+          panel.background = element_rect(fill = "transparent", colour = NA),  
+          plot.background = element_rect(fill = "transparent", colour = NA) 
+          
+        ) +
+        geom_histogram(aes(x = count)) + 
+        ylab("Frequency") + 
+        xlab("Ticks Observed per Sampling Event") + 
+        ggtitle("test") + 
       ggtitle(input$installation)
     })
   
   
-#  output$tick_species <- renderDataTable({
-#    tick_data <- subset_data(ticks, input$installation)
-#    tick_data <- select(tick_data, c("visit_year", "count","life_stage" ,"species_name"))
-#    })
+  output$tick_species <- renderPlot({
+    tick_data <- subset_data(ticks, input$installation)
+    tick_data <- select(tick_data, c("visit_year", "count","life_stage" ,"species_name"))
+    tick_data <- filter(tick_data, count >  0)
+    
+    ggplot(tick_data) +
+      geom_col(aes(x = species_name, y = count,  fill = life_stage)) + 
+      theme(
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "transparent", colour = NA),  
+        plot.background = element_rect(fill = "transparent", colour = NA),
+        axis.text.x = element_text(size = 12, angle = 45, hjust = 1)) +
+      ylab("Total Ticks Collected") + 
+      xlab("")
+    
+    })
 
   
   

@@ -3,7 +3,7 @@
 # by Alessio Benedetti           #
 # ui.R file                      #
 ##################################
-
+#library(rgdal, lib.loc = "/share/pkg.7/r/3.6.0/install/lib64/R/library")
 library(leaflet)
 library(shinydashboard)
 library(collapsibleTree)
@@ -49,7 +49,11 @@ shinyUI(fluidPage(
           "<br>"
         )),
         menuItem("Home", tabName = "home", icon = icon("home")),
-        menuItem("Tick Borne Disease", tabName = "tick_borne_disease", icon = icon("disease"))
+        menuItem("Tick Borne Disease", tabName = "tick_borne_disease", icon = icon("disease"),
+              menuSubItem("Disease Risk Map", tabName = "disease_risk_map"),
+              menuSubItem("Tick Pathogens", tabName = "pathogens")
+                 )
+        
       )
       
     ), # end dashboardSidebar
@@ -65,33 +69,39 @@ shinyUI(fluidPage(
           
         ),
         
-        tabItem(tabName = "tick_borne_disease",
-         
-            
-              
-              leafletOutput("parksMap", width = "75%", height = "100px") %>% withSpinner(color = "green"),
-              
-               
+        tabItem(tabName = "tick_borne_disease") ,## Tab 
+        tabItem(tabName = "disease_risk_map", 
+                fluidRow(
+                  column(1),
+                  column(10,
+                         leafletOutput("parksMap", width = "100%", height = "100px") %>% withSpinner(color = "green")
+                  ),
+                  column(1)
+                ),
                 
-           
-            
-             
-             selectInput(
-                "installation", "Please Select Installtion(s) for data summary", installation.name,
-                multiple = FALSE
-              ),
-            
-              
-              plotOutput("hist_summary_ticks"), 
-             
-            # dataTableOutput("tick_species")
-            
-            
+                fluidRow(
+                  column(2),
+                  column(8, p("Try hovering over installations for mean values used to generate this map.")),
+                  column(2)
+                ),
                 
-            
-            )## Tab 
-          
+                selectInput(
+                  "installation", "Please Select Installtion(s) for tick data summary", installation.name,
+                  multiple = FALSE
+                ),
                 
+                fluidRow(
+                  column(6,
+                         plotOutput("hist_summary_ticks")
+                  ), 
+                  column(6, 
+                         plotOutput("tick_species")
+                  )
+                )  
+        ), # disease risk map
+        
+        tabItem(tabName = "pathogens")
+        
               
       ) # End of tabItems
     
