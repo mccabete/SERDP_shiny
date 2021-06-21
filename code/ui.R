@@ -83,7 +83,10 @@ shinyUI(fluidPage(
                 
                 fluidRow(
                   column(2),
-                  column(8, p("Try hovering over installations for mean values used to generate this map.")),
+                  column(6, p("Try hovering over installations for mean values used to generate this map, or download the shapefiles and data.")),
+                  column(2, 
+                         downloadButton("download_tick_map", label = "Download Map Data")
+                         ),
                   column(2)
                 ),
                 
@@ -99,16 +102,16 @@ shinyUI(fluidPage(
                   column(6, 
                          plotOutput("tick_species")
                   )
-                )  
+                ),
+                fluidRow(
+                  column(6),
+                  column(6, 
+                         downloadButton("download_tick_summary", label = "Download Tick Species and Sampleing Data"))
+                )
         ), # disease risk map
         
         tabItem(tabName = "pathogens", 
               
-              #  selectInput(
-              #    "installation_path", "Please Select Installtion(s) for pathogen data", installation.name,
-              #    multiple = TRUE
-              #  ),
-                
                 reactableOutput("pathogen_data"),
                 
                 downloadButton("download_pathogen")

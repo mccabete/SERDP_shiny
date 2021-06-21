@@ -39,8 +39,7 @@ subset_data <- function (data, installation_name){
 
 shinyServer(function(input, output) {
    
- 
-# TBD Map prep ----
+  # TBD Map prep ----
   #Tick Abundance Layer
   pal_tick_abundance <- colorBin("Blues", domain = tick_map$tcks_p_, bins = 4)
   
@@ -129,6 +128,16 @@ shinyServer(function(input, output) {
       hideGroup(c("Tick Abundance", "Pathogen Presence"))
   }) # parkMap
   
+  # Download Map Data
+  output$download_tick_map <- downloadHandler(
+    filename = function() {
+      paste0("Tick_Borne_Disease_Map", ".csv")
+    },
+    content = function(file) {
+      write.csv(tick_map, file)
+    }
+  )
+
  
   #### Tick Borne Dssease Summery Plots ----
   #tick_data <- subset_data(ticks, input$installation)
@@ -165,7 +174,20 @@ shinyServer(function(input, output) {
       ylab("Total Ticks Collected") + 
       xlab("")
     })
+  
+  output$download_tick_summary <- downloadHandler(
+    
+    filename = function(){
+      paste("Tick_Species_and_Sampling", ".csv")
+    },
+    content = function(file){
+      write.csv(ticks, file)
+    }
+    
+  )
    
+  
+  
   # Pathogen data ----
   
   
@@ -188,5 +210,6 @@ shinyServer(function(input, output) {
   
 
   
+
 
 })
