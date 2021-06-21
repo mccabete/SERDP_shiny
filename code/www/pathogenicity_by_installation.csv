@@ -1,4 +1,4 @@
-Installation,Organism/Pathogen,Vertebrate_Host,Disease,Disease_infection_population
+Installation,Organism_or_Pathogen,Vertebrate_Host,Disease,Infection_population
 Avon,Francisella-like endosymbiont,unknown,non-pathogenic,NA
 Avon,Rickettsia rhipicephali,mammals,rickettsiosis, Wildlife Domestic Animals
 Blanding,Ehrlichia muris subsp. eauclairensis,"cattle, dogs, med/large mammals, mice, sml mammals, ground-frequenting birds, skinks, lizards",ehrlichiosis, Human

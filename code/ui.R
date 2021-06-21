@@ -3,6 +3,7 @@
 # by Alessio Benedetti           #
 # ui.R file                      #
 ##################################
+#library(rgdal)
 #library(rgdal, lib.loc = "/share/pkg.7/r/3.6.0/install/lib64/R/library")
 library(leaflet)
 library(shinydashboard)
@@ -10,6 +11,7 @@ library(collapsibleTree)
 library(shinycssloaders)
 library(DT)
 library(tigris)
+library(reactable)
 
 
 ###########
@@ -86,7 +88,7 @@ shinyUI(fluidPage(
                 ),
                 
                 selectInput(
-                  "installation", "Please Select Installtion(s) for tick data summary", installation.name,
+                  "installation", "Please Select Installtion for tick data summary", installation.name,
                   multiple = FALSE
                 ),
                 
@@ -101,10 +103,17 @@ shinyUI(fluidPage(
         ), # disease risk map
         
         tabItem(tabName = "pathogens", 
-                dataTableOutput("pathogen_data")
-                )
-        
               
+              #  selectInput(
+              #    "installation_path", "Please Select Installtion(s) for pathogen data", installation.name,
+              #    multiple = TRUE
+              #  ),
+                
+                reactableOutput("pathogen_data"),
+                
+                downloadButton("download_pathogen")
+                ) #pathogens tab
+        
       ) # End of tabItems
     
     ) # end dashboardBody

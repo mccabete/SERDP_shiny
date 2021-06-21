@@ -87,7 +87,7 @@ for (i in seq_along(d$Installation)){
   
 }
 d <- select(d, -c("Human":"Unknown"))
-names(d) <- c("Installation", "Organism/Pathogen", "Vertebrate_Host", "Disease", "Disease_infection_population")
+names(d) <- c("Installation", "Organism_or_Pathogen", "Vertebrate_Host", "Disease", "Infection_population")
 d <- unique(d)
   
 write_csv(d, "/projectnb/dietzelab/mccabete/SERDP_shiny/code/www/pathogenicity_by_installation.csv")

@@ -1,10 +1,11 @@
+#library(rgdal)
 #library(rgdal, lib.loc = "/share/pkg.7/r/3.6.0/install/lib64/R/library")
 library(shiny)
 library(tidyverse)
 library(leaflet.extras)
 library(rvest)
 library(sf)
-
+library(reactable)
 
 
 ##################
@@ -166,9 +167,24 @@ shinyServer(function(input, output) {
     })
    
   # Pathogen data ----
-  output$pathogen_data <- renderDataTable(pathogens)
-
   
+  
+  output$pathogen_data <- renderReactable(reactable(pathogens, filterable = TRUE, searchable = TRUE, columns = list(
+    Organism_or_Pathogen = colDef(name = "Pathogen / Organism"), 
+    Vertebrate_Host = colDef(name = "Vertebrate Host"), 
+    Disease = colDef(name = "Disease"), 
+    Infection_population =colDef(name = "Infection Population") 
+                                                  ) 
+                                          ))
+
+  output$download_pathogen <- downloadHandler(
+    filename = function() {
+      paste0("pathogens", ".csv")
+    },
+    content = function(file) {
+      write.csv(pathogens, file)
+    }
+  )
   
 
   
