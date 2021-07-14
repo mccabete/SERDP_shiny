@@ -12,23 +12,47 @@ library(reactable)
 # DATA WRANGLING #
 ##################
 
+# Helper data ----
+installation_lookup_table <- read.csv("www/SERDP_data_installtion_lookup_table.csv")
+
+
 # Tick data ----
 tick_map <- st_read("www/Tick_prevelence_absense_map.shp") #By default, this function abriviates column names? Renaming them does cause errors. 
 tick_map$pathogen_number <- tick_map$Hmn_pt_ * tick_map$Ticks
 
-installation_lookup_table <- read.csv("www/SERDP_data_installtion_lookup_table.csv")
 ticks <- read.csv("www/ticks.csv", stringsAsFactors = FALSE)
 pathogens <- read.csv("www/pathogenicity_by_installation.csv", stringsAsFactors = FALSE)
 #pathogens <- select(pathogens, c("Installation", "tbo", "Human", "Wildlife", "Domestic_Animals", "Endosymbiont", "Human_Endo","Human_Animal", "Unknown", "Vertebrate_Host","Disease"))
+dung <- read.csv("www/dung.csv", stringsAsFactors = FALSE)
+dung <- select(dung, c("installation", "species", "visit_year")) %>% na.omit()
+
+# Vegetation data ----
+plot_data <- read.csv("www/all_plotlevel_data.csv")
+
+# SEM data ----
+path_data <- read.csv("www/path_analysis_data.csv")
+all_host_effects <- read.csv("www/all_hosts_sem_effects.csv") # Could change if we need it
+
 
 ##################
 # HELPER FUNCTIONS #
 ##################
 
-subset_data <- function (data, installation_name){
+subset_data <- function (data, installation_name, grep = FALSE){
+  
   name <- installation_lookup_table$data_name[installation_name == installation_lookup_table$Formal_name]
   
-  data <- filter(data, installation == name)
+  if(grep){
+    
+    similar_name_rows <- grep(name, data$plot_id) 
+    data <- data[similar_name_rows,]
+    
+  }else{
+    
+    data <- filter(data, installation == name)
+    
+  }
+  
   
   return(data)
 }
@@ -38,7 +62,8 @@ subset_data <- function (data, installation_name){
 ################
 
 shinyServer(function(input, output) {
-   
+
+#### Tick Borne Disease ----     
   # TBD Map prep ----
   #Tick Abundance Layer
   pal_tick_abundance <- colorBin("Blues", domain = tick_map$tcks_p_, bins = 4)
@@ -65,7 +90,7 @@ shinyServer(function(input, output) {
   ) %>% lapply(htmltools::HTML)
   
 
-  #### TBD Map ----
+  # TBD Map ----
   output$parksMap <- renderLeaflet({
     leaflet(data = tick_map) %>% 
       addProviderTiles(providers$Esri.WorldImagery, group = "Esri World Imagery", options = providerTileOptions(noWrap = TRUE)) %>%
@@ -139,7 +164,7 @@ shinyServer(function(input, output) {
   )
 
  
-  #### Tick Borne Dssease Summery Plots ----
+  # Tick Borne Disease Summery Plots ----
   #tick_data <- subset_data(ticks, input$installation)
   
   output$hist_summary_ticks <- renderPlot( {
@@ -208,8 +233,57 @@ shinyServer(function(input, output) {
     }
   )
   
+  # Tick Host data ----
+  output$host_data <- renderReactable(reactable(dung, filterable = TRUE, searchable = TRUE, columns = list(
+    installation = colDef(name = "Installation"), 
+    species = colDef(name = "Host Detected"), 
+    visit_year = colDef(name = "Year")
+  ) 
+  ))
+  
+  output$download_host <- downloadHandler(
+    filename = function() {
+      paste0("hosts_detected", ".csv")
+    },
+    content = function(file) {
+      write.csv(dung, file)
+    }
+  )
+  
+#### Vegetation ----
+  # Litter (cover and biomass)
+  # Standing Biomass
+  # Species plots
+  
+#### Fire (Maybe fire effects?) ----
 
   
-
+#### Exploring Hypotheticals ----
+  
+  # tick_abundance_estimates <- reactiveValues(x = 999)
+  
+  # observeEvent(input$installation_sem, {
+  #   path_sub <- subset_data(path_data, input$installation_sem, grep = TRUE)
+  #   updateNumericInput(inputId = "cv_fire_days", value = mean(na.omit(path_sub$cv_30yr_fire_days))) ### do I want to display plot-level variation? 
+  #   
+  #   
+  # })
+  
+  # observeEvent(input$Oneyr_vpd, {
+  #   effect <- filter(all_host_effects, variable == "vapor pressure") # could I export these var names to a lookup table? 
+  #   c <- effect$direct * tick_abundance_estimates$x ## Need f(x) that uses effect size to modify tick population with change in state var. Truly not sure I know that f(x)
+  #   tick_abundance_estimates$x <- c
+  #   #updateNumericInput(inputId = "Tick_abundance_estimated", value = c)
+  # })
+  
+  # output$tick_abundance_estimated_plot <- renderPlot({
+  #   ggplot()+
+  #     geom_col(aes(y = tick_abundance_estimates$x, x = 1))
+  # })
+  
+  #observeEvent(input$standing_biomass, {
+  #  f <- round((input$temp_c * 9 / 5) + 32)
+  #  updateNumericInput(inputId = "temp_f", value = f)
+  #})
 
 })
