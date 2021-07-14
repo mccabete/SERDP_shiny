@@ -20,20 +20,20 @@
 
 library(tidyverse)
 library(sf)
-#library(tmap)
-#library(tmaptools)
+library(tmap)
+library(tmaptools)
 
 ## Load Data ####
 
 ## From tbo_data.R
-tbo_plot_agg <- read_csv("serdp_data/tbo_ticks_plot_year.csv")
-tbo_trap_ticks <- read_csv("serdp_data/tbo_ticks_onTraps.csv")
-tbo_human_strict_traps <- read_csv("serdp_data/tbo_human_strict_onTraps.csv")
+tbo_plot_agg <- read_csv("/projectnb/dietzelab/mccabete/SERDP_Project/data/tbo_ticks_plot_year.csv")
+tbo_trap_ticks <- read_csv("/projectnb/dietzelab/mccabete/SERDP_Project/data/tbo_ticks_onTraps.csv")
+tbo_human_strict_traps <- read_csv("/projectnb/dietzelab/mccabete/SERDP_Project/data/tbo_human_strict_onTraps.csv")
 
 ## From plot_data_report.Rmd
-trap_effort <- read_csv("serdp_data/installation_trapping_effort.csv")
+trap_effort <- read_csv("/projectnb/dietzelab/mccabete/SERDP_Project/data/installation_trapping_effort.csv")
 
-sites_sf <- st_read("serdp_data/gis_files/selected_installations.shp")
+sites_sf <- st_read("/projectnb/dietzelab/mccabete/SERDP_Project/data/gis_files/selected_installations.shp")
 
 unique(tbo_plot_agg$Installation)
 unique(sites_sf$FULLNAME)
@@ -42,8 +42,10 @@ unique(sites_sf$FULLNAME)
 ## Rename installations to match across data
 trap_effort$installation <- str_to_title(trap_effort$installation)
 trap_effort <- trap_effort %>%
-      rename(Installation = installation) %>%
-      mutate(
+   group_by(installation) %>% 
+   summarise(trap_effort = sum(trap_effort)) %>% 
+   rename(Installation = installation) %>%
+   mutate(
             Installation = case_when(
                   Installation=="Avonpark" ~ "Avon Park AFR",
                   Installation=="Benning" ~ "Ft. Benning",
@@ -139,14 +141,13 @@ sites_tbo_sf <- left_join(
       tbo_inst,
       by = c("FULLNAME"="Installation")
 ) %>%
-      select(FULLNAME, total_ticks, Human_pathogen_prevalence, ticks_per_trap, PxA)
-
+      select(FULLNAME, total_ticks, Human_pathogen_prevalence, trap_effort, ticks_per_trap, PxA)
 
 
 ## Make a map ####
 
 # toggle between interactive "view" mode and static "plot" mode
-#tmap_mode("view")
+tmap_mode("view")
 # tmap_mode("plot")
 
 # qtm(sites_sf, fill = "red")
@@ -157,10 +158,8 @@ sites_tbo_sf <- sites_tbo_sf %>%
              Prevalence = Human_pathogen_prevalence,
              Abundance = ticks_per_trap
              )
-sites_tbo_sf$Trap_effort <- trap_effort$trap_effort
-#sites_tbo_sf$geometry <- as.character(sites_tbo_sf$geometry)
-#write.csv(sites_tbo_sf, "/projectnb/dietzelab/mccabete/SERDP_shiny/code/serdp_data/Tick_prevelence_absense_map.csv")
-st_write(sites_tbo_sf, "/projectnb/dietzelab/mccabete/SERDP_shiny/code/serdp_data/Tick_prevelence_absense_map.shp")
+
+st_write(sites_tbo_sf, "/projectnb/dietzelab/mccabete/SERDP_shiny/code/www/Tick_prevelence_absense_map.shp")
 
 ## Adds layers for abundance, prevalence, and their product.
 ## So, need to toggle layers on/off for it to make any kind of sense.
@@ -183,13 +182,13 @@ st_write(sites_tbo_sf, "/projectnb/dietzelab/mccabete/SERDP_shiny/code/serdp_dat
 #       tm_text(text = "FULLNAME", just = "right", size = 1.5, xmod = -2, bg.color = "gray40")
 # tp_map
 # tmap_save(tp_map, filename = "figures/map_tickAbun_strictlyHuman_pathPrev.html")
-# tmap_save(tp_map, filename = "figures/map_tickAbun_pathPrev.png")
-
-#
-# library(ggmap)
-# bb <- st_bbox(sites_sf)
-# names(bb) <- c("left","bottom","right","top")
-# bm <- get_map(bb)
-# ggmap(bm) +
-#       geom_point(data = sites_tbo_sf)
-
+# # tmap_save(tp_map, filename = "figures/map_tickAbun_pathPrev.png")
+# 
+# 
+# # library(ggmap)
+# # bb <- st_bbox(sites_sf)
+# # names(bb) <- c("left","bottom","right","top")
+# # bm <- get_map(bb)
+# # ggmap(bm) +
+# #       geom_point(data = sites_tbo_sf)
+# 

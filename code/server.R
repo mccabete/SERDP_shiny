@@ -70,7 +70,7 @@ shinyServer(function(input, output) {
   
   labels_tick_abundance <- sprintf(
     "<strong>%s</strong><br/>%g Ticks per trap <br/> %g ticks, %g traps ",
-    tick_map$FULLNAM, tick_map$tcks_p_, tick_map$Ticks, tick_map$Trp_ffr
+    tick_map$FULLNAM, tick_map$tcks_p_, tick_map$Ticks, tick_map$trp_ffr
   ) %>% lapply(htmltools::HTML)
   
   #Pathogen Prevelence Data Layer
@@ -128,7 +128,7 @@ shinyServer(function(input, output) {
                 group = "Pathogen Presence"
       ) %>%
       #------------ Tick Abundance Layer ----------#
-      addPolygons(fillColor = ~pal_tick_abundance(tcks_p_),
+      addPolygons(fillColor = ~pal_tick_abundance(tick_map$tcks_p_),
                   weight = 1,
                   opacity = 1,
                   color = "white",
