@@ -725,7 +725,7 @@ tpt_effects_noHosts <- tibble(
   total = direct + indirect
 )
 
-write_csv(tpt_effects_noHosts, "/projectnb/dietzelab/mccabete/SERDP_shiny/code/www/no_hosts_sem_effects.csv")
+#write_csv(tpt_effects_noHosts, "/projectnb/dietzelab/mccabete/SERDP_shiny/code/www/no_hosts_sem_effects.csv")
 
 tpt_effects_noHosts %>% 
   knitr::kable(digits = 3, caption = "No hosts model effects on tick abundance")

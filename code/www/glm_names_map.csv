@@ -1,0 +1,7 @@
+state_vars_name,glm_names
+Days Since Fire,d_since_fire_log
+% Litter Cover,logit_litter
+Litter Depth,avg_litter_depth_all
+% Canopy Cover,avg_canopy_cover
+Standing Biomass g/(m^2),biomass_log
+1 Year Vapor Pressure Deficit,avg_1yr_vp..Pa.

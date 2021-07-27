@@ -7,10 +7,20 @@ library(rvest)
 library(sf)
 library(reactable)
 
+library(sjPlot)
+library(patchwork)
+library(MuMIn)
+library(DHARMa)
+library(lme4)
+library(piecewiseSEM)
+library(effectsize)
+library(ggeffects)
 
 ##################
 # DATA WRANGLING #
 ##################
+
+#setwd("/projectnb/dietzelab/mccabete/SERDP_shiny/code")
 
 # Helper data ----
 installation_lookup_table <- read.csv("www/SERDP_data_installtion_lookup_table.csv")
@@ -30,9 +40,11 @@ dung <- select(dung, c("installation", "species", "visit_year")) %>% na.omit()
 plot_data <- read.csv("www/all_plotlevel_data.csv")
 
 # SEM data ----
-path_data <- read.csv("www/path_analysis_data.csv")
-all_host_effects <- read.csv("www/all_hosts_sem_effects.csv") # Could change if we need it
-
+#path_data <- read.csv("www/path_analysis_data.csv")
+#all_host_effects <- read.csv("www/all_hosts_sem_effects.csv") # Could change if we need it
+load("www/tick_glmer.Rdata")
+path_data <- read.csv("www/path_data.csv", stringsAsFactors = FALSE)
+glm_map <- read_csv("www/glm_names_map.csv")
 
 ##################
 # HELPER FUNCTIONS #
@@ -260,30 +272,124 @@ shinyServer(function(input, output) {
   
 #### Exploring Hypotheticals ----
   
-  # tick_abundance_estimates <- reactiveValues(x = 999)
+  ## Helper Function for hypotheticals 
+  names_to_variables <- function(state_vars_name){
+    name <- glm_map$glm_names[glm_map$state_vars_name == state_vars_name]
+    return(name)
+  }
   
-  # observeEvent(input$installation_sem, {
-  #   path_sub <- subset_data(path_data, input$installation_sem, grep = TRUE)
-  #   updateNumericInput(inputId = "cv_fire_days", value = mean(na.omit(path_sub$cv_30yr_fire_days))) ### do I want to display plot-level variation? 
-  #   
-  #   
+  variable_transform <- function(p, variable){  # takes ggpredict object, returns a ggredict object with rawdata backtransformed 
+    
+    no_transforms <- c("avg_litter_depth_all", "avg_canopy_cover", "avg_1yr_vp..Pa.")
+    
+    if(!(variable %in% no_transforms)){
+      
+      rawdata <-  attr(p, "rawdata")
+      at_list <- attr(p, "at.list")
+      
+      if(variable == "biomass_log"){
+        rawdata$group <- as.character(exp(as.numeric(rawdata$group))) 
+        at_list$biomass_log <- as.character(exp(as.numeric(at_list$biomass_log)))
+        p$group <- as.character(exp(as.numeric(as.character(p$group))))
+        
+        if(length(unique(rawdata$group)) == 1){
+          rawdata$x <- exp(rawdata$x)
+          p$x <- exp(p$x)
+        }
+        
+      }
+      
+      if(variable == "d_since_fire_log"){
+        rawdata$group <- as.character(exp(as.numeric(rawdata$group))) 
+        at_list$d_since_fire_log <- as.character(exp(as.numeric(at_list$d_since_fire_log)))
+        p$group <- as.character(exp(as.numeric(as.character(p$group))))
+        
+        if(length(unique(rawdata$group)) == 1){
+          rawdata$x <- exp(rawdata$x)
+          p$x <- exp(p$x)
+        }
+        
+      }
+      
+      if(variable == "logit_litter"){
+        rawdata$group <- as.character(exp(as.numeric(rawdata$group)) / (1 + exp(as.numeric(rawdata$group)))) 
+        at_list$logit_litter <- as.character(exp(as.numeric(at_list$logit_litter))/ (1 + exp(as.numeric(at_list$logit_litter))))
+        p$group <- as.character(exp(as.numeric(as.character(p$group))) / (1 + exp(as.numeric(as.character(p$group)))))
+        
+        if(length(unique(rawdata$group)) == 1){
+          rawdata$x <- exp(rawdata$x)/(1 + exp(rawdata$x))
+          p$x <- exp(p$x)/(1 + exp(p$x))
+        }
+        
+      }
+      
+      attr(p, "rawdata") <- rawdata
+      attr(p, "at.list") <- at_list
+      
+    }
+    
+    return(p)
+    
+  }
+  
+   # pretty_paste <- function(var_name, vals = NULL){
+   #    if (!is.null(vals)){
+   #      tmp <- paste0("c(", paste(vals, collapse = ","), ")")
+   #      text <- paste(var_name, " ", "[", tmp ,"]", sep = "" )
+   #    }else{
+   # 
+   #      text <- paste(var_name)
+   # 
+   #    }
+   # 
+   #   return(text)
+   # }
+
+   # pretty_paste <- function(var_name){
+   #   
+   #     #paste0("c(", paste(vals, collapse = ","), ")")
+   #     text <- paste0(var_name, " ", "[", "vals","]")
+   # 
+   #   return(text)
+   # }
+  
+  ## Reactive Elements
+  
+  #state_vars_levels <- reactiveValues(avg_1yr_vp..Pa = path_data$avg_1yr_vp..Pa., biomass_log = path_data$biomass_log )
+
+   
+  # eventReactive(input$avg_1yr_vp..Pa, {
+  # state_vars_levels$avg_1yr_vp..Pa <- input$avg_1yr_vp..Pa
   # })
-  
-  # observeEvent(input$Oneyr_vpd, {
-  #   effect <- filter(all_host_effects, variable == "vapor pressure") # could I export these var names to a lookup table? 
-  #   c <- effect$direct * tick_abundance_estimates$x ## Need f(x) that uses effect size to modify tick population with change in state var. Truly not sure I know that f(x)
-  #   tick_abundance_estimates$x <- c
-  #   #updateNumericInput(inputId = "Tick_abundance_estimated", value = c)
+  # 
+  # eventReactive(input$standing_biomass, {
+  #   state_vars_levels$biomass_log <- input$standing_biomass
   # })
+
   
-  # output$tick_abundance_estimated_plot <- renderPlot({
-  #   ggplot()+
-  #     geom_col(aes(y = tick_abundance_estimates$x, x = 1))
-  # })
   
-  #observeEvent(input$standing_biomass, {
-  #  f <- round((input$temp_c * 9 / 5) + 32)
-  #  updateNumericInput(inputId = "temp_f", value = f)
-  #})
+  output$tick_abundance_estimated_plot <- renderPlot({
+    
+    
+    #vals <- state_vars_levels[[names_to_variables(input$state_variable)]]
+    p <-  ggpredict(tick_glmer, type = "re",  terms = c(names_to_variables(input$state_variable)))
+    p <- variable_transform(p,names_to_variables(input$state_variable))
+    
+    plt <- plot(p, rawdata = TRUE) + 
+      ggtitle("") + 
+      xlab(paste(input$state_variable)) + 
+      ylab("Predicted Ticks Per Trap") #+ 
+      #labs(color = "variable 2 pretty name") #+ 
+    plt
+    
+    
+  })
+  
+  # output$vals_placement <- renderText({
+  #  
+  #   paste("state_vars is ", input$)
+  #   })
+
+  
 
 })

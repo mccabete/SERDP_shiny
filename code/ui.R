@@ -1,8 +1,4 @@
-##################################
-# Biodiversity in National Parks #
-# by Alessio Benedetti           #
-# ui.R file                      #
-##################################
+
 #library(rgdal)
 #library(rgdal, lib.loc = "/share/pkg.7/r/3.6.0/install/lib64/R/library")
 library(leaflet)
@@ -20,6 +16,15 @@ library(reactable)
 installation.name <- c("Avon Park Air Force Range", "Fort Benning", "Camp Blanding Army Base",
                         "Eglin Air Force Base", "Fort Gordon Army Base", "Fort Jackson Army Base", "Moody Air Force Base", 
                         "Camp Shelby Joint Forces Training Center", "Tyndall Air Force Base")
+#state_vars_name <- c("Days Since Fire", "% Litter Cover", "Litter Depth",  "% Canopy Cover","Standing Biomass g/(m^2)", "1 Year Vapor Pressure Deficit")
+state_vars_name <- c("Standing Biomass g/(m^2)", "1 Year Vapor Pressure Deficit")
+# glm_names <- as.data.frame(lme4::getME(tick_glmer, "X"))
+# glm_names <- names(glm_names)
+# glm_names <- glm_names[glm_names !="(Intercept)"]
+# stat_vars_df <- cbind(state_vars_name, glm_names)
+# stat_vars_df <- as.data.frame(stat_vars_df)
+# write_csv(stat_vars_df, file = "www/glm_names_map.csv")
+
 ###########
 # LOAD UI #
 ###########
@@ -55,9 +60,9 @@ shinyUI(fluidPage(
               menuSubItem("Disease Risk Map", tabName = "disease_risk_map"),
               menuSubItem("Tick Pathogens", tabName = "pathogens"),
               menuSubItem("Tick Hosts", tabName = "tick_host")
-                 )#,
-        # menuItem("Exploring Hypotheticals", tabName = "sem", icon = icon("project-diagram")
-        #          )
+                 ),
+        menuItem("Exploring Hypotheticals", tabName = "sem", icon = icon("project-diagram")
+                 )
         
       )
       
@@ -122,27 +127,33 @@ shinyUI(fluidPage(
         tabItem(tabName = 'tick_host',
           reactableOutput("host_data"), 
           downloadButton("download_host")
-        )#, # Tick hosts tab
+        ), # Tick hosts tab
         
-        # tabItem(tabName = "sem", 
-        #         selectInput(
-        #           "installation_sem", "Please Select Installtion", installation.name,
-        #           multiple = FALSE
-        #         ),
-        #         numericInput("cv_fire_days", "CV Fire Days", NA ), ## Need to set NA's to exisitng measurments 
-        #         numericInput("FRI", "15 yr Fire Return Interval", NA),
-        #         numericInput("time_since_fire", "Time Since Fire", NA),
-        #         numericInput("canopy_cover", "Canopy Cover", NA),
-        #         numericInput("litter_cover", "Litter Cover", NA),
-        #         numericInput("litter_depth", "Litter Depth", NA),
-        #         numericInput("standing_biomass", "Standing Biomass", NA),
-        #         numericInput("Oneyr_vpd", "1 Year Vapor Pressure Deficit", NA), #, 
-        #         #numericInput("Tick_abundance_estimated", "Tick Abundance", NA)
-        #         
-        #         plotOutput("tick_abundance_estimated_plot")
-        #       
-        #         
-        #         )
+        tabItem(tabName = "sem",
+                selectInput(
+                  "state_variable", "Select predictor of tick populations", state_vars_name,
+                  multiple = FALSE
+                ),
+                selectInput(
+                  "state_variable2", "See how other predictors interact", state_vars_name,
+                  multiple = FALSE
+                ),
+                #numericInput("cv_fire_days", "CV Fire Days", NA ), ## Need to set NA's to exisitng measurments
+                #numericInput("FRI", "15 yr Fire Return Interval", NA),
+                # numericInput("time_since_fire", "Time Since Fire", NA),
+                # numericInput("canopy_cover", "Canopy Cover", NA),
+                # numericInput("litter_cover", "Litter Cover", NA),
+                # numericInput("litter_depth", "Litter Depth", NA),
+                # numericInput("standing_biomass", "Standing Biomass", NA),
+                # numericInput("avg_1yr_vp..Pa", "1 Year Vapor Pressure Deficit", NA), #,
+                #numericInput("Tick_abundance_estimated", "Tick Abundance", NA)
+
+                plotOutput("tick_abundance_estimated_plot"),
+                #textOutput("vals_placement")
+
+
+                )
+        
         
       ) # End of tabItems for all tabs
     
