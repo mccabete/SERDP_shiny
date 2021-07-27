@@ -45,6 +45,7 @@ plot_data <- read.csv("www/all_plotlevel_data.csv")
 load("www/tick_glmer.Rdata")
 path_data <- read.csv("www/path_data.csv", stringsAsFactors = FALSE)
 glm_map <- read_csv("www/glm_names_map.csv")
+#state_vars_name <- c("Days Since Fire", "% Litter Cover", "Litter Depth",  "% Canopy Cover","Standing Biomass g/(m^2)", "1 Year Vapor Pressure Deficit")
 
 ##################
 # HELPER FUNCTIONS #
@@ -278,53 +279,68 @@ shinyServer(function(input, output) {
     return(name)
   }
   
-  variable_transform <- function(p, variable){  # takes ggpredict object, returns a ggredict object with rawdata backtransformed 
-    
+ 
+  variable_transform <- function(p, reactive_vars){  # takes ggpredict object, returns a ggredict object with rawdata backtransformed 
+    num_vars <- length(reactive_vars)
     no_transforms <- c("avg_litter_depth_all", "avg_canopy_cover", "avg_1yr_vp..Pa.")
     
-    if(!(variable %in% no_transforms)){
-      
-      rawdata <-  attr(p, "rawdata")
-      at_list <- attr(p, "at.list")
-      
-      if(variable == "biomass_log"){
-        rawdata$group <- as.character(exp(as.numeric(rawdata$group))) 
-        at_list$biomass_log <- as.character(exp(as.numeric(at_list$biomass_log)))
-        p$group <- as.character(exp(as.numeric(as.character(p$group))))
+    for(i in 1:num_vars){
+     variable <- reactive_vars[i]
+     
+      if(!(variable %in% no_transforms)){
         
-        if(length(unique(rawdata$group)) == 1){
-          rawdata$x <- exp(rawdata$x)
-          p$x <- exp(p$x)
+        rawdata <-  attr(p, "rawdata")
+        at_list <- attr(p, "at.list")
+        
+        if(variable == "biomass_log"){
+          
+          if(i == 1){
+            rawdata$x <- exp(as.numeric(rawdata$x))
+            p$x <- exp(as.numeric(p$x))
+          }else{
+            
+            rawdata$group <- as.character(exp(as.numeric(rawdata$group))) 
+            at_list$biomass_log <- as.character(exp(as.numeric(at_list$biomass_log)))
+            p$group <- as.character(exp(as.numeric(as.character(p$group))))
+            
+          }
+          
+
         }
         
-      }
-      
-      if(variable == "d_since_fire_log"){
-        rawdata$group <- as.character(exp(as.numeric(rawdata$group))) 
-        at_list$d_since_fire_log <- as.character(exp(as.numeric(at_list$d_since_fire_log)))
-        p$group <- as.character(exp(as.numeric(as.character(p$group))))
-        
-        if(length(unique(rawdata$group)) == 1){
-          rawdata$x <- exp(rawdata$x)
-          p$x <- exp(p$x)
+        if(variable == "d_since_fire_log"){
+          
+          
+          if(i == 1){
+            rawdata$x <- exp(as.numeric(rawdata$x))
+            p$x <- exp(as.numeric(p$x))
+          }else{
+            rawdata$group <- as.character(exp(as.numeric(rawdata$group))) 
+            at_list$d_since_fire_log <- as.character(exp(as.numeric(at_list$d_since_fire_log)))
+            p$group <- as.character(exp(as.numeric(as.character(p$group))))
+            
+            
+          }
+          
         }
         
-      }
-      
-      if(variable == "logit_litter"){
-        rawdata$group <- as.character(exp(as.numeric(rawdata$group)) / (1 + exp(as.numeric(rawdata$group)))) 
-        at_list$logit_litter <- as.character(exp(as.numeric(at_list$logit_litter))/ (1 + exp(as.numeric(at_list$logit_litter))))
-        p$group <- as.character(exp(as.numeric(as.character(p$group))) / (1 + exp(as.numeric(as.character(p$group)))))
-        
-        if(length(unique(rawdata$group)) == 1){
-          rawdata$x <- exp(rawdata$x)/(1 + exp(rawdata$x))
-          p$x <- exp(p$x)/(1 + exp(p$x))
+        if(variable == "logit_litter"){
+          
+          if(i == 1){
+            rawdata$x <- exp(as.numeric(rawdata$x))/(1 + exp(as.numeric(rawdata$x)))
+            p$x <- exp(as.numeric(p$x))/(1 + exp(as.numeric(p$x)))
+          }else{
+            rawdata$group <- as.character(exp(as.numeric(rawdata$group)) / (1 + exp(as.numeric(rawdata$group)))) 
+            at_list$logit_litter <- as.character(exp(as.numeric(at_list$logit_litter))/ (1 + exp(as.numeric(at_list$logit_litter))))
+            p$group <- as.character(exp(as.numeric(as.character(p$group))) / (1 + exp(as.numeric(as.character(p$group)))))
+            
+          }
+
         }
-        
-      }
+        attr(p, "rawdata") <- rawdata
+        attr(p, "at.list") <- at_list
       
-      attr(p, "rawdata") <- rawdata
-      attr(p, "at.list") <- at_list
+    }
       
     }
     
@@ -368,28 +384,59 @@ shinyServer(function(input, output) {
   
   observeEvent(input$num_cov, {
     updateTabsetPanel(inputId = "state_vars", selected = input$num_cov)
+    #updateSelectInput(inputId = "state_variabel1", choices = state_vars_name)
+    #updateSelectInput(inputId = "state_variable2", choices = state_vars_name)
+    #updateSelectInput(inputId = "state_variabel1", selected = input$state_variable1)
+    #updateSelectInput(inputId = "state_variable2", selected = input$state_variable2)
   }) 
 
+  
+  # observeEvent(input$state_variable1, {
+  #   updateSelectInput(inputId = "state_variable2", choices = state_vars_name[state_vars_name != input$state_variable1] )
+  #   })
+  # 
   cov_names <- reactive({
     switch(input$num_cov,
-           single_covariate = names_to_variables(input$state_variable1),
+           single_covariate = names_to_variables(input$state_variable),
            two_covariates = c(names_to_variables(input$state_variable1), names_to_variables(input$state_variable2))
     )
   })
   
+  # cov_trans <- reactive({
+  #   switch(input$num_cov,
+  #          single_covariate = names_to_variables(input$state_variable),
+  #          two_covariates = names_to_variables(c(input$state_variable1, input$state_variable2))
+  #   )
+  # })
+  
+  cov_xlab <- reactive({
+    switch(input$num_cov,
+           single_covariate = input$state_variable,
+           two_covariates = input$state_variable1
+    )
+  })
+  
+  cov_group_lable <- reactive({
+    switch(input$num_cov,
+           single_covariate = NULL, 
+           two_covariates = input$state_variable2
+    )
+  })
   
   output$tick_abundance_estimated_plot <- renderPlot({
     
     
     #vals <- state_vars_levels[[names_to_variables(input$state_variable)]]
     p <-  ggpredict(tick_glmer, type = "re",  terms = c(cov_names()))
-    #p <- variable_transform(p,names_to_variables(input$state_variable)) # Take out transofrmation temporarily 
+    p <- variable_transform(p, cov_names())
+     
+    
+     # Take out transformation temporarily 
     
     plt <- plot(p, rawdata = TRUE) + 
-      ggtitle("") + 
-      xlab(paste(input$state_variable1)) + 
-      ylab("Predicted Ticks Per Trap") #+ 
-      #labs(color = "variable 2 pretty name") #+ 
+      xlab(paste(cov_xlab())) + 
+      ylab("Predicted Ticks Per Trap") +
+      labs(color = paste(cov_group_lable())) #+ 
     plt
     
     

@@ -30,7 +30,7 @@ parameter_tabs <- tabsetPanel(
   type = "hidden",
   tabPanel("single_covariate",
            selectInput(
-             "state_variable1", "Select predictor of tick populations", state_vars_name,
+             "state_variable", "Select predictor of tick populations", state_vars_name,
              multiple = FALSE
            )
            
