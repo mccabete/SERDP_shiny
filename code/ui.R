@@ -16,14 +16,20 @@ library(reactable)
 installation.name <- c("Avon Park Air Force Range", "Fort Benning", "Camp Blanding Army Base",
                         "Eglin Air Force Base", "Fort Gordon Army Base", "Fort Jackson Army Base", "Moody Air Force Base", 
                         "Camp Shelby Joint Forces Training Center", "Tyndall Air Force Base")
-#state_vars_name <- c("Days Since Fire", "% Litter Cover", "Litter Depth",  "% Canopy Cover","Standing Biomass g/(m^2)", "1 Year Vapor Pressure Deficit")
-state_vars_name <- c("Standing Biomass g/(m^2)", "1 Year Vapor Pressure Deficit")
+state_vars_name <- c("Days Since Fire", "% Litter Cover", "Litter Depth",  "% Canopy Cover","Standing Biomass g/(m^2)", "1 Year Vapor Pressure Deficit") 
+#stat_vars_sig <-  c("Days Since Fire", "% Litter Cover", "Litter Depth",  "% Canopy Cover","Standing Biomass g/(m^2)", "1 Year Vapor Pressure Deficit") # Need to modify by what is significant at predicting ticks?
+
+
+
 # glm_names <- as.data.frame(lme4::getME(tick_glmer, "X"))
 # glm_names <- names(glm_names)
 # glm_names <- glm_names[glm_names !="(Intercept)"]
 # stat_vars_df <- cbind(state_vars_name, glm_names)
 # stat_vars_df <- as.data.frame(stat_vars_df)
 # write_csv(stat_vars_df, file = "www/glm_names_map.csv")
+
+num_covariates_list <- c("single_covariate", "two_covariates")
+names(num_covariates_list) <- c("1", "2") # There must be a better way
 
 parameter_tabs <- tabsetPanel(
   id = "state_vars",
@@ -41,7 +47,7 @@ parameter_tabs <- tabsetPanel(
              multiple = FALSE
            ),
            selectInput(
-             "state_variable2", "See how other predictors interact", state_vars_name, # state_vars_name without the first state variable? 
+             "state_variable2", "Select interacting predictor", state_vars_name, # state_vars_name without the first state variable? 
              multiple = FALSE
            )
   )
@@ -177,7 +183,7 @@ shinyUI(fluidPage(
                 sidebarLayout(
                   sidebarPanel(
                     selectInput("num_cov", "Number of predictors", 
-                                choices = c("single_covariate", "two_covariates")
+                                choices = num_covariates_list
                     ),
                     parameter_tabs,
                   ),

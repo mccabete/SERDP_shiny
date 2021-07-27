@@ -384,17 +384,9 @@ shinyServer(function(input, output) {
   
   observeEvent(input$num_cov, {
     updateTabsetPanel(inputId = "state_vars", selected = input$num_cov)
-    #updateSelectInput(inputId = "state_variabel1", choices = state_vars_name)
-    #updateSelectInput(inputId = "state_variable2", choices = state_vars_name)
-    #updateSelectInput(inputId = "state_variabel1", selected = input$state_variable1)
-    #updateSelectInput(inputId = "state_variable2", selected = input$state_variable2)
+    
   }) 
 
-  
-  # observeEvent(input$state_variable1, {
-  #   updateSelectInput(inputId = "state_variable2", choices = state_vars_name[state_vars_name != input$state_variable1] )
-  #   })
-  # 
   cov_names <- reactive({
     switch(input$num_cov,
            single_covariate = names_to_variables(input$state_variable),
@@ -402,12 +394,6 @@ shinyServer(function(input, output) {
     )
   })
   
-  # cov_trans <- reactive({
-  #   switch(input$num_cov,
-  #          single_covariate = names_to_variables(input$state_variable),
-  #          two_covariates = names_to_variables(c(input$state_variable1, input$state_variable2))
-  #   )
-  # })
   
   cov_xlab <- reactive({
     switch(input$num_cov,
@@ -424,16 +410,11 @@ shinyServer(function(input, output) {
   })
   
   output$tick_abundance_estimated_plot <- renderPlot({
-    
-    
-    #vals <- state_vars_levels[[names_to_variables(input$state_variable)]]
     p <-  ggpredict(tick_glmer, type = "re",  terms = c(cov_names()))
     p <- variable_transform(p, cov_names())
-     
-    
-     # Take out transformation temporarily 
     
     plt <- plot(p, rawdata = TRUE) + 
+      ggtitle("") +
       xlab(paste(cov_xlab())) + 
       ylab("Predicted Ticks Per Trap") +
       labs(color = paste(cov_group_lable())) #+ 
@@ -442,10 +423,6 @@ shinyServer(function(input, output) {
     
   })
   
-  # output$vals_placement <- renderText({
-  #  
-  #   paste("state_vars is ", input$)
-  #   })
 
   
 
