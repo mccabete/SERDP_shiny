@@ -18,7 +18,7 @@ installation.name <- c("Avon Park Air Force Range", "Fort Benning", "Camp Blandi
                         "Camp Shelby Joint Forces Training Center", "Tyndall Air Force Base")
 state_vars_name <- c("Days Since Fire", "% Litter Cover", "Litter Depth",  "% Canopy Cover","Standing Biomass g/(m^2)", "1 Year Vapor Pressure Deficit") 
 #stat_vars_sig <-  c("Days Since Fire", "% Litter Cover", "Litter Depth",  "% Canopy Cover","Standing Biomass g/(m^2)", "1 Year Vapor Pressure Deficit") # Need to modify by what is significant at predicting ticks?
-
+path_data <- read.csv("www/path_data.csv", stringsAsFactors = FALSE)
 
 
 # glm_names <- as.data.frame(lme4::getME(tick_glmer, "X"))
@@ -30,6 +30,28 @@ state_vars_name <- c("Days Since Fire", "% Litter Cover", "Litter Depth",  "% Ca
 
 num_covariates_list <- c("single_covariate", "two_covariates")
 names(num_covariates_list) <- c("1", "2") # There must be a better way
+covariate_boolean_choices <- c( "no_custom_vars", "yes_custom_vars")
+names(covariate_boolean_choices) <- c("No", "Yes")
+
+custom_predictor_vals <- tabsetPanel( 
+  id = "custom_vars", 
+  type = "hidden", 
+  tabPanel("yes_custom_vars",
+    sliderInput("single_cov_slider", "Custom predictor values", 
+                #min = min(path_data[[input$state_variable]]), 
+                min = 0,
+                #max = max(path_data[[input$state_variable]]) * 3 , # Choosing a 3-fold increase arbitrarily
+                max = 4000, 
+                #value = quantile(path_data[[input$state_variable]], c(0.25, 0.75))
+                value = c(10, 200)
+    )
+    
+  ), 
+  tabPanel("no_custom_vars", column(12))
+  
+)
+  
+ 
 
 parameter_tabs <- tabsetPanel(
   id = "state_vars",
@@ -39,7 +61,6 @@ parameter_tabs <- tabsetPanel(
              "state_variable", "Select predictor of tick populations", state_vars_name,
              multiple = FALSE
            )
-           
   ),
   tabPanel("two_covariates", 
            selectInput(
@@ -186,6 +207,9 @@ shinyUI(fluidPage(
                                 choices = num_covariates_list
                     ),
                     parameter_tabs,
+                    selectInput("custom_vals_boolean", "Modify with custom values?", 
+                                choices = covariate_boolean_choices), 
+                    custom_predictor_vals, 
                   ),
                   mainPanel(
                     plotOutput("tick_abundance_estimated_plot")

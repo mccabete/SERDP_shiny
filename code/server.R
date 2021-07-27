@@ -386,6 +386,10 @@ shinyServer(function(input, output) {
     updateTabsetPanel(inputId = "state_vars", selected = input$num_cov)
     
   }) 
+  
+  observeEvent(input$custom_vals_boolean, {
+    updateTabsetPanel(inputId = "custom_vars", selected = input$custom_vals_boolean)
+  })
 
   cov_names <- reactive({
     switch(input$num_cov,
