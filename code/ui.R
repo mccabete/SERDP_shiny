@@ -25,6 +25,29 @@ state_vars_name <- c("Standing Biomass g/(m^2)", "1 Year Vapor Pressure Deficit"
 # stat_vars_df <- as.data.frame(stat_vars_df)
 # write_csv(stat_vars_df, file = "www/glm_names_map.csv")
 
+parameter_tabs <- tabsetPanel(
+  id = "state_vars",
+  type = "hidden",
+  tabPanel("single_covariate",
+           selectInput(
+             "state_variable1", "Select predictor of tick populations", state_vars_name,
+             multiple = FALSE
+           )
+           
+  ),
+  tabPanel("two_covariates", 
+           selectInput(
+             "state_variable1", "Select predictor of tick populations", state_vars_name,
+             multiple = FALSE
+           ),
+           selectInput(
+             "state_variable2", "See how other predictors interact", state_vars_name, # state_vars_name without the first state variable? 
+             multiple = FALSE
+           )
+  )
+  
+)
+
 ###########
 # LOAD UI #
 ###########
@@ -130,14 +153,14 @@ shinyUI(fluidPage(
         ), # Tick hosts tab
         
         tabItem(tabName = "sem",
-                selectInput(
-                  "state_variable", "Select predictor of tick populations", state_vars_name,
-                  multiple = FALSE
-                ),
-                selectInput(
-                  "state_variable2", "See how other predictors interact", state_vars_name,
-                  multiple = FALSE
-                ),
+                # selectInput(
+                #   "state_variable", "Select predictor of tick populations", state_vars_name,
+                #   multiple = FALSE
+                # ),
+                # selectInput(
+                #   "state_variable2", "See how other predictors interact", state_vars_name,
+                #   multiple = FALSE
+                # ),
                 #numericInput("cv_fire_days", "CV Fire Days", NA ), ## Need to set NA's to exisitng measurments
                 #numericInput("FRI", "15 yr Fire Return Interval", NA),
                 # numericInput("time_since_fire", "Time Since Fire", NA),
@@ -148,11 +171,23 @@ shinyUI(fluidPage(
                 # numericInput("avg_1yr_vp..Pa", "1 Year Vapor Pressure Deficit", NA), #,
                 #numericInput("Tick_abundance_estimated", "Tick Abundance", NA)
 
-                plotOutput("tick_abundance_estimated_plot"),
+                #plotOutput("tick_abundance_estimated_plot"),
                 #textOutput("vals_placement")
-
-
+                
+                sidebarLayout(
+                  sidebarPanel(
+                    selectInput("num_cov", "Number of predictors", 
+                                choices = c("single_covariate", "two_covariates")
+                    ),
+                    parameter_tabs,
+                  ),
+                  mainPanel(
+                    plotOutput("tick_abundance_estimated_plot")
+                  )
                 )
+
+
+                ) # sem tab
         
         
       ) # End of tabItems for all tabs
@@ -160,5 +195,8 @@ shinyUI(fluidPage(
     ) # end dashboardBody
   
   )# end dashboardPage
+  
+  ) # Fluid page
+  ) # ui Function
 
-))
+

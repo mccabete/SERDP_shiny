@@ -365,19 +365,29 @@ shinyServer(function(input, output) {
   # eventReactive(input$standing_biomass, {
   #   state_vars_levels$biomass_log <- input$standing_biomass
   # })
+  
+  observeEvent(input$num_cov, {
+    updateTabsetPanel(inputId = "state_vars", selected = input$num_cov)
+  }) 
 
+  cov_names <- reactive({
+    switch(input$num_cov,
+           single_covariate = names_to_variables(input$state_variable1),
+           two_covariates = c(names_to_variables(input$state_variable1), names_to_variables(input$state_variable2))
+    )
+  })
   
   
   output$tick_abundance_estimated_plot <- renderPlot({
     
     
     #vals <- state_vars_levels[[names_to_variables(input$state_variable)]]
-    p <-  ggpredict(tick_glmer, type = "re",  terms = c(names_to_variables(input$state_variable)))
-    p <- variable_transform(p,names_to_variables(input$state_variable))
+    p <-  ggpredict(tick_glmer, type = "re",  terms = c(cov_names()))
+    #p <- variable_transform(p,names_to_variables(input$state_variable)) # Take out transofrmation temporarily 
     
     plt <- plot(p, rawdata = TRUE) + 
       ggtitle("") + 
-      xlab(paste(input$state_variable)) + 
+      xlab(paste(input$state_variable1)) + 
       ylab("Predicted Ticks Per Trap") #+ 
       #labs(color = "variable 2 pretty name") #+ 
     plt
