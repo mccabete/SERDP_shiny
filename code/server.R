@@ -20,7 +20,7 @@ library(ggeffects)
 # DATA WRANGLING #
 ##################
 
-setwd("/projectnb/dietzelab/mccabete/SERDP_shiny/code")
+#setwd("/projectnb/dietzelab/mccabete/SERDP_shiny/code")
 
 # Helper data ----
 installation_lookup_table <- read.csv("www/SERDP_data_installtion_lookup_table.csv")
@@ -68,6 +68,81 @@ subset_data <- function (data, installation_name, grep = FALSE){
   
   
   return(data)
+}
+
+## Helper Function for hypotheticals 
+names_to_variables <- function(state_vars_name){
+  name <- glm_map$glm_names[glm_map$state_vars_name == state_vars_name]
+  return(name)
+}
+
+
+variable_transform <- function(p, reactive_vars){  # takes ggpredict object, returns a ggredict object with rawdata backtransformed 
+  num_vars <- length(reactive_vars)
+  no_transforms <- c("avg_litter_depth_all", "avg_canopy_cover", "avg_1yr_vp..Pa.")
+  
+  for(i in 1:num_vars){
+    variable <- reactive_vars[i]
+    
+    if(!(variable %in% no_transforms)){
+      
+      rawdata <-  attr(p, "rawdata")
+      at_list <- attr(p, "at.list")
+      
+      if(variable == "biomass_log"){
+        
+        if(i == 1){
+          rawdata$x <- exp(as.numeric(rawdata$x))
+          p$x <- exp(as.numeric(p$x))
+        }else{
+          
+          rawdata$group <- as.character(exp(as.numeric(rawdata$group))) 
+          at_list$biomass_log <- as.character(exp(as.numeric(at_list$biomass_log)))
+          p$group <- as.character(exp(as.numeric(as.character(p$group))))
+          
+        }
+        
+        
+      }
+      
+      if(variable == "d_since_fire_log"){
+        
+        
+        if(i == 1){
+          rawdata$x <- exp(as.numeric(rawdata$x))
+          p$x <- exp(as.numeric(p$x))
+        }else{
+          rawdata$group <- as.character(exp(as.numeric(rawdata$group))) 
+          at_list$d_since_fire_log <- as.character(exp(as.numeric(at_list$d_since_fire_log)))
+          p$group <- as.character(exp(as.numeric(as.character(p$group))))
+          
+          
+        }
+        
+      }
+      
+      if(variable == "logit_litter"){
+        
+        if(i == 1){
+          rawdata$x <- exp(as.numeric(rawdata$x))/(1 + exp(as.numeric(rawdata$x)))
+          p$x <- exp(as.numeric(p$x))/(1 + exp(as.numeric(p$x)))
+        }else{
+          rawdata$group <- as.character(exp(as.numeric(rawdata$group)) / (1 + exp(as.numeric(rawdata$group)))) 
+          at_list$logit_litter <- as.character(exp(as.numeric(at_list$logit_litter))/ (1 + exp(as.numeric(at_list$logit_litter))))
+          p$group <- as.character(exp(as.numeric(as.character(p$group))) / (1 + exp(as.numeric(as.character(p$group)))))
+          
+        }
+        
+      }
+      attr(p, "rawdata") <- rawdata
+      attr(p, "at.list") <- at_list
+      
+    }
+    
+  }
+  
+  return(p)
+  
 }
 
 ################
@@ -273,80 +348,7 @@ shinyServer(function(input, output) {
   
 #### Exploring Hypotheticals ----
   
-  ## Helper Function for hypotheticals 
-  names_to_variables <- function(state_vars_name){
-    name <- glm_map$glm_names[glm_map$state_vars_name == state_vars_name]
-    return(name)
-  }
   
- 
-  variable_transform <- function(p, reactive_vars){  # takes ggpredict object, returns a ggredict object with rawdata backtransformed 
-    num_vars <- length(reactive_vars)
-    no_transforms <- c("avg_litter_depth_all", "avg_canopy_cover", "avg_1yr_vp..Pa.")
-    
-    for(i in 1:num_vars){
-     variable <- reactive_vars[i]
-     
-      if(!(variable %in% no_transforms)){
-        
-        rawdata <-  attr(p, "rawdata")
-        at_list <- attr(p, "at.list")
-        
-        if(variable == "biomass_log"){
-          
-          if(i == 1){
-            rawdata$x <- exp(as.numeric(rawdata$x))
-            p$x <- exp(as.numeric(p$x))
-          }else{
-            
-            rawdata$group <- as.character(exp(as.numeric(rawdata$group))) 
-            at_list$biomass_log <- as.character(exp(as.numeric(at_list$biomass_log)))
-            p$group <- as.character(exp(as.numeric(as.character(p$group))))
-            
-          }
-          
-
-        }
-        
-        if(variable == "d_since_fire_log"){
-          
-          
-          if(i == 1){
-            rawdata$x <- exp(as.numeric(rawdata$x))
-            p$x <- exp(as.numeric(p$x))
-          }else{
-            rawdata$group <- as.character(exp(as.numeric(rawdata$group))) 
-            at_list$d_since_fire_log <- as.character(exp(as.numeric(at_list$d_since_fire_log)))
-            p$group <- as.character(exp(as.numeric(as.character(p$group))))
-            
-            
-          }
-          
-        }
-        
-        if(variable == "logit_litter"){
-          
-          if(i == 1){
-            rawdata$x <- exp(as.numeric(rawdata$x))/(1 + exp(as.numeric(rawdata$x)))
-            p$x <- exp(as.numeric(p$x))/(1 + exp(as.numeric(p$x)))
-          }else{
-            rawdata$group <- as.character(exp(as.numeric(rawdata$group)) / (1 + exp(as.numeric(rawdata$group)))) 
-            at_list$logit_litter <- as.character(exp(as.numeric(at_list$logit_litter))/ (1 + exp(as.numeric(at_list$logit_litter))))
-            p$group <- as.character(exp(as.numeric(as.character(p$group))) / (1 + exp(as.numeric(as.character(p$group)))))
-            
-          }
-
-        }
-        attr(p, "rawdata") <- rawdata
-        attr(p, "at.list") <- at_list
-      
-    }
-      
-    }
-    
-    return(p)
-    
-  }
   
    # pretty_paste <- function(var_name, vals = NULL){
    #    if (!is.null(vals)){
@@ -429,14 +431,24 @@ observeEvent(input$state_variable2,{
   updateSliderInput(inputId = "y_cov_slider", 
                     min = ceiling(min(path_data[[names_to_variables(input$state_variable2)]])), 
                     max = ceiling(max(path_data[[names_to_variables(input$state_variable2)]]) * 10),
-                    value = mean(path_data[[names_to_variables(input$state_variable2)]])
+                    value = c(ceiling(min(path_data[[names_to_variables(input$state_variable2)]])), mean(path_data[[names_to_variables(input$state_variable2)]]))
                     
   )
 })
   
+cov_terms <- reactive({
+  if(input$custom_vals_boolean == "no_custom_vars"){
+    return(cov_names())
+  }else{
+    term1 <- paste0( names_to_variables(input$state_variable1), " [c(", paste(input$x_cov_slider, collapse = ","), ")]")
+    term2 <- paste0( names_to_variables(input$state_variable1), " [c(", paste(input$y_cov_slider, collapse = ","), ")]")
+    return(c(term1, term2))
+  }
+  
+})
   
   output$tick_abundance_estimated_plot <- renderPlot({
-    p <-  ggpredict(tick_glmer, type = "re",  terms = c(cov_names()))
+    p <-  ggpredict(tick_glmer, type = "re",  terms = c(cov_terms()))
     p <- variable_transform(p, cov_names())
     
     plt <- plot(p, rawdata = TRUE) + 
