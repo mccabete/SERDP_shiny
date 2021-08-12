@@ -37,7 +37,7 @@ custom_predictor_vals <- tabsetPanel(
   id = "custom_vars", 
   type = "hidden", 
   tabPanel("yes_custom_vars",
-             sliderInput("single_cov_slider", "Custom predictor x-axis values", 
+             sliderInput("x_cov_slider", "Custom predictor x-axis values", 
                          #min = min(path_data[[input$state_variable]]), 
                          min = 0,
                          #max = max(path_data[[input$state_variable]]) * 3 , # Choosing a 3-fold increase arbitrarily
@@ -45,7 +45,7 @@ custom_predictor_vals <- tabsetPanel(
                          #value = quantile(path_data[[input$state_variable]], c(0.25, 0.75))
                          value = c(10)
              ), 
-             sliderInput("double_cov_slider", "Custom interaction values", 
+             sliderInput("y_cov_slider", "Custom interaction values", 
                          #min = min(path_data[[input$state_variable]]), 
                          min = 0,
                          #max = max(path_data[[input$state_variable]]) * 3 , # Choosing a 3-fold increase arbitrarily

@@ -416,16 +416,23 @@ shinyServer(function(input, output) {
     
   })
   
- observeEvent(cov_xlab(), {
-   updateSliderInput(inputId = "single_cov_slider", 
+ observeEvent(input$state_variable1, {
+   updateSliderInput(inputId = "x_cov_slider", 
                      min = 0, 
-                     max = ceiling(max(path_data[[names_to_variables(cov_xlab())]]) * 10),
-                     value = mean(path_data[[names_to_variables(cov_xlab())]])
+                     max = ceiling(max(path_data[[names_to_variables(input$state_variable1)]]) * 10),
+                     value = mean(path_data[[names_to_variables(input$state_variable1)]])
                      
    )
  })
 
-
+observeEvent(input$state_variable2,{
+  updateSliderInput(inputId = "y_cov_slider", 
+                    min = ceiling(min(path_data[[names_to_variables(input$state_variable2)]])), 
+                    max = ceiling(max(path_data[[names_to_variables(input$state_variable2)]]) * 10),
+                    value = mean(path_data[[names_to_variables(input$state_variable2)]])
+                    
+  )
+})
   
   
   output$tick_abundance_estimated_plot <- renderPlot({
