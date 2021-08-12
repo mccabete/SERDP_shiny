@@ -348,41 +348,8 @@ shinyServer(function(input, output) {
   
 #### Exploring Hypotheticals ----
   
-  
-  
-   # pretty_paste <- function(var_name, vals = NULL){
-   #    if (!is.null(vals)){
-   #      tmp <- paste0("c(", paste(vals, collapse = ","), ")")
-   #      text <- paste(var_name, " ", "[", tmp ,"]", sep = "" )
-   #    }else{
-   # 
-   #      text <- paste(var_name)
-   # 
-   #    }
-   # 
-   #   return(text)
-   # }
-
-   # pretty_paste <- function(var_name){
-   #   
-   #     #paste0("c(", paste(vals, collapse = ","), ")")
-   #     text <- paste0(var_name, " ", "[", "vals","]")
-   # 
-   #   return(text)
-   # }
-  
   ## Reactive Elements
-  
-  #state_vars_levels <- reactiveValues(avg_1yr_vp..Pa = path_data$avg_1yr_vp..Pa., biomass_log = path_data$biomass_log )
 
-   
-  # eventReactive(input$avg_1yr_vp..Pa, {
-  # state_vars_levels$avg_1yr_vp..Pa <- input$avg_1yr_vp..Pa
-  # })
-  # 
-  # eventReactive(input$standing_biomass, {
-  #   state_vars_levels$biomass_log <- input$standing_biomass
-  # })
   
   observeEvent(input$num_cov, {
     updateTabsetPanel(inputId = "state_vars", selected = input$num_cov)
@@ -413,42 +380,42 @@ shinyServer(function(input, output) {
   
   
   ### Adding custom values to project into the future
-  observeEvent(input$custom_vals_boolean, {
-    updateTabsetPanel(inputId = "custom_vars", selected = input$custom_vals_boolean)
-    
-  })
+  # observeEvent(input$custom_vals_boolean, {
+  #   updateTabsetPanel(inputId = "custom_vars", selected = input$custom_vals_boolean)
+  #   
+  # })
   
- observeEvent(input$state_variable1, {
-   updateSliderInput(inputId = "x_cov_slider", 
-                     min = 0, 
-                     max = ceiling(max(path_data[[names_to_variables(input$state_variable1)]]) * 10),
-                     value = mean(path_data[[names_to_variables(input$state_variable1)]])
-                     
-   )
- })
-
-observeEvent(input$state_variable2,{
-  updateSliderInput(inputId = "y_cov_slider", 
-                    min = ceiling(min(path_data[[names_to_variables(input$state_variable2)]])), 
-                    max = ceiling(max(path_data[[names_to_variables(input$state_variable2)]]) * 10),
-                    value = c(ceiling(min(path_data[[names_to_variables(input$state_variable2)]])), mean(path_data[[names_to_variables(input$state_variable2)]]))
-                    
-  )
-})
+#  observeEvent(input$state_variable1, {
+#    updateSliderInput(inputId = "x_cov_slider", 
+#                      min = 0, 
+#                      max = ceiling(max(path_data[[names_to_variables(input$state_variable1)]]) * 10),
+#                      value = mean(path_data[[names_to_variables(input$state_variable1)]])
+#                      
+#    )
+#  })
+# 
+# observeEvent(input$state_variable2,{
+#   updateSliderInput(inputId = "y_cov_slider", 
+#                     min = ceiling(min(path_data[[names_to_variables(input$state_variable2)]])), 
+#                     max = ceiling(max(path_data[[names_to_variables(input$state_variable2)]]) * 10),
+#                     value = c(ceiling(min(path_data[[names_to_variables(input$state_variable2)]])), mean(path_data[[names_to_variables(input$state_variable2)]]))
+#                     
+#   )
+# })
   
-cov_terms <- reactive({
-  if(input$custom_vals_boolean == "no_custom_vars"){
-    return(cov_names())
-  }else{
-    term1 <- paste0( names_to_variables(input$state_variable1), " [c(", paste(input$x_cov_slider, collapse = ","), ")]")
-    term2 <- paste0( names_to_variables(input$state_variable1), " [c(", paste(input$y_cov_slider, collapse = ","), ")]")
-    return(c(term1, term2))
-  }
-  
-})
+# cov_terms <- reactive({
+#   if(input$custom_vals_boolean == "no_custom_vars"){
+#     return(cov_names())
+#   }else{
+#     term1 <- paste0( names_to_variables(input$state_variable1), " [c(", paste(input$x_cov_slider, collapse = ","), ")]")
+#     term2 <- paste0( names_to_variables(input$state_variable1), " [c(", paste(input$y_cov_slider, collapse = ","), ")]")
+#     return(c(term1, term2))
+#   }
+#   
+# })
   
   output$tick_abundance_estimated_plot <- renderPlot({
-    p <-  ggpredict(tick_glmer, type = "re",  terms = c(cov_terms()))
+    p <-  ggpredict(tick_glmer, type = "re",  terms = c(cov_names())) #terms = c(cov_terms()))
     p <- variable_transform(p, cov_names())
     
     plt <- plot(p, rawdata = TRUE) + 
