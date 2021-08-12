@@ -20,7 +20,7 @@ library(ggeffects)
 # DATA WRANGLING #
 ##################
 
-#setwd("/projectnb/dietzelab/mccabete/SERDP_shiny/code")
+setwd("/projectnb/dietzelab/mccabete/SERDP_shiny/code")
 
 # Helper data ----
 installation_lookup_table <- read.csv("www/SERDP_data_installtion_lookup_table.csv")
@@ -384,13 +384,9 @@ shinyServer(function(input, output) {
   
   observeEvent(input$num_cov, {
     updateTabsetPanel(inputId = "state_vars", selected = input$num_cov)
-    
+  
   }) 
   
-  observeEvent(input$custom_vals_boolean, {
-    updateTabsetPanel(inputId = "custom_vars", selected = input$custom_vals_boolean)
-  })
-
   cov_names <- reactive({
     switch(input$num_cov,
            single_covariate = names_to_variables(input$state_variable),
@@ -412,6 +408,25 @@ shinyServer(function(input, output) {
            two_covariates = input$state_variable2
     )
   })
+  
+  
+  ### Adding custom values to project into the future
+  observeEvent(input$custom_vals_boolean, {
+    updateTabsetPanel(inputId = "custom_vars", selected = input$custom_vals_boolean)
+    
+  })
+  
+ observeEvent(cov_xlab(), {
+   updateSliderInput(inputId = "single_cov_slider", 
+                     min = 0, 
+                     max = ceiling(max(path_data[[names_to_variables(cov_xlab())]]) * 10),
+                     value = mean(path_data[[names_to_variables(cov_xlab())]])
+                     
+   )
+ })
+
+
+  
   
   output$tick_abundance_estimated_plot <- renderPlot({
     p <-  ggpredict(tick_glmer, type = "re",  terms = c(cov_names()))
