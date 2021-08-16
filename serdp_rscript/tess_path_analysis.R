@@ -326,7 +326,7 @@ vpd_data_frame <- as_tibble(test_plot$avg_1yr_vp..Pa.)
 
 
  #p$mapping$colour[[2]] <- "group_col" # If placed before running the group changes, get Discrete value error. If at end, get a
-p <-  ggpredict(tpt_noHosts_pois, type = "re",  terms = c("avg_1yr_vp..Pa.", "biomass_log"))
+p <-  ggpredict(tpt_noHosts_pois, type = "re",  terms = c("avg_1yr_vp..Pa.", "biomass_log [40, 200]"))
  rawdata <-  attr(p, "rawdata")
   rawdata$group <- exp(rawdata$group)
   attr(p, "rawdata") <- rawdata
@@ -389,10 +389,133 @@ test_mean2 <- ggemmeans(tpt_noHosts_pois, type = "re", terms = c("avg_1yr_vp..Pa
 test_mean2
 
 ## Exporting glmer objects for use in shiny ####
-tick_glmer <- tpt_noHosts_pois
-save(tick_glmer, file = "/projectnb/dietzelab/mccabete/SERDP_shiny/code/www/tick_glmer.Rdata")
-write_csv(sem_data, file = "/projectnb/dietzelab/mccabete/SERDP_shiny/code/www/path_data.csv")
+#tick_glmer <- tpt_noHosts_pois
+#save(tick_glmer, file = "/projectnb/dietzelab/mccabete/SERDP_shiny/code/www/tick_glmer.Rdata")
+#write_csv(sem_data, file = "/projectnb/dietzelab/mccabete/SERDP_shiny/code/www/path_data.csv")
 
+cov_names  <- c("avg_1yr_vp..Pa.", "avg_litter_depth_all")
+cov_xlab <- cov_names[1]
+cov_group_lable <- cov_names[2]
+
+p <-  ggpredict(tpt_noHosts_pois, type = "re",  terms = c("avg_1yr_vp..Pa.", "avg_litter_depth_all [100]"))
+ 
+new_p <- variable_transform_plot(p, cov_names)
+plt <- plot(new_p, rawdata = TRUE) + 
+  geom_path(aes(, group = 1)) + 
+  ggtitle("") +
+  xlab(paste(cov_xlab)) + 
+  ylab("Predicted Ticks Per Trap") +
+  labs(color = paste(cov_group_lable)) #+ 
+plt
+
+### Setting up the cummulative effects plot
+
+
+
+
+
+  
+  paste_var <- function(var, vals = NULL){
+    var <- names_to_variables(var)
+    
+    if( ! rlang::is_empty(vals) ){
+      p_var <- paste0( var, " [", paste(vals, collapse = ","), "]")
+    }
+  }
+
+vals_y <- c(1, 100)
+vals_x <- c(1, 3000)
+var1 <- "Litter Depth"
+var2 <- "% Canopy Cover"
+
+
+
+fire_levels <- c()
+percent_canopy <- ggpredict(canopy_mod, type = "re", terms = "d_since_fire_log[fire_levels]")
+percent_canopy_baseline <- ggpredict(canopy_mod, type = "re", terms = c("d_since_fire_log")) # Excluding "fri15yr" since not significant 
+tmp_var <- c(percent_canopy$predicted) #, percent_canopy$conf.low, percent_canopy$conf.high) ## Why include high and low confidence intervals? I think it may throw sampleing off
+
+biomass <- ggpredict(standing_biomass_mod, type = "re", terms = "avg_canopy_cover[tmp_var]") # Excluding "d_since_fire_log" since not significant 
+biomass_baseline <- ggpredict(standing_biomass_mod, type = "re", terms = c("avg_canopy_cover"))
+logit_litter <- ggpredict(litter_cover_mod, type = "re", terms = c("avg_canopy_cover [tmp_var]", "d_since_fire_log[fire_levels]"))
+logit_litter <- 
+
+tmp_logit <- c(logit_litter$predicted)#, logit_litter$conf.low, logit_litter$conf.high)
+litter_depth <- ggpredict(litter_depth_mod, type = "re", terms = "d_since_fire_log")
+
+
+ticks <-  ggpredict(tpt_noHosts_pois, type = "re", terms = c("avg_canopy_cover [tmp_var]", "logit_litter[tmp_logit]", "biomass_log", "avg_1yr_vp..Pa.") ) ## Cant be more than four values
+ticks_baseline <- ggpredict(tpt_noHosts_pois, type = "re", terms = c("avg_canopy_cover", "avg_1yr_vp..Pa.", "logit_litter", "biomass_log"))
+ #plot(ticks, rawdata = TRUE)
+hist(c(ticks$predicted))
+hist(c(ticks$predicted, ticks$conf.low, ticks$conf.high))
+
+# ggplot()+ 
+#   geom_density(data = ticks, aes(x = ticks$predicted)) + 
+#   geom_density(data = ticks_baseline, aes(x = ticks_baseline$predicted), color = "red") + 
+#   xlab("Ticks Predicted")
+
+ticks$label <- "Simulated Levels"
+ticks$quant <- "Mean Predictions"
+ticks_conf <- list()
+ticks_conf$confidence_points <- c(ticks$conf.low, ticks$conf.high, ticks$predicted)
+ticks_conf$label <- ticks$label
+ticks_conf$quant <- "95% Prediction Interval"
+ticks_conf$mean <- round(mean(ticks_conf$confidence_points), digits = 3)
+ticks_conf <- as.data.frame(ticks_conf)
+
+
+ticks_baseline$label <- "Baseline"
+ticks_baseline$quant <- "Mean Predictions"
+ticks_b <- list()
+ticks_b$confidence_points <- c(ticks_baseline$conf.low, ticks_baseline$conf.high, ticks_baseline$predicted)
+ticks_b$label <- ticks_baseline$label
+ticks_b$quant <- "95% Prediction Interval"
+ticks_b$mean <- round(mean(ticks_b$confidence_points), digits = 3)
+ticks_b_sd <- round(sd(ticks_b$confidence_points), digits = 3)
+ticks_b <- as.data.frame(ticks_b)
+
+ggplot() + 
+  theme_classic()+
+  #geom_violin(data = ticks_conf, aes(x = confidence_points, y = label, fill = label, alpha = quant)) +
+  #geom_violin(data = ticks_b, aes(x = ticks_b$confidence_points, y = ticks_b$label, fill = label, alpha = quant)) +
+  geom_violin(data = ticks, aes(x = ticks$predicted, y = ticks$label, fill = label)) + 
+  geom_violin(data = ticks_baseline, aes(x = ticks_baseline$predicted, y = ticks_baseline$label, fill = label)) +
+  geom_point(data = ticks_baseline, aes(x = round(mean(ticks_baseline$predicted), digits = 3), y = ticks_baseline$label[1]), color = "yellow") +
+  geom_text(aes(x = mean(ticks_baseline$predicted), y = ticks_baseline$label[1]), label = paste("Mean:", round(mean(ticks_baseline$predicted), digits = 3)), nudge_x = 4, nudge_y = 0.3, family = "Ariel", size = 3) + 
+  geom_point(data = ticks, aes(x = round(mean(ticks$predicted), digits = 3), y = ticks$label[1]), color = "yellow") +
+  geom_text(aes(x = mean(ticks$predicted), y = ticks$label[1]), label = paste("Mean:", round(mean(ticks$predicted), digits = 3)), nudge_x = 4, nudge_y = 0.3, family = "Ariel", size = 3) + 
+  coord_flip() + 
+  xlab("Ticks Predicted")+
+  ylab("") + 
+  scale_fill_discrete(guide = "none")  + 
+  scale_alpha_discrete(range=c(0.5, 1)) + 
+  guides(alpha = guide_legend(title = "", override.aes = list(fill = c("grey70", "grey60"))) ) 
+
+ #litter_cover_mod, litter_depth_mod, canopy_mod,
+#standing_biomass_mod,
+#time_since_fire_mod, fri_mod,
+#avg_1yr_vp_mod,
+
+
+
+###
+ggplot() + 
+  theme_classic()+
+  geom_violin(data = ticks_conf, aes(x = confidence_points, y = label, fill = label, alpha = quant)) +
+  geom_violin(data = ticks_b, aes(x = ticks_b$confidence_points, y = ticks_b$label, fill = label, alpha = quant)) +
+  geom_violin(data = ticks, aes(x = ticks$predicted, y = ticks$label, fill = label, alpha = quant)) + 
+  geom_violin(data = ticks_baseline, aes(x = ticks_baseline$predicted, y = ticks_baseline$label, fill = label, alpha = quant)) +
+  geom_point(data = ticks_baseline, aes(x = round(mean(ticks_baseline$predicted), digits = 3), y = ticks_baseline$label[1]), color = "yellow") +
+  geom_text(aes(x = mean(ticks_baseline$predicted), y = ticks_baseline$label[1]), label = paste("Mean:", round(mean(ticks_baseline$predicted), digits = 3)), nudge_x = 4, nudge_y = 0.3, family = "Ariel", size = 3) + 
+  geom_point(data = ticks, aes(x = round(mean(ticks$predicted), digits = 3), y = ticks$label[1]), color = "yellow") +
+  geom_text(aes(x = mean(ticks$predicted), y = ticks$label[1]), label = paste("Mean:", round(mean(ticks$predicted), digits = 3)), nudge_x = 4, nudge_y = 0.3, family = "Ariel", size = 3) + 
+  coord_flip() + 
+  xlab("Ticks Predicted")+
+  ylab("") + 
+  scale_fill_discrete(guide = "none")  + 
+  scale_alpha_discrete(range=c(0.5, 1)) + 
+  guides(alpha = guide_legend(title = "", override.aes = list(fill = c("grey70", "grey60"))) ) 
 
 
 
