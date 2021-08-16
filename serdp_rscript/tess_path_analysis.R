@@ -430,38 +430,107 @@ var2 <- "% Canopy Cover"
 
 
 
-fire_levels <- c(7,8,9, 10, 11) ## Not far off from actual 50% - 100% quantile for d_log_fire 
+fire_levels <- c(9, 10, 11) ## Need a way of taking the 1 value a user puts in and turning it into three vals. rnorm statement? 
 percent_canopy <- ggpredict(canopy_mod, type = "re", terms = "d_since_fire_log[fire_levels]")
-percent_canopy_baseline <- ggpredict(canopy_mod, type = "re", terms = c("d_since_fire_log")) # Excluding "fri15yr" since not significant 
-tmp_canopy <- c(percent_canopy$predicted) #, percent_canopy$conf.low, percent_canopy$conf.high) ## Why include high and low confidence intervals? I think it may throw sampleing off
+percent_canopy_baseline <- ggpredict(canopy_mod, type = "re", terms = c("d_since_fire_log [quart2]")) # Excluding "fri15yr" since not significant 
+tmp_canopy <- values_at(percent_canopy$predicted, values = "quart2") #, percent_canopy$conf.low, percent_canopy$conf.high) ## Why include high and low confidence intervals? I think it may throw sampleing off
+#tmp_canopy <- quantile(percent_canopy$predicted, seq(from = 0.1, to = 0.99, length = 11)) 
+
+plot_comparison_ggplot(percent_canopy, percent_canopy_baseline, title = "Predicted % Canopy")
 
 biomass <- ggpredict(standing_biomass_mod, type = "re", terms = "avg_canopy_cover[tmp_canopy]") # Excluding "d_since_fire_log" since not significant 
-biomass_baseline <- ggpredict(standing_biomass_mod, type = "re", terms = c("avg_canopy_cover"))
+biomass_baseline <- ggpredict(standing_biomass_mod, type = "re", terms = c("avg_canopy_cover  [quart2]"))
+tmp_biomass <- values_at(biomass$predicted, values = "quart2")
+
+plot_comparison_ggplot(biomass, biomass_baseline, "Predicted Biomass")
+
 logit_litter <- ggpredict(litter_cover_mod, type = "re", terms = c("avg_canopy_cover [tmp_canopy]", "d_since_fire_log [fire_levels]"))
-logit_litter_baseline <- ggpredict(litter_cover_mod, type = "re", terms = c("avg_canopy_cover", "d_since_fire_log"))
+logit_litter_baseline <- ggpredict(litter_cover_mod, type = "re", terms = c("avg_canopy_cover [quart2]", "d_since_fire_log [quart2]"))
+tmp_logit <- values_at(logit_litter$predicted, values = "quart2") 
 
-tmp_logit <- c(logit_litter$predicted)#, logit_litter$conf.low, logit_litter$conf.high)
+plot_comparison_ggplot(logit_litter, logit_litter_baseline, "Predicted Litter Cover")
+
+ #c(logit_litter$predicted)#, logit_litter$conf.low, logit_litter$conf.high)
 litter_depth <- ggpredict(litter_depth_mod, type = "re", terms = "d_since_fire_log [fire_levels]")
-litter_depth_baseline <- ggpredict(litter_depth_mod, type = "re", terms = "d_since_fire_log")
+litter_depth_baseline <- ggpredict(litter_depth_mod, type = "re", terms = "d_since_fire_log [quart2]")
 
-ticks <-  ggpredict(tpt_noHosts_pois, type = "re", terms = c("avg_canopy_cover [tmp_var]", "logit_litter[tmp_logit]", "biomass_log", "avg_1yr_vp..Pa.") ) ## Cant be more than four values. Excluding d_since_fire becuase wasn't sig anyway
-ticks_baseline <- ggpredict(tpt_noHosts_pois, type = "re", terms = c("avg_canopy_cover", "avg_1yr_vp..Pa.", "logit_litter", "biomass_log"))
+plot_comparison_ggplot(litter_depth, litter_depth_baseline, title = "Predicted Litter Depth")
 
+ticks <-  ggpredict(tpt_noHosts_pois, type = "re", terms = c("avg_canopy_cover [tmp_canopy]", "logit_litter[tmp_logit]", "biomass_log [tmp_biomass]", "avg_1yr_vp..Pa. [quart2]") ) ## Cant be more than four values. Excluding d_since_fire becuase wasn't sig anyway
+ticks_baseline <- ggpredict(tpt_noHosts_pois, type = "re", terms = c("avg_canopy_cover [quart2]", "avg_1yr_vp..Pa. [quart2]", "logit_litter [quart2]", "biomass_log [quart2]"))
+
+plot_comparison_ggplot(ticks, ticks_baseline, "Ticks Predicted")
+
+plot_comparison_ggplot <- function(simulated, baseline, title){
+  
+  
+  simulated$label <- "Simulated Levels"
+  simulated$quant <- "Mean Predictions"
+  simulated_conf <- list()
+  simulated_conf$confidence_points <- c(simulated$conf.low, simulated$conf.high, simulated$predicted)
+  simulated_conf$label <- "Simulated Levels"
+  simulated_conf$quant <- "95% Prediction Interval"
+  simulated_conf <- as.data.frame(simulated_conf)
+  
+  
+  baseline$label <- "Baseline"
+  baseline$quant <- "Mean Predictions"
+  baseline_conf <- list()
+  baseline_conf$confidence_points <- c(baseline$conf.low, baseline$conf.high, baseline$predicted)
+  baseline_conf$label <- "Baseline"
+  baseline_conf$quant <- "95% Prediction Interval"
+  
+  baseline_conf <- as.data.frame(baseline_conf)
+  
+  p <- ggplot() + 
+    theme_classic()+
+    geom_violin(data = simulated_conf, aes(x = confidence_points, y = label, fill = label, alpha = quant)) +
+    geom_violin(data = baseline_conf, aes(x = baseline_conf$confidence_points, y = baseline_conf$label, fill = label, alpha = quant)) +
+    geom_violin(data = simulated, aes(x = simulated$predicted, y = simulated$label, fill = label, alpha = quant)) + 
+    geom_violin(data = baseline, aes(x = baseline$predicted, y = baseline$label, fill = label, alpha = quant)) +
+    geom_point(data = baseline, aes(x = round(mean(baseline$predicted), digits = 3), y = baseline$label[1]), color = "yellow") +
+    geom_text(aes(x = mean(baseline$predicted), y = baseline$label[1]), label = paste("Mean:", round(mean(baseline$predicted), digits = 3)), nudge_x = 4, nudge_y = 0.3, family = "Ariel", size = 3) + 
+    geom_point(data = simulated, aes(x = round(mean(simulated$predicted), digits = 3), y = simulated$label[1]), color = "yellow") +
+    geom_text(aes(x = mean(simulated$predicted), y = simulated$label[1]), label = paste("Mean:", round(mean(simulated$predicted), digits = 3)), nudge_x = 4, nudge_y = 0.3, family = "Ariel", size = 3) + 
+    coord_flip() + 
+    xlab(title) +
+    ylab("") + 
+    scale_fill_discrete(guide = "none")  + 
+    scale_alpha_discrete(range=c(0.5, 1)) + 
+    guides(alpha = guide_legend(override.aes = list(fill = c("grey70", "grey50"))) ) 
+  
+  return(p)
+  
+  
+  
+}
 
 
 
 ticks$label <- "Simulated Levels"
-#ticks$quant <- "Mean Predictions"
+ticks$quant <- "Mean Predictions"
+ticks_conf <- list()
+ticks_conf$confidence_points <- c(ticks$conf.low, ticks$conf.high, ticks$predicted)
+ticks_conf$label <- ticks$label
+ticks_conf$quant <- "95% Prediction Interval"
+ticks_conf <- as.data.frame(ticks_conf)
+
 
 ticks_baseline$label <- "Baseline"
-#ticks_baseline$quant <- "Mean Predictions"
+ticks_baseline$quant <- "Mean Predictions"
+ticks_b <- list()
+ticks_b$confidence_points <- c(ticks_baseline$conf.low, ticks_baseline$conf.high, ticks_baseline$predicted)
+ticks_b$label <- ticks_baseline$label
+ticks_b$quant <- "95% Prediction Interval"
+
+ticks_b <- as.data.frame(ticks_b)
 
 ggplot() + 
   theme_classic()+
-  #geom_violin(data = ticks_conf, aes(x = confidence_points, y = label, fill = label, alpha = quant)) +
-  #geom_violin(data = ticks_b, aes(x = ticks_b$confidence_points, y = ticks_b$label, fill = label, alpha = quant)) +
-  geom_violin(data = ticks, aes(x = ticks$predicted, y = ticks$label, fill = ticks$label)) + 
-  geom_violin(data = ticks_baseline, aes(x = ticks_baseline$predicted, y = ticks_baseline$label, fill = ticks_baseline$label)) +
+  geom_violin(data = ticks_conf, aes(x = confidence_points, y = label, fill = label, alpha = quant)) +
+  geom_violin(data = ticks_b, aes(x = ticks_b$confidence_points, y = ticks_b$label, fill = label, alpha = quant)) +
+  geom_violin(data = ticks, aes(x = ticks$predicted, y = ticks$label, fill = label, alpha = quant)) + 
+  geom_violin(data = ticks_baseline, aes(x = ticks_baseline$predicted, y = ticks_baseline$label, fill = label, alpha = quant)) +
   geom_point(data = ticks_baseline, aes(x = round(mean(ticks_baseline$predicted), digits = 3), y = ticks_baseline$label[1]), color = "yellow") +
   geom_text(aes(x = mean(ticks_baseline$predicted), y = ticks_baseline$label[1]), label = paste("Mean:", round(mean(ticks_baseline$predicted), digits = 3)), nudge_x = 4, nudge_y = 0.3, family = "Ariel", size = 3) + 
   geom_point(data = ticks, aes(x = round(mean(ticks$predicted), digits = 3), y = ticks$label[1]), color = "yellow") +
@@ -469,28 +538,14 @@ ggplot() +
   coord_flip() + 
   xlab("Ticks Predicted")+
   ylab("") + 
-  scale_fill_discrete(guide = "none")  #+ 
+  scale_fill_discrete(guide = "none")  + 
+  scale_alpha_discrete(range=c(0.5, 1)) + 
+  guides(alpha = guide_legend(override.aes = list(fill = c("grey70", "grey50"))) ) 
 
-
-
-ggplot() + 
-  theme_classic()+
-  #geom_violin(data = ticks_conf, aes(x = confidence_points, y = label, fill = label, alpha = quant)) +
-  #geom_violin(data = ticks_b, aes(x = ticks_b$confidence_points, y = ticks_b$label, fill = label, alpha = quant)) +
-  geom_violin(data = ticks, aes(x = ticks$predicted, y = ticks$label, fill = label)) + 
-  geom_violin(data = ticks_baseline, aes(x = ticks_baseline$predicted, y = ticks_baseline$label, fill = label)) +
-  geom_point(data = ticks_baseline, aes(x = round(mean(ticks_baseline$predicted), digits = 3), y = ticks_baseline$label[1]), color = "yellow") +
-  geom_text(aes(x = mean(ticks_baseline$predicted), y = ticks_baseline$label[1]), label = paste("Mean:", round(mean(ticks_baseline$predicted), digits = 3)), nudge_x = 4, nudge_y = 0.3, family = "Ariel", size = 3) + 
-  geom_point(data = ticks, aes(x = round(mean(ticks$predicted), digits = 3), y = ticks$label[1]), color = "yellow") +
-  geom_text(aes(x = mean(ticks$predicted), y = ticks$label[1]), label = paste("Mean:", round(mean(ticks$predicted), digits = 3)), nudge_x = 4, nudge_y = 0.3, family = "Ariel", size = 3) + 
-  coord_flip() + 
-  xlab("Ticks Predicted")+
-  ylab("") + 
-  scale_fill_discrete(guide = "none")  #+ 
- 
-
-
-
+#litter_cover_mod, litter_depth_mod, canopy_mod,
+#standing_biomass_mod,
+#time_since_fire_mod, fri_mod,
+#avg_1yr_vp_mod,
 
 
 
