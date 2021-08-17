@@ -411,72 +411,76 @@ shinyServer(function(input, output) {
   
   
   ### Adding custom values to project into the future
-  # observeEvent(input$custom_vals_boolean, {
-  #   updateTabsetPanel(inputId = "custom_vars", selected = input$custom_vals_boolean)
-  # 
-  # })
+  observeEvent(input$custom_vals_boolean, {
+    updateTabsetPanel(inputId = "custom_vars", selected = input$custom_vals_boolean)
 
- # observeEvent(input$state_variable1, {
- #   updateSliderInput(inputId = "x_cov_slider",
- #                     min = 0,
- #                     max = ceiling(
- #                       max(
- #                         var_trans_normal_units(path_data[[names_to_variables(input$state_variable1)]], input$state_variable1)) * 5),
- #                     value = mean(path_data[[names_to_variables(input$state_variable1)]])
- # 
- #   )
- # })
- # slider_x_title <- renderText(paste("Custom", input$state_variable1, "values"))
- # slider_y_title <- renderText(paste("Custom", input$state_variable2, "values"))
+  })
 
-# observeEvent(input$state_variable2,{
-#   updateSliderInput(inputId = "y_cov_slider",
-#                     min = max(
-#                       ceiling(
-#                         min(
-#                           var_trans_normal_units(path_data[[names_to_variables(input$state_variable2)]], input$state_variable2))), 0), ## Negative values are weird here.
-#                     max = ceiling(
-#                       max(
-#                         var_trans_normal_units(path_data[[names_to_variables(input$state_variable2)]], input$state_variable2)) * 5),
-#                     value = c(ceiling(
-#                                   min(
-#                                     var_trans_normal_units(path_data[[names_to_variables(input$state_variable2)]], input$state_variable2))), 
-#                               
-#                               var_trans_normal_units(mean(path_data[[names_to_variables(input$state_variable2)]]), input$state_variable2))
-# 
-#   )
-# })
-  
-# cov_terms <- reactive({
-#   switch(input$custom)
-#   
-# })
-# cov_terms <- reactive({
-#   if(input$custom_vals_boolean == "no_custom_vars"){
-#     return(cov_names())
-#   }else{
-#     var_x <- var_trans_back(input$x_cov_slider, input$state_variable1)
-#     var_y <- var_trans_back(input$y_cov_slider, input$state_variable2)
-#     term1 <- paste0( names_to_variables(input$state_variable1), " [", paste(var_x, collapse = ","), "]")
-#     term2 <- paste0( names_to_variables(input$state_variable2), " [", paste(var_y, collapse = ","), "]")
-#     return(c(term1, term2))
-#   }
-# 
-# })
-# 
-# cov_names_reactive <- reactive({
-#   if(input$custom_vals_boolean == "no_custom_vars"){
-#     return(cov_names())
-#   }else{
-#     cov_names_sub <- c(names_to_variables(input$state_variable1), names_to_variables(input$state_variable2))
-#     return(cov_names_sub)
-#   }
-#   
-# })
-#   
+ observeEvent(input$state_variable1, {
+   updateSliderInput(inputId = "x_cov_slider",
+                     min = 0,
+                     max = ceiling(
+                       max(
+                         var_trans_normal_units(path_data[[names_to_variables(input$state_variable1)]], input$state_variable1)) * 5),
+                     value = c(ceiling(
+                       min(
+                         var_trans_normal_units(path_data[[names_to_variables(input$state_variable1)]], input$state_variable1))),
+                       
+                       var_trans_normal_units(mean(path_data[[names_to_variables(input$state_variable1)]]), input$state_variable1))
+
+   )
+ })
+ slider_x_title <- renderText(paste("Custom", input$state_variable1, "values"))
+ slider_y_title <- renderText(paste("Custom", input$state_variable2, "values"))
+
+observeEvent(input$state_variable2,{
+  updateSliderInput(inputId = "y_cov_slider",
+                    min = max(
+                      ceiling(
+                        min(
+                          var_trans_normal_units(path_data[[names_to_variables(input$state_variable2)]], input$state_variable2))), 0), ## Negative values are weird here.
+                    max = ceiling(
+                      max(
+                        var_trans_normal_units(path_data[[names_to_variables(input$state_variable2)]], input$state_variable2)) * 5),
+                    value = c(ceiling(
+                                  min(
+                                    var_trans_normal_units(path_data[[names_to_variables(input$state_variable2)]], input$state_variable2))),
+
+                              var_trans_normal_units(mean(path_data[[names_to_variables(input$state_variable2)]]), input$state_variable2))
+
+  )
+})
+
+cov_terms <- reactive({
+  switch(input$custom)
+
+})
+cov_terms <- reactive({
+  if(input$custom_vals_boolean == "no_custom_vars"){
+    return(cov_names())
+  }else{
+    var_x <- var_trans_lm(input$x_cov_slider, input$state_variable1)
+    var_y <- var_trans_lm(input$y_cov_slider, input$state_variable2)
+    term1 <- paste0( names_to_variables(input$state_variable1), " [", paste(var_x, collapse = ","), "]")
+    term2 <- paste0( names_to_variables(input$state_variable2), " [", paste(var_y, collapse = ","), "]")
+    return(c(term1, term2))
+  }
+
+})
+
+cov_names_reactive <- reactive({
+  if(input$custom_vals_boolean == "no_custom_vars"){
+    return(cov_names())
+  }else{
+    cov_names_sub <- c(names_to_variables(input$state_variable1), names_to_variables(input$state_variable2))
+    return(cov_names_sub)
+  }
+
+})
+
   output$tick_abundance_estimated_plot <- renderPlot({
-    p <-  ggpredict(tick_glmer, type = "re",  cov_names()) #terms = c(cov_terms())
-    p <- variable_transform_plot(p,cov_names()) # cov_names_reactive()
+    p <-  ggpredict(tick_glmer, type = "re",  cov_terms()) #terms = c(cov_terms()) #cov_names()
+    p <- variable_transform_plot(p,cov_names_reactive()) # cov_names_reactive() #cov_names()
     
     plt <- plot(p, rawdata = TRUE) + 
       ggtitle("") +

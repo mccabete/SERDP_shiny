@@ -30,36 +30,36 @@ path_data <- read.csv("www/path_data.csv", stringsAsFactors = FALSE)
 
 num_covariates_list <- c("single_covariate", "two_covariates")
 names(num_covariates_list) <- c("1", "2") # There must be a better way
-# covariate_boolean_choices <- c( "no_custom_vars", "yes_custom_vars")
-# names(covariate_boolean_choices) <- c("No", "Yes")
+covariate_boolean_choices <- c( "no_custom_vars", "yes_custom_vars")
+names(covariate_boolean_choices) <- c("No", "Yes")
 
-# custom_predictor_vals <- tabsetPanel(
-#   id = "custom_vars",
-#   type = "hidden",
-#   tabPanel("yes_custom_vars",
-#              sliderInput("x_cov_slider", textOutput("slider_x_title"), ## Render with name
-#                          #min = min(path_data[[input$state_variable]]),
-#                          min = 0,
-#                          #max = max(path_data[[input$state_variable]]) * 3 , # Choosing a 3-fold increase arbitrarily
-#                          max = 4000,
-#                          #value = quantile(path_data[[input$state_variable]], c(0.25, 0.75))
-#                          value = c(10)
-#              ),
-#              sliderInput("y_cov_slider", textOutput("slider_y_title"),
-#                          #min = min(path_data[[input$state_variable]]),
-#                          min = 0,
-#                          #max = max(path_data[[input$state_variable]]) * 3 , # Choosing a 3-fold increase arbitrarily
-#                          max = 4000,
-#                          #value = quantile(path_data[[input$state_variable]], c(0.25, 0.75))
-#                          value = c(10, 100)
-#              )
-# 
-#   ),
-# 
-#   tabPanel("no_custom_vars", column(12))
-# 
-# )
- 
+custom_predictor_vals <- tabsetPanel(
+  id = "custom_vars",
+  type = "hidden",
+  tabPanel("yes_custom_vars",
+             sliderInput("x_cov_slider", textOutput("slider_x_title"), ## Render with name
+                         #min = min(path_data[[input$state_variable]]),
+                         min = 0,
+                         #max = max(path_data[[input$state_variable]]) * 3 , # Choosing a 3-fold increase arbitrarily
+                         max = 4000,
+                         #value = quantile(path_data[[input$state_variable]], c(0.25, 0.75))
+                         value = c(10, 100)
+             ),
+             sliderInput("y_cov_slider", textOutput("slider_y_title"),
+                         #min = min(path_data[[input$state_variable]]),
+                         min = 0,
+                         #max = max(path_data[[input$state_variable]]) * 3 , # Choosing a 3-fold increase arbitrarily
+                         max = 4000,
+                         #value = quantile(path_data[[input$state_variable]], c(0.25, 0.75))
+                         value = c(10, 100)
+             )
+
+  ),
+
+  tabPanel("no_custom_vars", column(12))
+
+)
+
 
 parameter_tabs <- tabsetPanel(
   id = "state_vars",
@@ -78,10 +78,10 @@ parameter_tabs <- tabsetPanel(
            selectInput(
              "state_variable2", "Select interacting predictor", state_vars_name, # state_vars_name without the first state variable? 
              multiple = FALSE
-           ) #,
-           # selectInput("custom_vals_boolean", "Modify with custom values?",
-           #             choices = covariate_boolean_choices),
-           # custom_predictor_vals
+           ) ,
+           selectInput("custom_vals_boolean", "Modify with custom values?",
+                       choices = covariate_boolean_choices),
+           custom_predictor_vals
   )
   
 )
