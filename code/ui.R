@@ -28,6 +28,25 @@ path_data <- read.csv("www/path_data.csv", stringsAsFactors = FALSE)
 # stat_vars_df <- as.data.frame(stat_vars_df)
 # write_csv(stat_vars_df, file = "www/glm_names_map.csv")
 
+####################
+# Helper functions #
+####################
+
+sliderInput_var <- function(id) {
+  id_var <- names_to_variables(id)
+  tmp_nums <- var_trans_normal_units(path_data[[id_var]], id)
+  min <- min(tmp_nums) / 5
+  max <- max(tmp_nums) * 5
+  
+  sliderInput(id, label = id, 
+              min = round(min, digits = 1),
+              max = round(max, digits = 1), 
+              value = round(mean(tmp_nums), digits = 1))
+}
+
+###############
+# Hidden Tabs #
+###############
 num_covariates_list <- c("single_covariate", "two_covariates")
 names(num_covariates_list) <- c("1", "2") # There must be a better way
 covariate_boolean_choices <- c( "no_custom_vars", "yes_custom_vars")
@@ -37,7 +56,7 @@ custom_predictor_vals <- tabsetPanel(
   id = "custom_vars",
   type = "hidden",
   tabPanel("yes_custom_vars",
-             sliderInput("x_cov_slider", textOutput("slider_x_title"), ## Render with name
+             sliderInput("x_cov_slider", textOutput("slider_x_title"), ## Render with name?
                          #min = min(path_data[[input$state_variable]]),
                          min = 0,
                          #max = max(path_data[[input$state_variable]]) * 3 , # Choosing a 3-fold increase arbitrarily
@@ -123,7 +142,8 @@ shinyUI(fluidPage(
               menuSubItem("Tick Hosts", tabName = "tick_host")
                  ),
         menuItem("Exploring Hypotheticals", tabName = "sem", icon = icon("project-diagram"), 
-                 menuSubItem("Predictors of Tick Populations", tabName = "ggpredict_plots")
+                 menuSubItem("Predictors of Tick Populations", tabName = "ggpredict_plots"), 
+                 menuSubItem("How Predictors Interact", tabName = "violin")
                  )
         
       )
@@ -228,7 +248,16 @@ shinyUI(fluidPage(
                 )
 
 
-                ) # ggpredict_plots tab
+                ), # ggpredict_plots tab
+        tabItem(tabName = "violin", 
+                checkboxGroupInput("sub_lm", "Choose one or more variables to see how they affect one anouther:",
+                             choiceNames = state_vars_name, 
+                             choiceValues = glm_map$glm_names),
+                
+                fluidRow(sliders <- map(state_vars_name, sliderInput_var)), 
+                #plotOutput("violin_ticks")
+                
+                ) # violin tab
         
         
       ) # End of tabItems for all tabs

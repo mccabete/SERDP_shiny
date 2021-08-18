@@ -48,8 +48,10 @@ glm_map <- read_csv("www/glm_names_map.csv")
 #state_vars_name <- c("Days Since Fire", "% Litter Cover", "Litter Depth",  "% Canopy Cover","Standing Biomass g/(m^2)", "1 Year Vapor Pressure Deficit")
 
 ##################
-# HELPER FUNCTIONS #
+# HELPER FUNCTIONS # Should I source all the functions from separate files? 
 ##################
+
+source("www/functions/plot_comarison_ggplot.R")
 
 subset_data <- function (data, installation_name, grep = FALSE){
   
@@ -378,10 +380,7 @@ shinyServer(function(input, output) {
 
   
 #### Exploring Hypotheticals ----
-  
-  ## Reactive Elements
-
-  
+  ### ggpredict tab ----
   observeEvent(input$num_cov, {
     updateTabsetPanel(inputId = "state_vars", selected = input$num_cov)
   
@@ -480,7 +479,7 @@ cov_names_reactive <- reactive({
 
   output$tick_abundance_estimated_plot <- renderPlot({
     p <-  ggpredict(tick_glmer, type = "re",  cov_terms()) #terms = c(cov_terms()) #cov_names()
-    p <- variable_transform_plot(p,cov_names_reactive()) # cov_names_reactive() #cov_names()
+    p <- variable_transform_plot(p, cov_names_reactive()) # cov_names_reactive() #cov_names()
     
     plt <- plot(p, rawdata = TRUE) + 
       ggtitle("") +
@@ -494,5 +493,31 @@ cov_names_reactive <- reactive({
   
 
   
+  ### Violin tab----
+  
+  ## Read in Baseline models
+  percent_canopy_baseline <-  read_csv("www/percent_canopy_baseline.csv")
+  biomass_baseline <-  read_csv("www/biomass_baseline.csv")
+  logit_litter_baseline <-  read_csv("www/logit_litter_baseline.csv")
+  litter_depth_baseline <-  read_csv("www/litter_depth_baseline.csv")
+  vpd_baseline <-  read_csv("www/vpd_baseline.csv")
+  ticks_baseline <-  read_csv("www/ticks_baseline.csv")
+  
+  ## Checkboxes
+  
+  
+  # fire_vals <- reactive({
+  #   if("d_since_fire_log" %in% input$sub_lm){
+  #     return("slider output")
+  #   }else{
+  #     return(values_at(path_data$d_since_fire_log, values = "quart2"))
+  #   }
+  # })
+  
+
+  
+  
+  ## violin plots
+  # output$violin_ticks <- renderPlot(plot_comparison_ggplot(ticks, ticks_baseline, title = "Pridicted Ticks"))
 
 })

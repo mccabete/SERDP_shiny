@@ -453,13 +453,24 @@ plot_comparison_ggplot(logit_litter, logit_litter_baseline, "Predicted Litter Co
  #c(logit_litter$predicted)#, logit_litter$conf.low, logit_litter$conf.high)
 litter_depth <- ggpredict(litter_depth_mod, type = "re", terms = "d_since_fire_log [fire_levels]")
 litter_depth_baseline <- ggpredict(litter_depth_mod, type = "re", terms = "d_since_fire_log [quart2]")
+tmp_litter_depth <- values_at(litter_depth$predicted, values = "quart2")
 
 plot_comparison_ggplot(litter_depth, litter_depth_baseline, title = "Predicted Litter Depth")
 
-ticks <-  ggpredict(tpt_noHosts_pois, type = "re", terms = c("avg_canopy_cover [tmp_canopy]", "logit_litter[tmp_logit]", "biomass_log [tmp_biomass]", "avg_1yr_vp..Pa. [quart2]") ) ## Cant be more than four values. Excluding d_since_fire becuase wasn't sig anyway
-ticks_baseline <- ggpredict(tpt_noHosts_pois, type = "re", terms = c("avg_canopy_cover [quart2]", "avg_1yr_vp..Pa. [quart2]", "logit_litter [quart2]", "biomass_log [quart2]"))
+vpd_baseline <- ggpredict(avg_1yr_vp_mod, type = "re", terms = "cv_30yr_fire_days [quart2]")
+
+ticks <-  ggpredict(tpt_noHosts_pois, type = "re", terms = c("avg_litter_depth_all [tmp_litter_depth]", "logit_litter[tmp_logit]", "biomass_log [tmp_biomass]", "avg_1yr_vp..Pa. [quart2]") ) ## Cant be more than four values. Excluding d_since_fire becuase wasn't sig anyway. Could/ SHould also exclude canopy cover? 
+ticks_baseline <- ggpredict(tpt_noHosts_pois, type = "re", terms = c("avg_litter_depth_all [quart2]", "avg_1yr_vp..Pa. [quart2]", "logit_litter [quart2]", "biomass_log [quart2]"))
 
 plot_comparison_ggplot(ticks, ticks_baseline, "Ticks Predicted")
+
+write_csv(percent_canopy_baseline, "code/www/percent_canopy_baseline.csv")
+write_csv(biomass_baseline, "code/www/biomass_baseline.csv")
+write_csv(logit_litter_baseline, "code/www/logit_litter_baseline.csv")
+write_csv(litter_depth_baseline, "code/www/litter_depth_baseline.csv")
+write_csv(as.data.frame(vpd_baseline), "code/www/vpd_baseline.csv")
+write_csv(as.data.frame(ticks_baseline), "code/www/ticks_baseline.csv")
+
 
 source("code/www/functions/plot_comarison_ggplot.R")
 
