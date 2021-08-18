@@ -38,10 +38,13 @@ sliderInput_var <- function(id) {
   min <- min(tmp_nums) / 5
   max <- max(tmp_nums) * 5
   
+  tmp <- values_at(tmp_nums, values = "quart2")
+  
   sliderInput(id, label = id, 
               min = round(min, digits = 1),
               max = round(max, digits = 1), 
-              value = round(mean(tmp_nums), digits = 1))
+              value = c(round(tmp[1], digits = 1), round(tmp[3], digits = 1)))
+  
 }
 
 ###############
@@ -49,14 +52,37 @@ sliderInput_var <- function(id) {
 ###############
 num_covariates_list <- c("single_covariate", "two_covariates")
 names(num_covariates_list) <- c("1", "2") # There must be a better way
+
 covariate_boolean_choices <- c( "no_custom_vars", "yes_custom_vars")
 names(covariate_boolean_choices) <- c("No", "Yes")
+
+dependant_scenario_list <- c("independant_effects", "intermediate_effects", "dependant_effects")
+vars_independant <- c("Days Since Fire", "1 Year Vapor Pressure Deficit")
+vars_intermediate <- c("% Canopy Cover", "Litter Depth", "1 Year Vapor Pressure Deficit")
+vars_dependant <- c("Standing Biomass g/(m^2)", "% Litter Cover", "Litter Depth", "1 Year Vapor Pressure Deficit")
+
+
+sliders_tab <- tabsetPanel(
+  id = "dependant_scenario", 
+  type = "hidden",
+  tabPanel("independant_effects",
+           fluidRow(sliders <- map(vars_independant, sliderInput_var))
+           ),
+  tabPanel("intermediate_effects",
+           fluidRow(sliders <- map(vars_intermediate, sliderInput_var),
+                    p("Warning: % Canopy Cover, and % Litter Cover are both informed by Days Since Fire. If you manually change values of % Canopy cover, it represents a scenario where the % Litter Cover is infromed by Days Since Fire, but % Canopy isn't.")
+                    )
+  ), 
+  tabPanel("dependant_effects",
+           fluidRow(sliders <- map(vars_dependant, sliderInput_var))
+           )
+) ## sliders tab
 
 custom_predictor_vals <- tabsetPanel(
   id = "custom_vars",
   type = "hidden",
   tabPanel("yes_custom_vars",
-             sliderInput("x_cov_slider", textOutput("slider_x_title"), ## Render with name?
+             sliderInput("x_cov_slider", "Predictor on X axis", ## Render with name?
                          #min = min(path_data[[input$state_variable]]),
                          min = 0,
                          #max = max(path_data[[input$state_variable]]) * 3 , # Choosing a 3-fold increase arbitrarily
@@ -64,7 +90,7 @@ custom_predictor_vals <- tabsetPanel(
                          #value = quantile(path_data[[input$state_variable]], c(0.25, 0.75))
                          value = c(10, 100)
              ),
-             sliderInput("y_cov_slider", textOutput("slider_y_title"),
+             sliderInput("y_cov_slider", "Interacting Predictor",
                          #min = min(path_data[[input$state_variable]]),
                          min = 0,
                          #max = max(path_data[[input$state_variable]]) * 3 , # Choosing a 3-fold increase arbitrarily
@@ -250,11 +276,17 @@ shinyUI(fluidPage(
 
                 ), # ggpredict_plots tab
         tabItem(tabName = "violin", 
-                checkboxGroupInput("sub_lm", "Choose one or more variables to see how they affect one anouther:",
-                             choiceNames = state_vars_name, 
-                             choiceValues = glm_map$glm_names),
+                sidebarPanel(
+                  radioButtons("sub_lm", "Choose one or more predictors to provide custom values:",
+                                     choiceNames = c("Fire and VPD", "Canopy %, Litter Depth, or VPD", "Biomass, % Litter, Litter Depth, or VPD"), ## PAss html here? something more intuitive?
+                                     choiceValues = dependant_scenario_list), 
+                  sliders_tab
+                ), 
+                mainPanel()
+                 
                 
-                fluidRow(sliders <- map(state_vars_name, sliderInput_var)), 
+                
+               
                 #plotOutput("violin_ticks")
                 
                 ) # violin tab

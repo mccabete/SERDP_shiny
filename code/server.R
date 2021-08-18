@@ -503,7 +503,10 @@ cov_names_reactive <- reactive({
   vpd_baseline <-  read_csv("www/vpd_baseline.csv")
   ticks_baseline <-  read_csv("www/ticks_baseline.csv")
   
-  ## Checkboxes
+  ## Check which scenario
+  observeEvent(input$sub_lm, {
+    updateTabsetPanel(inputId = "dependant_scenario", selected = input$sub_lm)
+  }) 
   
   
   # fire_vals <- reactive({
