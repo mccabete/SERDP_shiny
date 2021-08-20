@@ -280,7 +280,8 @@ shinyUI(fluidPage(
                   radioButtons("sub_lm", "Choose one or more predictors to provide custom values:",
                                      choiceNames = c("Fire and VPD", "Canopy %, Litter Depth, or VPD", "Biomass, % Litter, Litter Depth, or VPD"), ## PAss html here? something more intuitive?
                                      choiceValues = dependant_scenario_list), 
-                  sliders_tab
+                  sliders_tab, 
+                  actionButton("simulate", "Draw Graphs")
                 ), 
                 mainPanel()
                  

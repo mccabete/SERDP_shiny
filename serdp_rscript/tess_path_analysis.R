@@ -428,51 +428,88 @@ vals_x <- c(1, 3000)
 var1 <- "Litter Depth"
 var2 <- "% Canopy Cover"
 
+source("code/www/functions/plot_comarison_ggplot.R")
 
 
-fire_levels <- c(9, 10, 11) ## Need a way of taking the 1 value a user puts in and turning it into three vals. rnorm statement? 
-percent_canopy <- ggpredict(canopy_mod, type = "re", terms = "d_since_fire_log[fire_levels]")
-percent_canopy_baseline <- ggpredict(canopy_mod, type = "re", terms = c("d_since_fire_log [quart2]")) # Excluding "fri15yr" since not significant 
-tmp_canopy <- values_at(percent_canopy$predicted, values = "quart2") #, percent_canopy$conf.low, percent_canopy$conf.high) ## Why include high and low confidence intervals? I think it may throw sampleing off
+fire_levels <- c(8) ## Need a way of taking the 1 value a user puts in and turning it into three vals. rnorm statement? 
+
+sample_from_conditionals <- function(model, n = 2, pois = FALSE){
+  
+  length_cond <- length(model$predicted)
+  #n_per <- n/length_cond
+  #print(paste(n_per, "samples will be taken at each level for a total of", n ,"samples"))
+  
+  samples <- c()
+  for(i in seq_along(model$predicted)){
+    if(!pois){
+      #sd <-  model$std.error[i] * (1^(1/2))
+      #sd <- sd = (model$conf.high)/(1.96*2)
+      tmp <- rnorm(n, model$predicted[i], model$std.error[i])
+    }else{
+      tmp <- rpois(n, model$predicted[i])
+    }
+    
+    
+    samples <- c(samples, tmp)
+  }
+  
+  return(samples)
+}
+
+
+fire_levels <- c(20)
+n = 5
+percent_canopy <- ggpredict(canopy_mod, type = "re", terms = "d_since_fire_log [fire_levels]")
+#percent_canopy_baseline <- ggpredict(canopy_mod, type = "re", terms = c("d_since_fire_log [all]")) # Excluding "fri15yr" since not significant 
+tmp_canopy <-  sample_from_conditionals(percent_canopy, n = n)
+#tmp_canopy_baseline <- sample(unlist(simulate(canopy_mod, 100)), n) 
+  #, percent_canopy$conf.low, percent_canopy$conf.high) ## Why include high and low confidence intervals? I think it may throw sampleing off
 #tmp_canopy <- quantile(percent_canopy$predicted, seq(from = 0.1, to = 0.99, length = 11)) 
 
-plot_comparison_ggplot(percent_canopy, percent_canopy_baseline, title = "Predicted % Canopy")
+plot_comparison_ggplot(tmp_canopy, path_data$avg_canopy_cover, title = "Predicted % Canopy")
 
 biomass <- ggpredict(standing_biomass_mod, type = "re", terms = "avg_canopy_cover[tmp_canopy]") # Excluding "d_since_fire_log" since not significant 
-biomass_baseline <- ggpredict(standing_biomass_mod, type = "re", terms = c("avg_canopy_cover  [quart2]"))
-tmp_biomass <- values_at(biomass$predicted, values = "quart2")
+#biomass_baseline <- ggpredict(standing_biomass_mod, type = "re", terms = c("avg_canopy_cover  [quart2]"))
+tmp_biomass <- sample_from_conditionals(biomass, 5 )
+#tmp_biomass_baseline <- sample(unlist(simulate(standing_biomass_mod, 100)), n*n) 
 
-plot_comparison_ggplot(biomass, biomass_baseline, "Predicted Biomass")
+plot_comparison_ggplot(tmp_biomass, path_data$biomass_log, "Predicted Biomass")
 
-logit_litter <- ggpredict(litter_cover_mod, type = "re", terms = c("avg_canopy_cover [tmp_canopy]", "d_since_fire_log [fire_levels]"))
-logit_litter_baseline <- ggpredict(litter_cover_mod, type = "re", terms = c("avg_canopy_cover [quart2]", "d_since_fire_log [quart2]"))
-tmp_logit <- values_at(logit_litter$predicted, values = "quart2") 
+logit_litter <- ggpredict(litter_cover_mod, type = "re", terms = c("avg_canopy_cover [tmp_canopy]", "d_since_fire_log [fire_levels]")) ####### CHECK ERROR MODEL FOR SIMULATIONS
+#logit_litter_baseline <- ggpredict(litter_cover_mod, type = "re", terms = c("avg_canopy_cover [quart2]", "d_since_fire_log [6.652009]"))
+tmp_logit_litter <- sample_from_conditionals(logit_litter, 5)
+#tmp_logit_litter_baseline <- sample_from_conditionals(logit_litter_baseline, 18)
 
-plot_comparison_ggplot(logit_litter, logit_litter_baseline, "Predicted Litter Cover")
+plot_comparison_ggplot(tmp_logit_litter, path_data$logit_litter, "Predicted Litter Cover")
 
  #c(logit_litter$predicted)#, logit_litter$conf.low, logit_litter$conf.high)
 litter_depth <- ggpredict(litter_depth_mod, type = "re", terms = "d_since_fire_log [fire_levels]")
-litter_depth_baseline <- ggpredict(litter_depth_mod, type = "re", terms = "d_since_fire_log [quart2]")
-tmp_litter_depth <- values_at(litter_depth$predicted, values = "quart2")
+#litter_depth_baseline <- ggpredict(litter_depth_mod, type = "re", terms = "d_since_fire_log [6.652009]")
+tmp_litter_depth <- sample_from_conditionals(litter_depth, 5)
+#tmp_litter_depth_baseline <- sample_from_conditionals(litter_depth_baseline)
 
-plot_comparison_ggplot(litter_depth, litter_depth_baseline, title = "Predicted Litter Depth")
+plot_comparison_ggplot(tmp_litter_depth, path_data$avg_litter_depth_all, title = "Predicted Litter Depth")
 
-vpd_baseline <- ggpredict(avg_1yr_vp_mod, type = "re", terms = "cv_30yr_fire_days [quart2]")
+#vpd_baseline <- ggpredict(avg_1yr_vp_mod, type = "re", terms = "cv_30yr_fire_days [quart2]")
 
-ticks <-  ggpredict(tpt_noHosts_pois, type = "re", terms = c("avg_litter_depth_all [tmp_litter_depth]", "logit_litter[tmp_logit]", "biomass_log [tmp_biomass]", "avg_1yr_vp..Pa. [quart2]") ) ## Cant be more than four values. Excluding d_since_fire becuase wasn't sig anyway. Could/ SHould also exclude canopy cover? 
-ticks_baseline <- ggpredict(tpt_noHosts_pois, type = "re", terms = c("avg_litter_depth_all [quart2]", "avg_1yr_vp..Pa. [quart2]", "logit_litter [quart2]", "biomass_log [quart2]"))
+ticks <-  ggpredict(tpt_noHosts_pois, type = "re", terms = c("avg_litter_depth_all [tmp_litter_depth]", "logit_litter[tmp_logit_litter]", "biomass_log [tmp_biomass]") ) ## Cant be more than four values. Excluding d_since_fire becuase wasn't sig anyway. Could/ SHould also exclude canopy cover? 
+#ticks_baseline <- ggpredict(tpt_noHosts_pois, type = "re", terms = c("avg_litter_depth_all [quart2]", "logit_litter [quart2]", "biomass_log [quart2]"))
 
-plot_comparison_ggplot(ticks, ticks_baseline, "Ticks Predicted")
-
-write_csv(percent_canopy_baseline, "code/www/percent_canopy_baseline.csv")
-write_csv(biomass_baseline, "code/www/biomass_baseline.csv")
-write_csv(logit_litter_baseline, "code/www/logit_litter_baseline.csv")
-write_csv(litter_depth_baseline, "code/www/litter_depth_baseline.csv")
-write_csv(as.data.frame(vpd_baseline), "code/www/vpd_baseline.csv")
-write_csv(as.data.frame(ticks_baseline), "code/www/ticks_baseline.csv")
+tmp_ticks <- sample_from_conditionals(ticks, n = 5, pois = TRUE)
+#tmp_ticks_baseline <- sample_from_conditionals(ticks_baseline, n = length(ticks$predicted), pois = TRUE)
 
 
-source("code/www/functions/plot_comarison_ggplot.R")
+plot_comparison_ggplot(tmp_ticks, path_data$tpt, "Ticks Predicted")
+
+# write_csv(percent_canopy_baseline, "code/www/percent_canopy_baseline.csv")
+# write_csv(biomass_baseline, "code/www/biomass_baseline.csv")
+# write_csv(logit_litter_baseline, "code/www/logit_litter_baseline.csv")
+# write_csv(litter_depth_baseline, "code/www/litter_depth_baseline.csv")
+# write_csv(as.data.frame(vpd_baseline), "code/www/vpd_baseline.csv")
+# write_csv(as.data.frame(ticks_baseline), "code/www/ticks_baseline.csv")
+
+
+
 
 
 

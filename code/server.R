@@ -450,10 +450,9 @@ observeEvent(input$state_variable2,{
   )
 })
 
-cov_terms <- reactive({
-  switch(input$custom)
-
-})
+# cov_terms <- reactive({
+#   switch(input$custom)
+# })
 cov_terms <- reactive({
   if(input$custom_vals_boolean == "no_custom_vars"){
     return(cov_names())
@@ -506,8 +505,29 @@ cov_names_reactive <- reactive({
   ## Check which scenario
   observeEvent(input$sub_lm, {
     updateTabsetPanel(inputId = "dependant_scenario", selected = input$sub_lm)
+    
+    ## Reset values to baseline
+    fire_vals <- values_at(path_data$d_since_fire_log, values = "quart2")
+    percent_canopy_vals <- percent_canopy_baseline$predicted
+    biomass_vals <- biomass_baseline$predicted
+    logit_litter_vals <- logit_litter_baseline$predicted
+    litter_depth_vals <- litter_depth_baseline
+    vpd_vals <- vpd_baseline$predicted
+    ticks_vals <- ticks_baseline$predicted
   }) 
   
+  ## If user changes any values
+ observeEvent(input$d_since_fire_log, fire_vals <- input$d_since_fire_log)
+ observeEvent(input$avg_canopy_cover, percent_canopy_vals <- input$avg_canopy_cover)
+ observeEvent(input$biomass_log, biomass_vals <- input$biomass_log)
+ observeEvent(input$logit_litter, logit_litter_vals <- input$logit_litter)
+ observeEvent(input$avg_litter_depth_all, litter_depth_vals <- input$avg_litter_depth_all )
+ observeEvent(input$avg_1yr_vp..Pa., vpd_vals <- input$avg_1yr_vp..Pa.)
+
+  ## Update variables
+  eventReactive(input$simulate, { ## When values are refreshed
+  #canopy <- ggpredict()
+  })
   
   # fire_vals <- reactive({
   #   if("d_since_fire_log" %in% input$sub_lm){
@@ -523,4 +543,4 @@ cov_names_reactive <- reactive({
   ## violin plots
   # output$violin_ticks <- renderPlot(plot_comparison_ggplot(ticks, ticks_baseline, title = "Pridicted Ticks"))
 
-})
+}) #Shiny server function
