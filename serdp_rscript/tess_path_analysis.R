@@ -456,10 +456,13 @@ sample_from_conditionals <- function(model, n = 2, pois = FALSE){
   return(samples)
 }
 
+tmp_df <- list()
+tmp_df$fire_levels <- c(20)
 
-fire_levels <- c(20)
+tmp_df <- as.data.frame(tmp_df)
+#fire_levels <- c(20)
 n = 5
-percent_canopy <- ggpredict(canopy_mod, type = "re", terms = "d_since_fire_log [fire_levels]")
+percent_canopy <- ggpredict(canopy_mod, type = "re", terms = "d_since_fire_log [tmp_df[,1]]")
 #percent_canopy_baseline <- ggpredict(canopy_mod, type = "re", terms = c("d_since_fire_log [all]")) # Excluding "fri15yr" since not significant 
 tmp_canopy <-  sample_from_conditionals(percent_canopy, n = n)
 #tmp_canopy_baseline <- sample(unlist(simulate(canopy_mod, 100)), n) 

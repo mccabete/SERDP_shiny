@@ -35,15 +35,16 @@ path_data <- read.csv("www/path_data.csv", stringsAsFactors = FALSE)
 sliderInput_var <- function(id) {
   id_var <- names_to_variables(id)
   tmp_nums <- var_trans_normal_units(path_data[[id_var]], id)
+  id_name <- paste0("col", id_var)
   min <- min(tmp_nums) / 5
   max <- max(tmp_nums) * 5
   
-  tmp <- values_at(tmp_nums, values = "quart2")
+  mean <- mean(tmp_nums)
   
-  sliderInput(id, label = id, 
+  sliderInput(id_name, label = id, 
               min = round(min, digits = 1),
               max = round(max, digits = 1), 
-              value = c(round(tmp[1], digits = 1), round(tmp[3], digits = 1)))
+              value = c(round(mean, digits = 1)))
   
 }
 
@@ -67,6 +68,7 @@ sliders_tab <- tabsetPanel(
   type = "hidden",
   tabPanel("independant_effects",
            fluidRow(sliders <- map(vars_independant, sliderInput_var))
+           
            ),
   tabPanel("intermediate_effects",
            fluidRow(sliders <- map(vars_intermediate, sliderInput_var),
@@ -265,7 +267,7 @@ shinyUI(fluidPage(
                     selectInput("num_cov", "Number of predictors", 
                                 choices = num_covariates_list
                     ),
-                    parameter_tabs,
+                    parameter_tabs#,
                     
                   ),
                   mainPanel(
@@ -278,15 +280,17 @@ shinyUI(fluidPage(
         tabItem(tabName = "violin", 
                 sidebarPanel(
                   radioButtons("sub_lm", "Choose one or more predictors to provide custom values:",
-                                     choiceNames = c("Fire and VPD", "Canopy %, Litter Depth, or VPD", "Biomass, % Litter, Litter Depth, or VPD"), ## PAss html here? something more intuitive?
-                                     choiceValues = dependant_scenario_list), 
-                  sliders_tab, 
+                                     choiceNames = c("Stage 1", "Stage 2", "Stage 3"), ## PAss html here? something more intuitive?
+                                     choiceValues = dependant_scenario_list),
+                  checkboxGroupInput("vars_to_slide", "Check the variables to change thier value", choices = glm_map$state_vars_name), 
+                  uiOutput("slider"), 
+                  #sliders_tab, 
                   actionButton("simulate", "Draw Graphs")
                 ), 
-                mainPanel()
-                 
-                
-                
+                mainPanel(
+                  fluidRow(textOutput("test_plot"))
+                )
+          
                
                 #plotOutput("violin_ticks")
                 

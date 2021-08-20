@@ -15,6 +15,7 @@ library(lme4)
 library(piecewiseSEM)
 library(effectsize)
 library(ggeffects)
+library(purrr)
 
 ##################
 # DATA WRANGLING #
@@ -495,40 +496,113 @@ cov_names_reactive <- reactive({
   ### Violin tab----
   
   ## Read in Baseline models
-  percent_canopy_baseline <-  read_csv("www/percent_canopy_baseline.csv")
-  biomass_baseline <-  read_csv("www/biomass_baseline.csv")
-  logit_litter_baseline <-  read_csv("www/logit_litter_baseline.csv")
-  litter_depth_baseline <-  read_csv("www/litter_depth_baseline.csv")
-  vpd_baseline <-  read_csv("www/vpd_baseline.csv")
-  ticks_baseline <-  read_csv("www/ticks_baseline.csv")
+  # percent_canopy_baseline <-  read_csv("www/percent_canopy_baseline.csv")
+  # biomass_baseline <-  read_csv("www/biomass_baseline.csv")
+  # logit_litter_baseline <-  read_csv("www/logit_litter_baseline.csv")
+  # litter_depth_baseline <-  read_csv("www/litter_depth_baseline.csv")
+  # vpd_baseline <-  read_csv("www/vpd_baseline.csv")
+  # ticks_baseline <-  read_csv("www/ticks_baseline.csv")
+  
+  ## Read in lm and glm objects to predict from 
   
   ## Check which scenario
   observeEvent(input$sub_lm, {
     updateTabsetPanel(inputId = "dependant_scenario", selected = input$sub_lm)
     
     ## Reset values to baseline
-    fire_vals <- values_at(path_data$d_since_fire_log, values = "quart2")
-    percent_canopy_vals <- percent_canopy_baseline$predicted
-    biomass_vals <- biomass_baseline$predicted
-    logit_litter_vals <- logit_litter_baseline$predicted
-    litter_depth_vals <- litter_depth_baseline
-    vpd_vals <- vpd_baseline$predicted
-    ticks_vals <- ticks_baseline$predicted
+    #fire_vals <- values_at(path_data$d_since_fire_log, values = "quart2")
+    #percent_canopy_vals <- percent_canopy_baseline$predicted
+    #biomass_vals <- biomass_baseline$predicted
+    #logit_litter_vals <- logit_litter_baseline$predicted
+    #litter_depth_vals <- litter_depth_baseline
+    #vpd_vals <- vpd_baseline$predicted
+    #ticks_vals <- ticks_baseline$predicted
   }) 
   
-  ## If user changes any values
- observeEvent(input$d_since_fire_log, fire_vals <- input$d_since_fire_log)
- observeEvent(input$avg_canopy_cover, percent_canopy_vals <- input$avg_canopy_cover)
- observeEvent(input$biomass_log, biomass_vals <- input$biomass_log)
- observeEvent(input$logit_litter, logit_litter_vals <- input$logit_litter)
- observeEvent(input$avg_litter_depth_all, litter_depth_vals <- input$avg_litter_depth_all )
- observeEvent(input$avg_1yr_vp..Pa., vpd_vals <- input$avg_1yr_vp..Pa.)
-
-  ## Update variables
-  eventReactive(input$simulate, { ## When values are refreshed
-  #canopy <- ggpredict()
+ 
+  #slide_vals() <-re
+  
+  slider_names <- reactive(paste0("col", input$vars_to_slide))
+  
+  output$slider <- renderUI({
+    map(input$vars_to_slide, ~ sliderInput_var(.x))
   })
   
+  assign_vals_shiny <- function(term_name){ ### does this need to be reactive? 
+    vals <- input[[term_name]]
+  }
+  
+  ggpredict_var <- function(term_name, map_of_model_inputs, vals){
+    map_of_model_inputs <- map_of_model_inputs[input_name == term_name,]
+    num_dependant_models <- length( map_of_model_inputs$models_effected)
+    
+    val_storage <- matrix(NA, ncol = num_dependant_models + 1, rnow = 2000) ## Very large number, because values start small but grows combinatorially at each level. 
+    val_storage[1,1] <- vals ## First user-input value. Model's effected must start with the model called
+    
+    for(i in 1:(num_dependant_models)){
+     sm_map <- map_of_model_inputs[input_name == map_of_model_inputs$models_effected[i],]
+     tmp_values <- na.omit(val_storage[,i])
+     #term_paste <- paste0(sm_map$terms, " [tmp_values]", ) ## WHAT ABOUT MULTIPLE TERMS? ONLY LITTER, NEED PASTE STATMENT TO DO BOTH
+      predictions <- ggpredict(sm_map$model, type = "re", terms = term_paste )
+      
+      val_storage[,i + 1] <- sample_from_conditionals(predictions, n = 5)
+      
+    }
+    val_storage <- as.data.frame(val_storage)
+    names(val_storage) <- c("user_input", map_of_model_inputs$models_effected) 
+    
+  }
+
+  ### NEED TO MAKE SURE THEY CAN ONLY CHECKBOX THE MODELS THAT ARE ALLOWED TO BE MODIFIED TOGETHER
+  
+  calculate_conditional_sub <- eventReactive(input$simulate, {
+   
+   samples <- map(slider_names(), ggpredict_var(.x, map_of_model_inputs, assign_vals_shiny(.x))) ## Unlist samples in a way that makes sense
+   #index <- which(names(samples) == "fire_levels") ## Need to find for every term 
+   terms_paste <- paste0(names(samples), " [samples", index, "]") ## Can't just use the names because of ggpredict. 
+   tick_pred <- ggpredict("tpt_effects_noHosts / map_of_model_inputs$inputname ==  'ticks'", type = "re", terms = terms_past)
+   
+   tick_samples <- sample_from_conditionals(tick_pred, n = 5)
+   
+   samp_names <- names(samp_names)
+   final_df <- cbind(samples, tick_samples)
+   names(final_df) <- c(samp_names, "ticks_predicted")
+   
+   return(final_df)
+   
+ })
+  
+  
+  ## Plot output
+  
+  #output$dynamic_plots <-  ## How to generate a dynamic number of plots? can I pass the UI statement? 
+  
+ # model_list <- reactive(input$dependant_scenario, {
+ #   if(input$dependant_scenario == "independant_effects"){
+ #     return(vars_independant)
+ #   }else if (nput$dependant_scenario == "intermediate_effects"){
+ #     return(vars_intermediate)
+ #   }else{
+ #     return(vars_dependant)
+ #   }
+ # })
+ # 
+ #equation_list <- 
+ # observeEvent(input$avg_canopy_cover, percent_canopy_vals <- input$avg_canopy_cover)
+ # observeEvent(input$biomass_log, biomass_vals <- input$biomass_log)
+ # observeEvent(input$logit_litter, logit_litter_vals <- input$logit_litter)
+ # observeEvent(input$avg_litter_depth_all, litter_depth_vals <- input$avg_litter_depth_all )
+ # observeEvent(input$avg_1yr_vp..Pa., vpd_vals <- input$avg_1yr_vp..Pa.)
+
+ 
+  ## Update variables
+ # fire_data <-  eventReactive(input$simulate, { ## When I do the actual model runs
+ #  #output$test_plot <- renderPlot(hist(fire_levels))
+ #   tmp <- fire_levels() - 10
+ #    return(tmp)
+ #  })
+ #  
+ #  output$test_plot <- renderText(paste(fire_data()))
   # fire_vals <- reactive({
   #   if("d_since_fire_log" %in% input$sub_lm){
   #     return("slider output")
