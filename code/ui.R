@@ -224,7 +224,7 @@ shinyUI(fluidPage(
                 fluidRow(
                   column(6),
                   column(6, 
-                         downloadButton("download_tick_summary", label = "Download Tick Species and Sampleing Data"))
+                         downloadButton("download_tick_summary", label = "Download Tick Species and Sampling Data"))
                 )
         ), # disease risk map
         
