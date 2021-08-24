@@ -48,6 +48,19 @@ sliderInput_var <- function(id) {
   
 }
 
+sliderInput_ggpredict <- function(id) {
+  
+  tmp_nums <- var_trans_normal_units(path_data[[id]], id)
+  min <- min(tmp_nums) / 5
+  max <- max(tmp_nums) * 5
+  
+  shiny_id <- paste0("ggpredict_vals_", id)
+  sliderInput(shiny_id, label = var_to_names(id), 
+              min = round(min, digits = 1),
+              max = round(max, digits = 1), 
+              value = c(round(mean(tmp_nums), digits = 1), round(min(tmp_nums), digits = 1)))
+}
+
 ###############
 # Hidden Tabs #
 ###############
@@ -84,23 +97,7 @@ custom_predictor_vals <- tabsetPanel(
   id = "custom_vars",
   type = "hidden",
   tabPanel("yes_custom_vars",
-             sliderInput("x_cov_slider", "Predictor on X axis", ## Render with name?
-                         #min = min(path_data[[input$state_variable]]),
-                         min = 0,
-                         #max = max(path_data[[input$state_variable]]) * 3 , # Choosing a 3-fold increase arbitrarily
-                         max = 4000,
-                         #value = quantile(path_data[[input$state_variable]], c(0.25, 0.75))
-                         value = c(10, 100)
-             ),
-             sliderInput("y_cov_slider", "Interacting Predictor",
-                         #min = min(path_data[[input$state_variable]]),
-                         min = 0,
-                         #max = max(path_data[[input$state_variable]]) * 3 , # Choosing a 3-fold increase arbitrarily
-                         max = 4000,
-                         #value = quantile(path_data[[input$state_variable]], c(0.25, 0.75))
-                         value = c(10, 100)
-             )
-
+           uiOutput("slider_ggpredict")
   ),
 
   tabPanel("no_custom_vars", column(12))
@@ -125,10 +122,7 @@ parameter_tabs <- tabsetPanel(
            selectInput(
              "state_variable2", "Select interacting predictor", state_vars_name, # state_vars_name without the first state variable? 
              multiple = FALSE
-           ) ,
-           selectInput("custom_vals_boolean", "Modify with custom values?",
-                       choices = covariate_boolean_choices),
-           custom_predictor_vals
+           )
   )
   
 )
@@ -267,8 +261,11 @@ shinyUI(fluidPage(
                     selectInput("num_cov", "Number of predictors", 
                                 choices = num_covariates_list
                     ),
-                    parameter_tabs#,
-                    
+                    parameter_tabs,
+                    selectInput("custom_vals_boolean", "Project to custom values?",
+                                choices = covariate_boolean_choices),
+                    custom_predictor_vals
+
                   ),
                   mainPanel(
                     plotOutput("tick_abundance_estimated_plot")
