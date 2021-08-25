@@ -1,3 +1,13 @@
+
+data_name_to_formal <- function(data_name){
+  length <- length(data_name)
+  name <- rep(NA, length)
+  for(i in 1:length){
+    name[i] <- installation_lookup_table$Formal_name[data_name[i] == installation_lookup_table$data_name]
+  }
+  return(name)
+}
+
 subset_data <- function (data, installation_name, grep = FALSE){
   
   name <- installation_lookup_table$data_name[installation_name == installation_lookup_table$Formal_name]

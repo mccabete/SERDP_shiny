@@ -74,11 +74,11 @@ d <- select(d, -c("TICK HOSTS, DOD SERDP STUDY", "DISEASE HOST", "TICK HOST(S)",
 d$animal_infection <- rep(NA, length(d$Installation))
 for (i in seq_along(d$Installation)){
   tmp <- c("")
-  if(!is.na(d$Human[i])){tmp <- paste(tmp, "Human")}
+  if(!is.na(d$Human[i]) | !is.na(d$Human_Endo[i])){tmp <- paste(tmp, "Human")}
   if(!is.na(d$Wildlife[i])){tmp <- paste(tmp, "Wildlife") }
   if(!is.na(d$Domestic_Animals[i])){tmp <- paste(tmp, "Domestic Animals")}
   #if(!is.na(d$Endosymbiont[i])){tmp <- paste(tmp, "Endosymbiont")} #not sure if I should include this? 
-  if(!is.na(d$Human_Endo[i])){tmp <- paste(tmp, "Human/Endosymbiont")} # Not sure how different from "Human" catagory
+  #if(!is.na(d$Human_Endo[i])){tmp <- paste(tmp, "Human/Endo")} # Not sure how different from "Human" catagory
   if(!is.na(d$Human_Animal[i])){tmp <- paste(tmp, "Human/Animals")}
   if(!is.na(d$Unknown[i])){tmp <- paste(tmp, "Unknown")}
   if(tmp == ""){tmp <- NA}
@@ -88,8 +88,21 @@ for (i in seq_along(d$Installation)){
 }
 d <- select(d, -c("Human":"Unknown"))
 names(d) <- c("Installation", "Organism_or_Pathogen", "Vertebrate_Host", "Disease", "Infection_population")
+
+d$Organism_or_Pathogen[d$Organism_or_Pathogen == "Coxiella endo. of A. americanum"] <- "Coxiella sp."
+d$Organism_or_Pathogen[d$Organism_or_Pathogen == "Theileria sp. North Texas white-tailed dee"] <- "Theileria sp."
+d$Organism_or_Pathogen[d$Organism_or_Pathogen == "Francisella-like endosymbiont"] <- "Unknown. Possibly Francisella sp."
+d$Organism_or_Pathogen[d$Organism_or_Pathogen == "Theileria cervi-like"] <- "Unknown. Possibly Theileria sp."
+
+d$Disease[d$Disease == "STARI? (probably not?)"] <- "Implicated in Southern Tick-Associated Rash Illness (STARI)"
+
+d$Disease <- gsub("endosymbiont, ", "", d$Disease) #remove all mention of endosymbiont in disease
+
+
 d <- unique(d)
   
+
+
 write_csv(d, "/projectnb/dietzelab/mccabete/SERDP_shiny/code/www/pathogenicity_by_installation.csv")
 
 # d2 <- d %>%

@@ -29,12 +29,41 @@ installation_lookup_table <- read.csv("www/SERDP_data_installtion_lookup_table.c
 # Tick data ----
 tick_map <- st_read("www/Tick_prevelence_absense_map.shp") #By default, this function abriviates column names? Renaming them does cause errors. 
 tick_map$pathogen_number <- tick_map$Hmn_pt_ * tick_map$Ticks
+tick_map_pretty_names <- dplyr::rename(tick_map,"Installtion" = FULLNAM, 
+                                       "Total Ticks" = ttl_tck, 
+                                       "Human Pathogens Per Tick" = Hmn_pt_, 
+                                       "Trapping Effort" = trp_ffr, 
+                                       "Ticks Per Trap" = tcks_p_, 
+                                       "Tick Borne Disease Risk" = PxA, 
+                                       "Pathogens Detected" = pathogen_number
+                                       )
+tick_map_pretty_names <- select(tick_map_pretty_names, c("Installtion", 
+                                                         "Total Ticks",
+                                                         "Human Pathogens Per Tick", 
+                                                         "Trapping Effort", 
+                                                         "Ticks Per Trap", 
+                                                         "Tick Borne Disease Risk", 
+                                                         "Pathogens Detected"))
 
 ticks <- read.csv("www/ticks.csv", stringsAsFactors = FALSE)
+ticks_for_distribution <- select(ticks, c(
+  "installation" , 
+  "count"
+))
+ticks_for_distribution <- ticks_for_distribution %>% 
+  group_by(installation ) %>% 
+  summarise( count = sum(count))
+
+ticks_for_distribution$installation <- data_name_to_formal(ticks_for_distribution$installation)
+
+
 pathogens <- read.csv("www/pathogenicity_by_installation.csv", stringsAsFactors = FALSE)
 #pathogens <- select(pathogens, c("Installation", "tbo", "Human", "Wildlife", "Domestic_Animals", "Endosymbiont", "Human_Endo","Human_Animal", "Unknown", "Vertebrate_Host","Disease"))
 dung <- read.csv("www/dung.csv", stringsAsFactors = FALSE)
 dung <- select(dung, c("installation", "species", "visit_year")) %>% na.omit()
+dung <- dung[dung$installation %in% installation_lookup_table$data_name, ]
+dung$installation <- data_name_to_formal(dung$installation)
+dung <- dung %>% group_by(installation, species) %>% summarise(count = n())
 
 # Vegetation data ----
 plot_data <- read.csv("www/all_plotlevel_data.csv")
@@ -156,7 +185,7 @@ shinyServer(function(input, output) {
       paste0("Tick_Borne_Disease_Map", ".csv")
     },
     content = function(file) {
-      write.csv(tick_map, file)
+      write.csv(tick_map_pretty_names, file)
     }
   )
 
@@ -203,7 +232,7 @@ shinyServer(function(input, output) {
       paste("Tick_Species_and_Sampling", ".csv")
     },
     content = function(file){
-      write.csv(ticks, file)
+      write.csv(ticks_for_distribution, file)
     }
     
   )
