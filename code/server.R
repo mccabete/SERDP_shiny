@@ -263,7 +263,7 @@ shinyServer(function(input, output) {
   output$host_data <- renderReactable(reactable(dung, filterable = TRUE, searchable = TRUE, columns = list(
     installation = colDef(name = "Installation"), 
     species = colDef(name = "Host Detected"), 
-    visit_year = colDef(name = "Year")
+    count = colDef(name = "Count")
   ) 
   ))
   
