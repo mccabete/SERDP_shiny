@@ -163,6 +163,11 @@ shinyUI(fluidPage(
               menuSubItem("Tick Pathogens", tabName = "pathogens"),
               menuSubItem("Tick Hosts", tabName = "tick_host")
                  ),
+        menuItem("Vegetation", tabName = "vegetation", icon = icon("pagelines"), 
+                 menuSubItem("Litter", tabName = "litter"), 
+                 menuSubItem("Canopy", tabName = "canopy_cover"), 
+                 menuSubItem("Biomass", tabName = "biomass")
+                  ),
         menuItem("Exploring Hypotheticals", tabName = "sem", icon = icon("project-diagram"), 
                  menuSubItem("Predictors of Tick Populations", tabName = "ggpredict_plots")#, 
                  #menuSubItem("How Predictors Interact", tabName = "violin")
@@ -233,6 +238,33 @@ shinyUI(fluidPage(
           downloadButton("download_host")
         ), # Tick hosts tab
         
+        tabItem(tabName = "vegetation"), 
+        tabItem(tabName = "litter",
+                selectInput(
+                  "installation_litter", "Please Select Installtion for leaf litter data summary", installation.name,
+                  multiple = FALSE
+                ),
+                fluidRow(
+                  column(6, plotOutput("pecent_litter_cover_plot")
+                        ),
+                  column(6, plotOutput("litter_depth_plot")
+                        )
+                )
+                ), # Litter tabitem
+        tabItem(tabName = "canopy_cover", 
+                selectInput(
+                  "installation_canopy", "Please Select Installtion for canopy cover summary", installation.name,
+                  multiple = FALSE
+                ),
+                plotOutput("pecent_canopy_cover_plot")
+        ), # canopy cover tabitem
+        tabItem(tabname = "biomass", 
+                selectInput(
+                  "installation_biomass", "Please Select Installtion for biomass summary", installation.name,
+                  multiple = FALSE
+                ),
+                plotOutput("biomass_plot_hist")
+                ), #biomass tabitem
         tabItem(tabName = "sem"),
         tabItem(tabName = "ggpredict_plots",
                 # selectInput(

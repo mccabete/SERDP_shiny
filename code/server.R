@@ -277,9 +277,84 @@ shinyServer(function(input, output) {
   )
   
 #### Vegetation ----
-  # Litter (cover and biomass)
-  # Standing Biomass
-  # Species plots
+ ## Litter
+  
+  output$litter_depth_plot <- renderPlot({
+    path_small <- filter(path_data, installation_name == input$installation_litter)
+    path_small <- select(path_small, c("avg_litter_depth_all", "installation_name"))
+    
+    ggplot(path_small) +
+      theme(
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "transparent", colour = NA),  
+        plot.background = element_rect(fill = "transparent", colour = NA) 
+        
+      ) +
+      geom_histogram(aes(x = avg_litter_depth_all)) + 
+      ylab("Frequency") + 
+      xlab("Litter Depth") +
+      coord_flip() +
+      scale_x_reverse() +
+      ggtitle(input$installation_litter)
+  })
+  
+  output$pecent_litter_cover_plot <- renderPlot({
+    path_s <- filter(path_data, installation_name == input$installation_litter)
+    path_s <- select(path_s, c("avg_pct_litter", "installation_name"))
+    
+    ggplot(path_s) +
+      theme(
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "transparent", colour = NA),  
+        plot.background = element_rect(fill = "transparent", colour = NA) 
+        
+      ) +
+      geom_histogram(aes(x = avg_pct_litter), binwidth = 5) + 
+      ylab("Frequency") + 
+      xlab("% Litter Cover") +
+      ggtitle(input$installation_litter)
+  })
+  
+  
+  
+  
+  
+  ## Canopy
+  output$pecent_canopy_cover_plot <- renderPlot({
+    path_s <- filter(path_data, installation_name == input$installation_canopy)
+    path_s <- select(path_s, c("avg_canopy_cover", "installation_name"))
+    
+    ggplot(path_s) +
+      theme(
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "transparent", colour = NA),  
+        plot.background = element_rect(fill = "transparent", colour = NA) 
+        
+      ) +
+      geom_histogram(aes(x = avg_canopy_cover), binwidth = 5) + 
+      ylab("Frequency") + 
+      xlab("Percent Canopy Cover") +
+      ggtitle(input$installation_canopy)
+  })
+  
+  ## Biomass 
+  output$biomass_plot_hist <- renderPlot({
+    path_b <- filter(path_data, installation_name == input$installation_biomass)
+    path_b <- select(path_b, c("avg_dry_standing_gm2", "installation_name"))
+    range <- range(path_b$avg_dry_standing_gm2)[2] - range(path_b$avg_dry_standing_gm2)[1]
+    ggplot(path_b) +
+      theme(
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "transparent", colour = NA),  
+        plot.background = element_rect(fill = "transparent", colour = NA) 
+        
+      ) +
+      #geom_histogram(aes(x = avg_dry_standing_gm2), fill = "dark green") + 
+      geom_dotplot(aes(x = avg_dry_standing_gm2), fill = "dark green", binwidth = range/10) +
+      ylab("Frequency") + 
+      xlab("Biomass (g/m^2)") +
+      ggtitle(input$installation_biomass)
+  })
   
 #### Fire (Maybe fire effects?) ----
 
