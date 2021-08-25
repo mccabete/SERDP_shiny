@@ -258,10 +258,11 @@ shinyUI(fluidPage(
                 
                 sidebarLayout(
                   sidebarPanel(
+                    
+                    parameter_tabs,
                     selectInput("num_cov", "Number of predictors", 
                                 choices = num_covariates_list
                     ),
-                    parameter_tabs,
                     selectInput("custom_vals_boolean", "Project to custom values?",
                                 choices = covariate_boolean_choices),
                     custom_predictor_vals
