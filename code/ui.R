@@ -164,8 +164,8 @@ shinyUI(fluidPage(
               menuSubItem("Tick Hosts", tabName = "tick_host")
                  ),
         menuItem("Exploring Hypotheticals", tabName = "sem", icon = icon("project-diagram"), 
-                 menuSubItem("Predictors of Tick Populations", tabName = "ggpredict_plots"), 
-                 menuSubItem("How Predictors Interact", tabName = "violin")
+                 menuSubItem("Predictors of Tick Populations", tabName = "ggpredict_plots")#, 
+                 #menuSubItem("How Predictors Interact", tabName = "violin")
                  )
         
       )
@@ -273,25 +273,25 @@ shinyUI(fluidPage(
                 )
 
 
-                ), # ggpredict_plots tab
-        tabItem(tabName = "violin", 
-                sidebarPanel(
-                  radioButtons("sub_lm", "Choose one or more predictors to provide custom values:",
-                                     choiceNames = c("Stage 1", "Stage 2", "Stage 3"), ## PAss html here? something more intuitive?
-                                     choiceValues = dependant_scenario_list),
-                  checkboxGroupInput("vars_to_slide", "Check the variables to change thier value", choices = glm_map$state_vars_name), 
-                  uiOutput("slider"), 
-                  #sliders_tab, 
-                  actionButton("simulate", "Draw Graphs")
-                ), 
-                mainPanel(
-                  fluidRow(textOutput("test_plot"))
-                )
-          
-               
-                #plotOutput("violin_ticks")
-                
-                ) # violin tab
+                )#, # ggpredict_plots tab
+        # tabItem(tabName = "violin", 
+        #         sidebarPanel(
+        #           radioButtons("sub_lm", "Choose one or more predictors to provide custom values:",
+        #                              choiceNames = c("Stage 1", "Stage 2", "Stage 3"), ## PAss html here? something more intuitive?
+        #                              choiceValues = dependant_scenario_list),
+        #           checkboxGroupInput("vars_to_slide", "Check the variables to change thier value", choices = glm_map$state_vars_name), 
+        #           uiOutput("slider"), 
+        #           #sliders_tab, 
+        #           actionButton("simulate", "Draw Graphs")
+        #         ), 
+        #         mainPanel(
+        #           fluidRow(textOutput("test_plot"))
+        #         )
+        #   
+        #        
+        #         #plotOutput("violin_ticks")
+        #         
+        #         ) # violin tab
         
         
       ) # End of tabItems for all tabs
