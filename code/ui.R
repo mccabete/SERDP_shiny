@@ -174,8 +174,8 @@ shinyUI(fluidPage(
                  ),
         menuItem("Vegetation", tabName = "vegetation", icon = icon("pagelines"), 
                  menuSubItem("Litter", tabName = "litter"), 
-                 menuSubItem("Canopy", tabName = "canopy_cover"), 
-                 menuSubItem("Biomass", tabName = "biomass_tab")
+                 menuSubItem("Canopy", tabName = "canopy_cover")#, 
+                 # menuSubItem("Biomass", tabName = "biomass_tab")
                   ),
         menuItem("Exploring Hypotheticals", tabName = "sem", icon = icon("project-diagram"), 
                  menuSubItem("Predictors of Tick Populations", tabName = "ggpredict_plots")#, 
@@ -267,13 +267,13 @@ shinyUI(fluidPage(
                 ),
                 plotOutput("pecent_canopy_cover_plot")
         ), # canopy cover tabitem
-        tabItem(tabname = "biomass_tab", 
-                selectInput(
-                  "installation_biomass", "Please Select Installtion for biomass summary", installation.name,
-                  multiple = FALSE
-                ),
-                plotOutput("biomass_plot_hist")
-                ), #biomass tabitem
+        # tabItem(tabname = "biomass_tab", 
+        #         selectInput(
+        #           "installation_biomass", "Please Select Installtion for biomass summary", installation.name,
+        #           multiple = FALSE
+        #         ),
+        #         plotOutput("biomass_plot_hist")
+        #         ), #biomass tabitem
         tabItem(tabName = "sem"),
         tabItem(tabName = "ggpredict_plots",
                 # selectInput(

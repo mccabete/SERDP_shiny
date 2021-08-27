@@ -360,24 +360,24 @@ shinyServer(function(input, output) {
   })
   
   ## Biomass 
-  output$biomass_plot_hist <- renderPlot({
-    path_b <- filter(path_data, installation_name == input$installation_biomass)
-    path_b <- select(path_b, c("avg_dry_standing_gm2", "installation_name"))
-    range <- range(path_b$avg_dry_standing_gm2)[2] - range(path_b$avg_dry_standing_gm2)[1]
-    ggplot(path_b) +
-      theme(
-        legend.title = element_blank(),
-        panel.background = element_rect(fill = "transparent", colour = NA),  
-        plot.background = element_rect(fill = "transparent", colour = NA) 
-        
-      ) +
-      geom_histogram(aes(x = avg_dry_standing_gm2), fill = "dark green") + 
-      #geom_dotplot(aes(x = avg_dry_standing_gm2), fill = "dark green", binwidth = range/10) +
-      ylab("Frequency") + 
-      xlab("Biomass (g/m^2)") +
-      ggtitle(input$installation_biomass)
-  })
-  
+  # output$biomass_plot_hist <- renderPlot({
+  #   path_b <- filter(path_data, installation_name == input$installation_biomass)
+  #   path_b <- select(path_b, c("avg_dry_standing_gm2", "installation_name"))
+  #   range <- range(path_b$avg_dry_standing_gm2)[2] - range(path_b$avg_dry_standing_gm2)[1]
+  #   ggplot(path_b) +
+  #     theme(
+  #       legend.title = element_blank(),
+  #       panel.background = element_rect(fill = "transparent", colour = NA),  
+  #       plot.background = element_rect(fill = "transparent", colour = NA) 
+  #       
+  #     ) +
+  #     geom_histogram(aes(x = avg_dry_standing_gm2), fill = "dark green") + 
+  #     #geom_dotplot(aes(x = avg_dry_standing_gm2), fill = "dark green", binwidth = range/10) +
+  #     ylab("Frequency") + 
+  #     xlab("Biomass (g/m^2)") +
+  #     ggtitle(input$installation_biomass)
+  # })
+  # 
 #### Fire (Maybe fire effects?) ----
 
   
