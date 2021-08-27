@@ -1,5 +1,12 @@
-
-library(rgdal, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
+library(maptools)
+library(multcomp)
+library(sandwich)
+library(zoo)
+library(Matrix)
+library(abind)
+library(car)
+library(numDeriv)
+#library(rgdal, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
 library(leaflet)
 library(shinydashboard)
 library(shinycssloaders)
@@ -22,6 +29,9 @@ library(reactable)
 ###########
 # DATA    #
 ###########
+source("www/functions/plot_comarison_ggplot.R")
+source("www/functions/helper_functions.R")
+
 installation.name <- c("Avon Park Air Force Range", "Fort Benning", "Camp Blanding Army Base",
                         "Eglin Air Force Base", "Fort Gordon Army Base", "Fort Jackson Army Base", "Moody Air Force Base",
                         "Camp Shelby Joint Forces Training Center", "Tyndall Air Force Base")

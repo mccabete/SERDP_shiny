@@ -1,18 +1,19 @@
 
+library(patchwork)
+library(xtable)
+library(shiny)
 
-library(shiny, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
-
-library(tidyverse, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
+library(tidyverse)
 library(leaflet.extras)
 library(rvest)
-library(sf, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
+#library(sf, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
 library(reactable)
 
 library(sjPlot)
-library(patchwork, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
+#library(patchwork, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
 #library(MuMIn, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
 #library(DHARMa, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
-library(lme4, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
+library(lme4)
 library(piecewiseSEM)
 library(effectsize)
 library(ggeffects)
@@ -55,7 +56,7 @@ installation_lookup_table <- read.csv("www/SERDP_data_installtion_lookup_table.c
 
 
 # Tick data ----
-tick_map <- st_read("www/Tick_prevelence_absense_map.shp") #By default, this function abriviates column names? Renaming them does cause errors.
+tick_map <- sf::st_read("www/Tick_prevelence_absense_map.shp") #By default, this function abriviates column names? Renaming them does cause errors.
 tick_map$pathogen_number <- tick_map$Hmn_pt_ * tick_map$Ticks
 tick_map_pretty_names <- dplyr::rename(tick_map,"Installtion" = FULLNAM,
                                        "Total Ticks" = ttl_tck,

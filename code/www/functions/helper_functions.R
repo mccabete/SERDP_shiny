@@ -1,4 +1,8 @@
 
+glm_map <- read.csv("www/glm_names_map.csv")
+installation_lookup_table <- read.csv("www/SERDP_data_installtion_lookup_table.csv")
+
+
 data_name_to_formal <- function(data_name){
   length <- length(data_name)
   name <- rep(NA, length)
