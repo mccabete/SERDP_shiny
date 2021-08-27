@@ -1,22 +1,31 @@
 
-#library(rgdal)
-#library(rgdal, lib.loc = "/share/pkg.7/r/3.6.0/install/lib64/R/library")
+library(rgdal, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
 library(leaflet)
 library(shinydashboard)
-#library(collapsibleTree)
 library(shinycssloaders)
 library(DT)
-library(tigris, "/share/pkg.7/r/4.0.5/install/lib64/R/library")
+##library(tigris, "/share/pkg.7/r/4.0.5/install/lib64/R/library")
+#library(tigris, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
 library(reactable)
+
+#library(tigris, "/share/pkg.7/r/4.0.5/install/lib64/R/library")
+##################################################################################
+
+# library(leaflet)
+# library(shinydashboard)
+# library(shinycssloaders)
+# library(DT)
+# library(tigris)
+# library(reactable)
 
 
 ###########
 # DATA    #
 ###########
 installation.name <- c("Avon Park Air Force Range", "Fort Benning", "Camp Blanding Army Base",
-                        "Eglin Air Force Base", "Fort Gordon Army Base", "Fort Jackson Army Base", "Moody Air Force Base", 
+                        "Eglin Air Force Base", "Fort Gordon Army Base", "Fort Jackson Army Base", "Moody Air Force Base",
                         "Camp Shelby Joint Forces Training Center", "Tyndall Air Force Base")
-state_vars_name <- c("Days Since Fire", "% Litter Cover", "Litter Depth",  "% Canopy Cover","Standing Biomass g/(m^2)", "1 Year Vapor Pressure Deficit") 
+state_vars_name <- c("Days Since Fire", "% Litter Cover", "Litter Depth",  "% Canopy Cover","Standing Biomass g/(m^2)", "1 Year Vapor Pressure Deficit")
 #stat_vars_sig <-  c("Days Since Fire", "% Litter Cover", "Litter Depth",  "% Canopy Cover","Standing Biomass g/(m^2)", "1 Year Vapor Pressure Deficit") # Need to modify by what is significant at predicting ticks?
 path_data <- read.csv("www/path_data.csv", stringsAsFactors = FALSE)
 
@@ -28,9 +37,9 @@ path_data <- read.csv("www/path_data.csv", stringsAsFactors = FALSE)
 # stat_vars_df <- as.data.frame(stat_vars_df)
 # write_csv(stat_vars_df, file = "www/glm_names_map.csv")
 
-####################
-# Helper functions #
-####################
+#######################
+# Helper UI functions #
+#######################
 
 sliderInput_var <- function(id) {
   id_var <- names_to_variables(id)
@@ -80,16 +89,16 @@ sliders_tab <- tabsetPanel(
   id = "dependant_scenario", 
   type = "hidden",
   tabPanel("independant_effects",
-           fluidRow(sliders <- map(vars_independant, sliderInput_var))
+           fluidRow(sliders <- purrr::map(vars_independant, sliderInput_var))
            
            ),
   tabPanel("intermediate_effects",
-           fluidRow(sliders <- map(vars_intermediate, sliderInput_var),
+           fluidRow(sliders <- purrr::map(vars_intermediate, sliderInput_var),
                     p("Warning: % Canopy Cover, and % Litter Cover are both informed by Days Since Fire. If you manually change values of % Canopy cover, it represents a scenario where the % Litter Cover is infromed by Days Since Fire, but % Canopy isn't.")
                     )
   ), 
   tabPanel("dependant_effects",
-           fluidRow(sliders <- map(vars_dependant, sliderInput_var))
+           fluidRow(sliders <- purrr::map(vars_dependant, sliderInput_var))
            )
 ) ## sliders tab
 
@@ -166,7 +175,7 @@ shinyUI(fluidPage(
         menuItem("Vegetation", tabName = "vegetation", icon = icon("pagelines"), 
                  menuSubItem("Litter", tabName = "litter"), 
                  menuSubItem("Canopy", tabName = "canopy_cover"), 
-                 menuSubItem("Biomass", tabName = "biomass")
+                 menuSubItem("Biomass", tabName = "biomass_tab")
                   ),
         menuItem("Exploring Hypotheticals", tabName = "sem", icon = icon("project-diagram"), 
                  menuSubItem("Predictors of Tick Populations", tabName = "ggpredict_plots")#, 
@@ -258,7 +267,7 @@ shinyUI(fluidPage(
                 ),
                 plotOutput("pecent_canopy_cover_plot")
         ), # canopy cover tabitem
-        tabItem(tabname = "biomass", 
+        tabItem(tabname = "biomass_tab", 
                 selectInput(
                   "installation_biomass", "Please Select Installtion for biomass summary", installation.name,
                   multiple = FALSE

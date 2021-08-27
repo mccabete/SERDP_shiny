@@ -1,20 +1,48 @@
 
-library(shiny)
-library(tidyverse)
+
+library(shiny, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
+
+library(tidyverse, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
 library(leaflet.extras)
 library(rvest)
-library(sf)
+library(sf, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
 library(reactable)
 
 library(sjPlot)
-library(patchwork)
-library(MuMIn)
-library(DHARMa)
-library(lme4)
+library(patchwork, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
+#library(MuMIn, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
+#library(DHARMa, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
+library(lme4, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
 library(piecewiseSEM)
 library(effectsize)
 library(ggeffects)
-library(purrr)
+library(purrr, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
+
+#######################################################################
+# library(shiny)
+# library(tidyverse)
+# library(leaflet.extras)
+# library(rvest)
+# library(sf)
+# library(reactable)
+# 
+# library(sjPlot)
+# library(patchwork)
+# ##library(MuMIn)
+# ##library(DHARMa)
+# library(lme4)
+# library(piecewiseSEM)
+# library(effectsize)
+# library(ggeffects)
+# library(purrr)
+
+##################
+# HELPER FUNCTIONS # Should I source all the functions from separate files?
+##################
+
+source("www/functions/plot_comarison_ggplot.R")
+source("www/functions/helper_functions.R")
+
 
 ##################
 # DATA WRANGLING #
@@ -27,31 +55,31 @@ installation_lookup_table <- read.csv("www/SERDP_data_installtion_lookup_table.c
 
 
 # Tick data ----
-tick_map <- st_read("www/Tick_prevelence_absense_map.shp") #By default, this function abriviates column names? Renaming them does cause errors. 
+tick_map <- st_read("www/Tick_prevelence_absense_map.shp") #By default, this function abriviates column names? Renaming them does cause errors.
 tick_map$pathogen_number <- tick_map$Hmn_pt_ * tick_map$Ticks
-tick_map_pretty_names <- dplyr::rename(tick_map,"Installtion" = FULLNAM, 
-                                       "Total Ticks" = ttl_tck, 
-                                       "Human Pathogens Per Tick" = Hmn_pt_, 
-                                       "Trapping Effort" = trp_ffr, 
-                                       "Ticks Per Trap" = tcks_p_, 
-                                       "Tick Borne Disease Risk" = PxA, 
+tick_map_pretty_names <- dplyr::rename(tick_map,"Installtion" = FULLNAM,
+                                       "Total Ticks" = ttl_tck,
+                                       "Human Pathogens Per Tick" = Hmn_pt_,
+                                       "Trapping Effort" = trp_ffr,
+                                       "Ticks Per Trap" = tcks_p_,
+                                       "Tick Borne Disease Risk" = PxA,
                                        "Pathogens Detected" = pathogen_number
                                        )
-tick_map_pretty_names <- select(tick_map_pretty_names, c("Installtion", 
+tick_map_pretty_names <- select(tick_map_pretty_names, c("Installtion",
                                                          "Total Ticks",
-                                                         "Human Pathogens Per Tick", 
-                                                         "Trapping Effort", 
-                                                         "Ticks Per Trap", 
-                                                         "Tick Borne Disease Risk", 
+                                                         "Human Pathogens Per Tick",
+                                                         "Trapping Effort",
+                                                         "Ticks Per Trap",
+                                                         "Tick Borne Disease Risk",
                                                          "Pathogens Detected"))
 
 ticks <- read.csv("www/ticks.csv", stringsAsFactors = FALSE)
 ticks_for_distribution <- select(ticks, c(
-  "installation" , 
+  "installation" ,
   "count"
 ))
-ticks_for_distribution <- ticks_for_distribution %>% 
-  group_by(installation ) %>% 
+ticks_for_distribution <- ticks_for_distribution %>%
+  group_by(installation ) %>%
   summarise( count = sum(count))
 
 ticks_for_distribution$installation <- data_name_to_formal(ticks_for_distribution$installation)
@@ -73,15 +101,9 @@ plot_data <- read.csv("www/all_plotlevel_data.csv")
 #all_host_effects <- read.csv("www/all_hosts_sem_effects.csv") # Could change if we need it
 load("www/tick_glmer.Rdata")
 path_data <- read.csv("www/path_data.csv", stringsAsFactors = FALSE)
-glm_map <- read_csv("www/glm_names_map.csv")
+glm_map <- read.csv("www/glm_names_map.csv")
 #state_vars_name <- c("Days Since Fire", "% Litter Cover", "Litter Depth",  "% Canopy Cover","Standing Biomass g/(m^2)", "1 Year Vapor Pressure Deficit")
 
-##################
-# HELPER FUNCTIONS # Should I source all the functions from separate files? 
-##################
-
-source("www/functions/plot_comarison_ggplot.R")
-source("www/functions/helper_functions.R")
 
 ################
 # SERVER LOGIC #
@@ -349,8 +371,8 @@ shinyServer(function(input, output) {
         plot.background = element_rect(fill = "transparent", colour = NA) 
         
       ) +
-      #geom_histogram(aes(x = avg_dry_standing_gm2), fill = "dark green") + 
-      geom_dotplot(aes(x = avg_dry_standing_gm2), fill = "dark green", binwidth = range/10) +
+      geom_histogram(aes(x = avg_dry_standing_gm2), fill = "dark green") + 
+      #geom_dotplot(aes(x = avg_dry_standing_gm2), fill = "dark green", binwidth = range/10) +
       ylab("Frequency") + 
       xlab("Biomass (g/m^2)") +
       ggtitle(input$installation_biomass)
@@ -397,7 +419,7 @@ shinyServer(function(input, output) {
   })
   
  output$slider_ggpredict <- renderUI({
-   map(cov_names(), ~sliderInput_ggpredict(.x))
+   purrr::map(cov_names(), ~sliderInput_ggpredict(.x))
  }) 
   
 cov_terms <- reactive({

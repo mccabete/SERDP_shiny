@@ -5,9 +5,10 @@ account: serdp2636
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3804899
-bundleId: 4963991
+bundleId: 4968008
 url: https://serdp2636.shinyapps.io/serdp2636/
-when: 1629915821.75059
-lastSyncTime: 1629915821.7506
+when: 1629989537.11641
+lastSyncTime: 1629989537.11642
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: app_archive.R|app_test.R
