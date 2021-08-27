@@ -1,9 +1,12 @@
-RC-2636 Decision Support Tool User Guide
+# RC-2636 Decision Support Tool User Guide
+
 Updated on 8/23/2021
+
 Tempest McCabe, Whalen Dillion, Michael C. Dietze, Drew Hiatt, L. Page Fredericks, Allison Gardner, Luke Flory, and Brian Allen
 
 **Statement of Need**
-	Reported cases of Tick Borne Diseases (TBD) more than doubled from 2004-2016 (Rosenberg et al., 2018). In the Southeastern US, the Gulf Coast tick and the Lone-star tick have both had dramatic range expansions in the last 50 years (Sonenshine, 2018). Prescribed burning is a common management practice in the Southeastern US that has been found to decrease tick populations in the short and long-term, and reduce TBD risk (Gleim et al., 2014, 2019). However, prescribed burns are primarily planned around other management objectives like forest productivity, fire risk reduction, and conservation. Reducing tick populations is frequently an unanticipated benefit to existing practices. However, landscape features other than fire also affect tick populations. Humidity, tick habitat availability, and the overstory, all change fire’s efficacy as a control mechanism. In areas where burns are infeasible or low-priority, other reduction mechanisms could exist.
+
+Reported cases of Tick Borne Diseases (TBD) more than doubled from 2004-2016 (Rosenberg et al., 2018). In the Southeastern US, the Gulf Coast tick and the Lone-star tick have both had dramatic range expansions in the last 50 years (Sonenshine, 2018). Prescribed burning is a common management practice in the Southeastern US that has been found to decrease tick populations in the short and long-term, and reduce TBD risk (Gleim et al., 2014, 2019). However, prescribed burns are primarily planned around other management objectives like forest productivity, fire risk reduction, and conservation. Reducing tick populations is frequently an unanticipated benefit to existing practices. However, landscape features other than fire also affect tick populations. Humidity, tick habitat availability, and the overstory, all change fire’s efficacy as a control mechanism. In areas where burns are infeasible or low-priority, other reduction mechanisms could exist.
 
 To quantify these relationships, we measured the tick populations, tick hosts, and vegetation, and recorded fire histories at nine Department of Defense installations in the southeastern United States. We then statistically estimated how each landscape feature-controlled tick populations. This Decision Support Tool uses the data and estimates to:
 
@@ -13,7 +16,8 @@ To quantify these relationships, we measured the tick populations, tick hosts, a
   4) Explore the efficacy of non-burning reduction strategies
 
 **State of the field**
-	A number of DSTs exist already pertaining to the implementation of prescribed fire, such as: FARSITE (Finney, 2004), SPITFIRE (Thonicke et al., 2010), First Order Fire Effects model (Hood & Lutes, 2017),  FFI (Lutes et al., 2009), Interagency Fuels Treatment Decision Support System (Wells et al., 2009), or planting pines PINEMAP (T. A. Martin, 2019).  However, these management decisions often are made in isolation from decisions concerning efforts to mitigate tick-borne disease risk, for which there are no established DSTs at present to our knowledge.
+
+A number of DSTs exist already pertaining to the implementation of prescribed fire, such as: FARSITE (Finney, 2004), SPITFIRE (Thonicke et al., 2010), First Order Fire Effects model (Hood & Lutes, 2017),  FFI (Lutes et al., 2009), Interagency Fuels Treatment Decision Support System (Wells et al., 2009), or planting pines PINEMAP (T. A. Martin, 2019).  However, these management decisions often are made in isolation from decisions concerning efforts to mitigate tick-borne disease risk, for which there are no established DSTs at present to our knowledge.
 	
 **Intended Audience** 
 
@@ -28,6 +32,7 @@ The underlying code that generates the app is at: https://github.com/mccabete/SE
 Our tool requires an internet browser to access, and no other software to run. Graphics can appear different depending on the browser. Data downloaded from our tool may require software to be opened or edited. We provide the options to download .csv files and .pdf files. 
 
 **Summary of Features:** 
+
 (Tabs with an * are still in development)
 
 _Tick Born Disease_ 
@@ -78,16 +83,32 @@ This work was possible because of  a grant from The Strategic Environmental Rese
 **Citations**
 
 Chang, W., Cheng, J., Allair, J., Xie, Y., & McPherson, J. (2019). shiny: Web Application Framework for R (R package version 1.4.0) [Computer software]. https://CRAN.R-project.org/package=shiny
+
 Finney, M. A. (2004). FARSITE : Fire Area Simulator—Model Development and Evaluation (RMRS-RP-4).
+
 Gleim, E. R., Conner, L. M., Berghaus, R. D., Levin, M. L., Zemtsova, G. E., & Yabsley, M. J. (2014). The Phenology of Ticks and the Effects of Long-Term Prescribed Burning on Tick Population Dynamics in Southwestern Georgia and Northwestern Florida. PLoS ONE, 9(11), e112174–e112174. https://doi.org/10.1371/journal.pone.0112174
+
 Gleim, E. R., Zemtsova, G. E., Berghaus, R. D., Levin, M. L., Conner, M., & Yabsley, M. J. (2019). Frequent Prescribed Fires Can Reduce Risk of Tick-borne Diseases. Scientific Reports. https://doi.org/10.1038/s41598-019-46377-4
-Hiers, J. K., Laine, S. C., Bachant, J. J., Furman, J. H., Greene, W. W., & Compton, V. (2003). Simple Spatial Modeling Tool for Prioritizing Prescribed Burning Activities at the Landscape Scale. Conservation Biology, 17(6), 1571–1578. https://doi.org/10.1111/j.1523-1739.2003.00381.x
+
+Hiers, J. K., Laine, S. C., Bachant, J. J., Furman, J. H., Greene, W. W., & Compton, V. (2003). Simple Spatial Modeling Tool for Prioritizing Prescribed Burning 
+Activities at the Landscape Scale. Conservation Biology, 17(6), 1571–1578. https://doi.org/10.1111/j.1523-1739.2003.00381.x
+
 Hood, S., & Lutes, D. (2017). Predicting Post-Fire Tree Mortality for 12 Western US Conifers Using the First Order Fire Effects Model (FOFEM). Fire Ecology, 13(2), 66–84. https://doi.org/10.4996/fireecology.130290243
+
 Lutes, D. C., Benson, N. C., Keifer, M., Caratti, J. F., & Streetman, S. A. (2009). FFI: A software tool for ecological monitoring. International Journal of Wildland Fire, 18(3), 310. https://doi.org/10.1071/WF08083
+
 Martin, K. L., Hurteau, M. D., Hungate, B. A., Koch, G. W., & North, M. P. (2015). Carbon Tradeoffs of Restoration and Provision of Endangered Species Habitat in a Fire-Maintained Forest. Ecosystems, 18(1), 76–88. https://doi.org/10.1007/s10021-014-9813-1
+
 Martin, T. A. (2019). PINEMAP: Mapping the Future of Southern Pine Management in a Changing World. Forest Resources and Conservation Speaker Series.
+
 R Core Team. (2019). R: A Language and Environment for Statistical Computing [R]. R Foundation for Statistical Computing. https://www.R-project.org/
-Rosenberg, R., Lindsey, N. P., Fischer, M., Gregory, C. J., Hinckley, A. F., Mead, P. S., Paz-Bailey, G., Waterman, S. H., Drexler, N. A., Kersh, G. J., Hooks, H., Partridge, S. K., Visser, S. N., Beard, C. B., & Petersen, L. R. (2018). Morbidity and Mortality Weekly Report Vital Signs: Trends in Reported Vectorborne Disease Cases—United States and Territories, 2004–2016. 67(17), 496–501.
+
+Rosenberg, R., Lindsey, N. P., Fischer, M., Gregory, C. J., Hinckley, A. F., Mead, P. S., Paz-Bailey, G., Waterman, S. H., Drexler, N. A., Kersh, G. J., Hooks, H., 
+
+Partridge, S. K., Visser, S. N., Beard, C. B., & Petersen, L. R. (2018). Morbidity and Mortality Weekly Report Vital Signs: Trends in Reported Vectorborne Disease Cases—United States and Territories, 2004–2016. 67(17), 496–501.
+
 Sonenshine, D. E. (2018). Range expansion of tick disease vectors in north america: Implications for spread of tick-borne disease. International Journal of Environmental Research and Public Health, 15(3), 1–9. https://doi.org/10.3390/ijerph15030478
+
 Thonicke, K., Spessa, A., Prentice, I. C., Harrison, S. P., Dong, L., & Carmona-Moreno, C. (2010). The influence of vegetation, fire spread and fire behaviour on biomass burning and trace gas emissions: Results from a process-based model. Biogeosciences, 7(6), 1991–2011. https://doi.org/10.5194/bg-7-1991-2010
+
 Wells, G., Rohling, K., Kapus, J., & Swedberg, T. (2009). A Powerful new Planning environment for Fuels Managers: The interagency Fuels treatment Decision Support System. Fire Science Digest, 7.
