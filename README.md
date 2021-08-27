@@ -1,19 +1,20 @@
 # RC-2636 Decision Support Tool User Guide
 
-Updated on 8/23/2021
+Updated on 8/27/2021
 
-Tempest McCabe, Whalen Dillion, Michael C. Dietze, Drew Hiatt, L. Page Fredericks, Allison Gardner, Luke Flory, and Brian Allen
+Tempest McCabe, Whalen Dillion, Michael C. Dietze, Drew Hiatt, L. Page Fredericks, Allison Gardner, Luke Flory, and Brian Allan
 
 **Statement of Need**
 
-Reported cases of Tick Borne Diseases (TBD) more than doubled from 2004-2016 (Rosenberg et al., 2018). In the Southeastern US, the Gulf Coast tick and the Lone-star tick have both had dramatic range expansions in the last 50 years (Sonenshine, 2018). Prescribed burning is a common management practice in the Southeastern US that has been found to decrease tick populations in the short and long-term, and reduce TBD risk (Gleim et al., 2014, 2019). However, prescribed burns are primarily planned around other management objectives like forest productivity, fire risk reduction, and conservation. Reducing tick populations is frequently an unanticipated benefit to existing practices. However, landscape features other than fire also affect tick populations. Humidity, tick habitat availability, and the overstory, all change fire’s efficacy as a control mechanism. In areas where burns are infeasible or low-priority, other reduction mechanisms could exist.
+Reported cases of tick-borne diseases (TBD) reported in the United States (US) more than doubled from 2004-2016 (Rosenberg et al., 2018). In the southeastern US, the Gulf Coast tick (Amblyomma maculatum) and the lone star tick (A. americanum) have both undergone dramatic range expansions in the past 50 years (Sonenshine, 2018). Prescribed burning is a common management practice in the southeastern US that has been found to decrease tick populations in the short and long-term, and reduce TBD risk (Gleim et al., 2014, 2019). However, prescribed burns are primarily planned around other management objectives like forest productivity, fire risk reduction, and conservation. Reducing tick populations is likely an unanticipated benefit to existing practices. However, landscape features other than fire also affect tick populations. Humidity, tick habitat availability, and the overstory, are all likely to change fire’s efficacy as a control mechanism. In areas where burns are infeasible or low-priority, other reduction mechanisms could be utilized.
 
-To quantify these relationships, we measured the tick populations, tick hosts, and vegetation, and recorded fire histories at nine Department of Defense installations in the southeastern United States. We then statistically estimated how each landscape feature-controlled tick populations. This Decision Support Tool uses the data and estimates to:
+To quantify these relationships and thereby better inform fire and tick management practices, we measured the tick populations, tick hosts, vegetation, and recorded fire histories at nine Department of Defense (DoD) installations in the southeastern US. We then statistically estimated how each landscape feature relates to tick populations. This Decision Support Tool (DST) uses these data and estimates in order to:
 
-  1) Report on each installation’s tick disease risk
-  2) Allow installations to quantify how much existing prescribed burn practices reduce tick populations
-  3) Explore how alternative levels of burning effect tick populations
-  4) Explore the efficacy of non-burning reduction strategies
+1)	Report each installation’s tick-borne disease risk
+2)	Allow installations to quantify the extent to which existing fire management reduces tick populations
+3)	Explore how alternative fire management scenarios may affect tick populations
+4)	Explore the efficacy of non-burning tick management strategies
+
 
 **State of the field**
 
@@ -21,64 +22,64 @@ A number of DSTs exist already pertaining to the implementation of prescribed fi
 	
 **Intended Audience** 
 
-This decision support tool is based on data collected at DoD sites. However, the DoD installations represent a large range of latitudes, soil types, and forests of the southeastern US. Estimates of tick born disease risk (Goal 1), may not correspond to levels of disease risk nearby. However, the underlying relationships between prescribed burns and ticks may be useful to private landowners to explore how their burn frequency effects ticks (Goals 2-4). 
-
+This decision support tool is based on data collected from DoD sites. However, the DoD installations represent a large range of latitudes, soil types, and forests of the southeastern US. Estimates of tick-borne disease risk (Goal 1), may not correspond to levels of disease risk nearby. However, the underlying relationships between prescribed burns and ticks may be useful to public and private land managers to explore how burn frequency affects ticks (Goals 2-4). 
 
 **Access and Installation Instructions**
 
 To see the app navigate to: https://serdp2636.shinyapps.io/serdp2636/
 The underlying code that generates the app is at: https://github.com/mccabete/SERDP_shiny/tree/main/code
 
-Our tool requires an internet browser to access, and no other software to run. Graphics can appear different depending on the browser. Data downloaded from our tool may require software to be opened or edited. We provide the options to download .csv files and .pdf files. 
+Our tool requires an internet browser to access, and no other software to run. Graphics can appear differently depending on the browser. Data downloaded from our tool may require software to be opened or edited. We provide the options to download .csv files. 
+
 
 **Summary of Features:** 
 
 (Tabs with an * are still in development)
 
-_Tick Born Disease_ 
-Disease Risk Map: Map of Tick Borne Disease risk (Risk of pathogen exposer per 24hours), Tick abundance, and pathogen presence at each of the DoD installations. Data available for download.  
-Tick Pathogens: Searchable & downloadable database of pathogens that were detected at each base, and any diseases the pathogens cause. 
-Tick Hosts: searchable & downloadable database of hosts detected at each installation. 
+_Tick-Borne Disease_ 
+-	Disease Risk Map: Map of Tick-Borne Disease risk (Risk of pathogen exposure per 24 hours), Tick abundance, and Pathogen prevalence at each of the DoD installations. Data available for download.  
+-	Tick Pathogens: Searchable & downloadable database of pathogens that were detected at each base, and a key to diseases the pathogens cause. 
+-	Tick Hosts: Searchable & downloadable database of animal hosts detected at each installation. 
 
 _Vegetation_
-Litter*: Summary figures of litter depth and percent cover per installation. Data available for download. 
-Canopy cover*: Summary of figures of percent canopy cover per installation. Data available for download
-Biomass*: Summary figures of biomass per installation. Data available for download. 
+-	Litter: Summary figures of litter depth and percent cover per installation. Data available for download. 
+-	Canopy cover: Summary of figures of percent canopy cover per installation. Data available for download
+-	Biomass: Summary figures of vegetation biomass per installation. Data available for download. 
 
 _Exploring Hypotheticals_
-Project Tick Populations: Project how different levels of predictors affect tick populations. Figures available for download. 
-Multiple Interacting Predictors of Tick populations*: Project how changes to fire frequency effect litter, canopy cover, Biomass, and ticks. Or, project how simultaneous changes to any of those variables affects tick populations. Figures available for download. 
+-	Project Tick Populations: Project tick populations with new fire regimes, levels of vegetation biomass, canopy cover, and leaf litter. Figures available for download. 
+-	Multiple Interacting Predictors of Tick Populations*: Project how changes to fire frequency affect litter, canopy cover, vegetation biomass, and ticks. Or, project how simultaneous changes to any of those variables affects tick populations. Figures available for download. 
+
 
 
 **Example usage**
 
-How to understand an installation’s disease risk:
-    1) Navigate to the “Disease Risk Map” under the “Tick Borne Disease” tab. Hover over installations to see summary information. 
-    2)  Explore other layers by clicking on the layer button in the upper leaf corner. 
-    3) Download data by clicking on the “Download Map Data” button. Data will be delivered as a .csv file. 
-    4) Under the map are figures that show summaries of the number of ticks collected, and what species and life stage were found. These may be useful to refer to when means are difficult to interpret. For example, Eglin Air Force Base has a mean number of 1.71 ticks per sampling event, but that number comes from combining numbers that are frequently <1, but rarely dramatically larger than 1. 
-    5) Choose an installation from the dropdown menu to generate new plots. Download the data by clicking the “Download Tick Species and Sampling Data” button. Data is delivered in .csv format. 
+Please see the "wiki" page for specific usage examples. 
 
 **How to Report a Problem or Request a Feature**
 
 Let us know about any issues either by submitting a bug report on Github or by emailing Tempest McCabe at tmccabe@bu.edu. 
-Submit a bug report by navigating to https://github.com/mccabete/SERDP_shiny/issues, and selecting a “new issue”. Please include a quick title summarizing the problem, and then in the main body describe the issue and how one could recreate it. If you email tmccabe@bu.edu, include the same details. 
-You can request a feature the same ways! Instead of describing the problem, describe what you would like to see implemented, and how you would use the new feature. 
+-	Submit a bug report by navigating to https://github.com/mccabete/SERDP_shiny/issues, and selecting a “new issue”. Please include a quick title summarizing the problem, and then in the main body describe the issue and how one could re-create it. If you email tmccabe@bu.edu, include the same details. 
+-	You can request a feature the same ways! Instead of describing the problem, describe what you would like to see implemented, and how you would use the new feature. 
 
-**Using The Data from This Tool**
+**Using The Data from this Tool**
 
-The datasets that are downloadable from this tool are summarized versions of the datasets we collected. We ask that publications only incorporate the data from this tool with explicit permission from the RC-2636 team. Please contact Tempest McCabe tmccabe@bu.edu or Brian Allen ballen@illinois.edu if you are interested in collaborations. 
+The datasets that are downloadable from this tool are summarized versions of the datasets we collected. We ask that publications only incorporate the data from this tool with explicit permission from the RC-2636 team. Please contact Tempest McCabe tmccabe@bu.edu or Brian Allan ballan@illinois.edu if you are interested in collaboration. 
+
 
 **License**
 
-The data for this project is licensed Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+The data for this project are licensed Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 The underlying code used to display, format, and extrapolate from data is licensed under the MIT license. To view a copy of this license, visit https://opensource.org/licenses/MIT. 
 
+
 **Acknowledgements**
+
 LF, BA, AG, and MCD conceived of the project and acquired the funding. WD, AG, DH, designed data collection. WD, DH, SC, collected data at DoD installations. BA and LPF conducted pathogen analyses. BA and TDM interviewed partners to inform the design of this app. WD conducted statistical analyses. MCD advised statistical implementation of the app. TDM designed and implemented the app. 
 
-This work was possible because of  a grant from The Strategic Environmental Research and Development Program (SERDP) Project RC-2636. We referenced Alessio Benedetti’s Biodiveristy In National Parks shiny app https://github.com/abenedetti/bioNPS/, during the course of our app design. Special thanks to our DoD installation partners. 
+This work was possible because of  a grant from the Strategic Environmental Research and Development Program (SERDP) Project RC-2636. We referenced Alessio Benedetti’s Biodiversity In National Parks shiny app https://github.com/abenedetti/bioNPS/, during the course of our app design. Special thanks to our DoD installation partners. 
+
 
 **Citations**
 
