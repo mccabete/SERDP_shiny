@@ -44,7 +44,7 @@ _Tick-Borne Disease_
 _Vegetation_
 -	Litter: Summary figures of litter depth and percent cover per installation. Data available for download. 
 -	Canopy cover: Summary of figures of percent canopy cover per installation. Data available for download
--	Biomass: Summary figures of vegetation biomass per installation. Data available for download. 
+
 
 _Exploring Hypotheticals_
 -	Project Tick Populations: Project tick populations with new fire regimes, levels of vegetation biomass, canopy cover, and leaf litter. Figures available for download. 
