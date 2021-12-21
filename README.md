@@ -37,7 +37,7 @@ Our tool requires an internet browser to access, and no other software to run. G
 (Tabs with an * are still in development)
 
 _Tick-Borne Disease_ 
--	Disease Risk Map: Map of Tick-Borne Disease risk (Risk of pathogen exposure per 24 hours), Tick abundance, and Pathogen prevalence at each of the DoD installations. Data available for download.  
+-	Disease Risk Map: Map of Tick-Borne Disease risk (Risk of pathogen exposure per 24 hours), Tick abundance in counts, and Pathogen prevalence at each of the DoD installations. Data available for download.  
 -	Tick Pathogens: Searchable & downloadable database of pathogens that were detected at each base, and a key to diseases the pathogens cause. 
 -	Tick Hosts: Searchable & downloadable database of animal hosts detected at each installation. 
 
