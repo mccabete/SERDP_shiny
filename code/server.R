@@ -58,7 +58,7 @@ installation_lookup_table <- read.csv("www/SERDP_data_installtion_lookup_table.c
 # Tick data ----
 tick_map <- sf::st_read("www/Tick_prevelence_absense_map.shp") #By default, this function abriviates column names? Renaming them does cause errors.
 tick_map$pathogen_number <- tick_map$Hmn_pt_ * tick_map$Ticks
-tick_map_pretty_names <- dplyr::rename(tick_map,"Installtion" = FULLNAM,
+tick_map_pretty_names <- dplyr::rename(tick_map,"Installation" = FULLNAM,
                                        "Total Ticks" = ttl_tck,
                                        "Human Pathogens Per Tick" = Hmn_pt_,
                                        "Trapping Effort" = trp_ffr,
@@ -66,7 +66,8 @@ tick_map_pretty_names <- dplyr::rename(tick_map,"Installtion" = FULLNAM,
                                        "Tick Borne Disease Risk" = PxA,
                                        "Pathogens Detected" = pathogen_number
                                        )
-tick_map_pretty_names <- select(tick_map_pretty_names, c("Installtion",
+tick_map_pretty_names <- as_tibble(tick_map_pretty_names) %>%
+                                            select(, c("Installation",
                                                          "Total Ticks",
                                                          "Human Pathogens Per Tick",
                                                          "Trapping Effort",
@@ -205,7 +206,7 @@ shinyServer(function(input, output) {
   # Download Map Data
   output$download_tick_map <- downloadHandler(
     filename = function() {
-      paste0("Tick_Borne_Disease_Map", ".csv")
+      paste0("Tick_Borne_Disease_Risk", ".csv")
     },
     content = function(file) {
       write.csv(tick_map_pretty_names, file)
@@ -255,6 +256,7 @@ shinyServer(function(input, output) {
       paste("Tick_Species_and_Sampling", ".csv")
     },
     content = function(file){
+      names(ticks_for_distribution) <- c("Installation", "Tick_Counts")
       write.csv(ticks_for_distribution, file)
     }
     

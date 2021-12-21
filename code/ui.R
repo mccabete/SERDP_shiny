@@ -14,6 +14,7 @@ library(DT)
 ##library(tigris, "/share/pkg.7/r/4.0.5/install/lib64/R/library")
 #library(tigris, lib.loc = "/share/pkg.7/r/4.1.1/install/lib64/R/library")
 library(reactable)
+library(dplyr)
 
 #library(tigris, "/share/pkg.7/r/4.0.5/install/lib64/R/library")
 ##################################################################################
@@ -55,8 +56,12 @@ sliderInput_var <- function(id) {
   id_var <- names_to_variables(id)
   tmp_nums <- var_trans_normal_units(path_data[[id_var]], id)
   id_name <- paste0("col", id_var)
-  min <- min(tmp_nums) / 5
-  max <- max(tmp_nums) * 5
+  
+ 
+    min <- min(tmp_nums) / 5
+    max <- max(tmp_nums) * 5
+
+  
   
   mean <- mean(tmp_nums)
   
@@ -242,7 +247,7 @@ shinyUI(fluidPage(
                 fluidRow(
                   column(6),
                   column(6, 
-                         downloadButton("download_tick_summary", label = "Download Tick Species and Sampling Data"))
+                         downloadButton("download_tick_summary", label = "Download Tick Sampling Data"))
                 )
         ), # disease risk map
         
