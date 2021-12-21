@@ -29,7 +29,7 @@ This decision support tool is based on data collected from DoD sites. However, t
 To see the app navigate to: https://serdp2636.shinyapps.io/serdp2636/
 The underlying code that generates the app is at: https://github.com/mccabete/SERDP_shiny/tree/main/code
 
-Our tool requires an internet browser to access, and no other software to run. Graphics can appear differently depending on the browser. Data downloaded from our tool may require software to be opened or edited. We provide the options to download .csv files. 
+Our tool requires an internet browser to access, and no other software to run. Graphics can appear differently depending on the browser. Data downloaded from our tool may require software to be opened or edited. We provide the options to download comma separated values or `.csv` files. 
 
 
 **Summary of Features:** 
