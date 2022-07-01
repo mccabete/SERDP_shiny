@@ -78,7 +78,7 @@ The underlying code used to display, format, and extrapolate from data is licens
 
 LF, BA, AG, and MCD conceived of the project and acquired the funding. WD, AG, DH, designed data collection. WD, DH, SC, collected data at DoD installations. BA and LPF conducted pathogen analyses. BA and TDM interviewed partners to inform the design of this app. WD conducted statistical analyses. MCD advised statistical implementation of the app. TDM designed and implemented the app. 
 
-This work was possible because of  a grant from the Strategic Environmental Research and Development Program (SERDP) Project RC-2636. We referenced Alessio Benedetti’s Biodiversity In National Parks shiny app https://github.com/abenedetti/bioNPS/, during the course of our app design. Special thanks to our DoD installation partners. 
+This work was possible because of  a grant from the Strategic Environmental Research and Development Program (SERDP) Project RC-2636. Support for training was provided to TM from the BU URBAN Program with support from a National Science Foundation Research Traineeship (NRT) grant to Boston University (DGE 1735087). We referenced Alessio Benedetti’s Biodiversity In National Parks shiny app https://github.com/abenedetti/bioNPS/, during the course of our app design. Special thanks to our DoD installation partners. 
 
 
 **Citations**
